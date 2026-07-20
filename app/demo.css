@@ -4,3 +4,29 @@
 .demo-trace { border-top: 1px solid #eef0f4; margin-top: 8px; padding-top: 6px; }
 .demo-trace i { display: block; font-style: normal; color: #7b8495; font-size: 7px; line-height: 1.7; }
 .handoff-button { width: 100%; border: 0; background: #fff0e3; color: #aa5b19; border-radius: 7px; padding: 7px; margin-top: 8px; font-size: 8px; font-weight: 600; }
+.evaluation-panel { padding: 16px; margin-bottom: 14px; }
+.evaluation-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.evaluation-head h3 { margin: 3px 0; font-size: 13px; }
+.evaluation-head p { margin: 0; color: var(--muted); font-size: 9px; }
+.evaluation-head .primary-button:disabled { opacity: .6; cursor: wait; }
+.eyebrow { color: var(--blue); font-size: 8px; font-weight: 700; letter-spacing: .08em; }
+.evaluation-kpis { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 14px; border: 1px solid var(--line); border-radius: 10px; background: #fafbfc; }
+.evaluation-kpis > div { padding: 12px 14px; border-right: 1px solid var(--line); }
+.evaluation-kpis > div:last-child { border-right: 0; }
+.evaluation-kpis span, .evaluation-kpis b, .evaluation-kpis small { display: block; }
+.evaluation-kpis span { color: var(--muted); font-size: 8px; }
+.evaluation-kpis b { margin-top: 5px; font-size: 17px; }
+.evaluation-kpis small { margin-top: 3px; color: #949cab; font-size: 8px; }
+.evaluation-results { margin-top: 12px; }
+.evaluation-subhead { display: flex; justify-content: space-between; font-size: 9px; }
+.evaluation-subhead span { color: var(--muted); }
+.evaluation-case { display: flex; align-items: center; gap: 10px; border-top: 1px solid #eef0f4; padding: 9px 2px; }
+.evaluation-case p { flex: 1; margin: 0; }
+.evaluation-case p b, .evaluation-case p span { display: block; font-size: 9px; }
+.evaluation-case p span { color: var(--red); margin-top: 3px; font-size: 8px; }
+.evaluation-placeholder, .evaluation-empty { margin-top: 14px; padding: 13px; border: 1px dashed #d8deea; border-radius: 9px; background: #fafbff; }
+.evaluation-placeholder b, .evaluation-placeholder span { display: block; font-size: 9px; }
+.evaluation-placeholder span { color: var(--muted); margin-top: 5px; }
+.evaluation-empty { color: var(--green); font-size: 9px; }
+.evaluation-error { margin-top: 12px; padding: 9px; border-radius: 8px; background: #fff2f3; color: var(--red); font-size: 9px; }
+@media(max-width:760px) { .evaluation-kpis { grid-template-columns: 1fr 1fr; } .evaluation-kpis > div:nth-child(2) { border-right: 0; } .evaluation-head { align-items: flex-start; } }

@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { real, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const organizations = sqliteTable("organizations", {
   id: text("id").primaryKey(),
@@ -74,4 +74,23 @@ export const auditLogs = sqliteTable("audit_logs", {
   resourceId: text("resource_id").notNull(), result: text("result", { enum: ["allowed", "blocked", "failed"] }).notNull(),
   risk: text("risk", { enum: ["low", "medium", "high"] }).notNull(), metadataJson: text("metadata_json").notNull().default("{}"),
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const evaluationRuns = sqliteTable("evaluation_runs", {
+  id: text("id").primaryKey(), organizationId: text("organization_id").notNull().references(() => organizations.id),
+  model: text("model").notNull(), datasetVersion: text("dataset_version").notNull(),
+  status: text("status", { enum: ["running", "completed", "failed"] }).notNull(),
+  totalCases: integer("total_cases").notNull(), passedCases: integer("passed_cases").notNull().default(0),
+  passRate: real("pass_rate").notNull().default(0), highRiskPassRate: real("high_risk_pass_rate").notNull().default(0),
+  averageLatencyMs: real("average_latency_ms").notNull().default(0),
+  startedAt: text("started_at").notNull(), completedAt: text("completed_at"),
+});
+
+export const evaluationResults = sqliteTable("evaluation_results", {
+  id: text("id").primaryKey(), runId: text("run_id").notNull().references(() => evaluationRuns.id),
+  caseId: text("case_id").notNull(), category: text("category").notNull(), query: text("query").notNull(),
+  passed: integer("passed", { mode: "boolean" }).notNull(), expectedSource: text("expected_source"), actualSource: text("actual_source"),
+  expectedHandoff: integer("expected_handoff", { mode: "boolean" }).notNull(), actualHandoff: integer("actual_handoff", { mode: "boolean" }).notNull(),
+  latencyMs: integer("latency_ms").notNull(), mode: text("mode").notNull(), failuresJson: text("failures_json").notNull().default("[]"),
+  answer: text("answer").notNull(), createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });

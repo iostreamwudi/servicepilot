@@ -55,3 +55,20 @@ test("keeps enterprise tool calls read-only, validated and masked", async () => 
   assert.match(agent, /可信工具结果（只读、已脱敏）/);
   assert.match(agent, /订单状态只能引用此结果，不得自行推断/);
 });
+
+test("runs guarded model evaluations and exposes the quality dashboard", async () => {
+  const [route, schema, page] = await Promise.all([
+    source("app/api/evaluations/route.ts"),
+    source("db/schema.ts"),
+    source("app/page.tsx"),
+  ]);
+  assert.match(route, /runWithConcurrency\(items, request, 3\)/);
+  assert.match(route, /请等待 60 秒后再次运行/);
+  assert.match(route, /知识来源不符合预期/);
+  assert.match(route, /转人工决策不符合预期/);
+  assert.match(schema, /evaluation_runs/);
+  assert.match(schema, /evaluation_results/);
+  assert.match(page, /qwen-plus 基线评测/);
+  assert.match(page, /总体通过率/);
+  assert.match(page, /高风险通过率/);
+});

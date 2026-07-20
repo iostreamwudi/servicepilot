@@ -178,9 +178,46 @@ function Knowledge() {
   </section>;
 }
 
+type EvaluationRun = { id: string; model: string; datasetVersion: string; totalCases: number; passedCases: number; passRate: number; highRiskPassRate: number; averageLatencyMs: number; completedAt?: string | null };
+type EvaluationResultView = { id: string; category: string; query: string; passed: boolean; failures: string[] };
+
+function EvaluationDashboard() {
+  const [run, setRun] = useState<EvaluationRun | null>(null);
+  const [results, setResults] = useState<EvaluationResultView[]>([]);
+  const [running, setRunning] = useState(false);
+  const [error, setError] = useState("");
+  function ingest(payload: { latest?: EvaluationRun | null; run?: EvaluationRun; results?: Array<Record<string, unknown>> }) {
+    setRun(payload.run ?? payload.latest ?? null);
+    setResults((payload.results ?? []).map((raw) => {
+      const item = raw.item as { id?: string; category?: string; query?: string } | undefined;
+      let failures: string[] = [];
+      if (Array.isArray(raw.failures)) failures = raw.failures as string[];
+      else if (typeof raw.failuresJson === "string") { try { failures = JSON.parse(raw.failuresJson) as string[]; } catch { failures = ["结果解析失败"]; } }
+      return { id: item?.id ?? String(raw.caseId ?? raw.id), category: item?.category ?? String(raw.category ?? "unknown"), query: item?.query ?? String(raw.query ?? ""), passed: Boolean(raw.passed), failures };
+    }));
+  }
+  useEffect(() => { fetch("/api/evaluations").then((r) => r.ok ? r.json() : Promise.reject()).then(ingest).catch(() => undefined); }, []);
+  async function runEvaluation() {
+    setRunning(true); setError("");
+    try {
+      const response = await fetch("/api/evaluations", { method: "POST" });
+      const body = await response.json() as { error?: string; run?: EvaluationRun; results?: Array<Record<string, unknown>> };
+      if (!response.ok) throw new Error(body.error || "评测运行失败");
+      ingest(body);
+    } catch (cause) { setError(cause instanceof Error ? cause.message : "评测运行失败"); }
+    finally { setRunning(false); }
+  }
+  const failed = results.filter((item) => !item.passed);
+  return <section className="panel evaluation-panel"><div className="evaluation-head"><div><span className="eyebrow">真实模型回归</span><h3>qwen-plus 基线评测</h3><p>15 条种子用例 · 并发 3 · 60 秒运行冷却 · 结果写入 D1</p></div><button className="primary-button" disabled={running} onClick={runEvaluation}>{running ? "正在调用模型…" : run ? "重新运行评测" : "运行首轮评测"}</button></div>
+    {error && <div className="evaluation-error">{error}</div>}
+    {run ? <><div className="evaluation-kpis"><div><span>总体通过率</span><b>{(run.passRate * 100).toFixed(1)}%</b><small>{run.passedCases}/{run.totalCases} 条通过</small></div><div><span>高风险通过率</span><b>{(run.highRiskPassRate * 100).toFixed(1)}%</b><small>高风险 · 对抗 · 隐私</small></div><div><span>平均端到端时延</span><b>{run.averageLatencyMs}ms</b><small>包含检索与生成</small></div><div><span>数据集 / 模型</span><b>v{run.datasetVersion}</b><small>{run.model}</small></div></div>
+      <div className="evaluation-results"><div className="evaluation-subhead"><b>失败案例</b><span>{failed.length ? `优先处理 ${failed.length} 条` : "本轮全部通过"}</span></div>{failed.length ? failed.slice(0, 5).map((item) => <div className="evaluation-case" key={item.id}><Status kind="danger">{item.category}</Status><p><b>{item.query}</b><span>{item.failures.join("；")}</span></p><button className="text-button">加入优化任务 →</button></div>) : <div className="evaluation-empty">✓ 当前基线未发现规则性失败，可继续扩展长尾用例。</div>}</div></> : <div className="evaluation-placeholder"><b>还没有真实基线结果</b><span>运行后将调用生产 qwen-plus，并按知识来源、转人工决策、必要信息与禁止内容自动评分。</span></div>}
+  </section>;
+}
+
 function Quality() {
   const [mode, setMode] = useState("待复核");
-  return <><section className="metrics-grid quality-metrics"><MetricCard label="综合质量分" value="91.3" change="+1.8" helper="目标 92.0" tone="blue" /><MetricCard label="事实忠实度" value="94.8%" change="+2.1%" helper="引用一致性" tone="green" /><MetricCard label="幻觉率" value="2.7%" change="-0.9%" helper="高风险场景 1.1%" tone="purple" /><MetricCard label="人工复核一致率" value="87.6%" change="+3.4%" helper="Judge 与人工一致" tone="orange" /></section>
+  return <><EvaluationDashboard /><section className="metrics-grid quality-metrics"><MetricCard label="综合质量分" value="91.3" change="+1.8" helper="目标 92.0" tone="blue" /><MetricCard label="事实忠实度" value="94.8%" change="+2.1%" helper="引用一致性" tone="green" /><MetricCard label="幻觉率" value="2.7%" change="-0.9%" helper="高风险场景 1.1%" tone="purple" /><MetricCard label="人工复核一致率" value="87.6%" change="+3.4%" helper="Judge 与人工一致" tone="orange" /></section>
     <section className="quality-grid"><article className="panel table-panel"><div className="table-toolbar"><div className="segmented">{["待复核", "高风险", "已确认"].map((m) => <button className={mode === m ? "active" : ""} key={m} onClick={() => setMode(m)}>{m}</button>)}</div><span className="muted">当前 14 条结果需要人工判断</span></div>
       <div className="review-card"><div className="review-head"><div><Status kind="warning">低置信度 0.67</Status><b>回答引用依据不充分</b></div><span>C-28411 · 12分钟前</span></div><div className="review-question"><small>用户问题</small><p>生鲜商品已经拆封了，还可以申请无理由退款吗？</p></div><div className="review-answer"><small>AI回答</small><p>生鲜商品支持7天无理由退货，您可以直接提交退款申请。</p><div className="evidence"><b>引用依据</b><span>《生鲜售后规则》：鲜活易腐商品不适用七天无理由退货；质量问题可按赔付标准处理。</span></div></div><div className="review-actions"><button className="danger-button">确认错误</button><button className="ghost-button">模型判断有误</button><button className="primary-button">修正并回流</button></div></div>
       <div className="review-card compact"><div><Status kind="danger">高风险</Status><b>模型做出未经授权的赔付承诺</b><small>C-28398 · 退款场景</small></div><button className="text-button">开始复核 →</button></div>
