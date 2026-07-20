@@ -210,8 +210,26 @@ function Audit() {
 }
 
 function CustomerDemo({ onClose }: { onClose: () => void }) {
-  const [sent, setSent] = useState(false);
-  return <div className="modal-backdrop" onClick={onClose}><div className="customer-demo" onClick={(e) => e.stopPropagation()}><div className="demo-head"><div className="brand-mark small">S</div><div><b>商城智能客服</b><span>AI 服务中 · 随时可转人工</span></div><button onClick={onClose}>×</button></div><div className="demo-body"><div className="demo-welcome"><b>您好，我是商城智能客服</b><span>我可以帮您查询订单、物流、退款和售后问题。</span></div><div className="quick-questions"><button>查询退款进度</button><button>商品破损理赔</button><button>修改收货地址</button></div>{sent && <><div className="demo-user">我的退款什么时候到账？</div><div className="demo-ai"><b>退款状态正常</b><span>退款已于今天 10:26 审核通过，预计 1–3 个工作日原路退回。</span><a>依据：退款与到账时效规则 v3.4</a><small>信息来自订单系统 · 不是模型推测</small></div></>}</div><div className="demo-input"><input placeholder="请输入您的问题" onKeyDown={(e) => e.key === 'Enter' && setSent(true)} /><button onClick={() => setSent(true)}>发送</button></div><div className="demo-footer">AI生成内容仅供参考 · 涉及资金操作需人工确认</div></div></div>;
+  type AgentResult = { answer: string; source: { id: string; title: string; version: string } | null; confidence: number; handoff: boolean; mode: string; trace: Array<{ label: string }> };
+  const [query, setQuery] = useState("我的退款什么时候到账？");
+  const [submitted, setSubmitted] = useState("");
+  const [result, setResult] = useState<AgentResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  async function send(nextQuery = query) {
+    const value = nextQuery.trim();
+    if (!value || loading) return;
+    setSubmitted(value); setQuery(value); setLoading(true); setError(""); setResult(null);
+    try {
+      const response = await fetch("/api/agent/respond", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ query: value }) });
+      const body = await response.json() as AgentResult & { error?: string };
+      if (!response.ok) throw new Error(body.error || "服务暂时不可用");
+      setResult(body);
+    } catch (cause) { setError(cause instanceof Error ? cause.message : "服务暂时不可用"); }
+    finally { setLoading(false); }
+  }
+  const quick = ["退款审核通过后多久能到账？", "收到的生鲜破损了怎么办？", "订单还没发货怎么改地址？"];
+  return <div className="modal-backdrop" onClick={onClose}><div className="customer-demo" onClick={(e) => e.stopPropagation()}><div className="demo-head"><div className="brand-mark small">S</div><div><b>商城智能客服</b><span>Agent API 已连接 · 随时可转人工</span></div><button onClick={onClose}>×</button></div><div className="demo-body"><div className="demo-welcome"><b>您好，我是商城智能客服</b><span>回答会展示知识依据、置信度与安全决策。</span></div><div className="quick-questions">{quick.map((item) => <button key={item} onClick={() => send(item)}>{item.replace("？", "")}</button>)}</div>{submitted && <div className="demo-user">{submitted}</div>}{loading && <div className="demo-ai loading"><b>正在执行 Agent 工作流</b><span>意图识别 → 知识检索 → 风险校验</span></div>}{error && <div className="demo-ai error"><b>请求失败</b><span>{error}</span></div>}{result && <div className="demo-ai"><b>{result.handoff ? "已生成安全答复并建议转人工" : "已基于可信知识回答"}</b><span>{result.answer}</span>{result.source && <a>依据：{result.source.title} {result.source.version} · {result.source.id}</a>}<small>置信度 {(result.confidence * 100).toFixed(0)}% · {result.mode === "model-grounded" ? "大模型生成（有依据约束）" : result.mode === "safe-fallback" ? "低置信度安全兜底" : "确定性安全模式"}</small><div className="demo-trace">{result.trace.map((step, index) => <i key={step.label}>{index + 1}. {step.label}</i>)}</div>{result.handoff && <button className="handoff-button">转接人工客服</button>}</div>}</div><div className="demo-input"><input value={query} maxLength={500} onChange={(e) => setQuery(e.target.value)} placeholder="请输入您的问题" onKeyDown={(e) => e.key === 'Enter' && send()} /><button disabled={loading} onClick={() => send()}>{loading ? "处理中" : "发送"}</button></div><div className="demo-footer">AI生成内容仅供参考 · 涉及资金、赔付和账户操作需人工确认</div></div></div>;
 }
 
 export default function Home() {

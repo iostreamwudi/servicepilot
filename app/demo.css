@@ -1,0 +1,6 @@
+.demo-ai.loading { border-color: #dbe3ff; background: #f7f9ff; }
+.demo-ai.error { border-color: #f0cdd1; background: #fff7f8; }
+.demo-input button:disabled { opacity: .55; cursor: wait; }
+.demo-trace { border-top: 1px solid #eef0f4; margin-top: 8px; padding-top: 6px; }
+.demo-trace i { display: block; font-style: normal; color: #7b8495; font-size: 7px; line-height: 1.7; }
+.handoff-button { width: 100%; border: 0; background: #fff0e3; color: #aa5b19; border-radius: 7px; padding: 7px; margin-top: 8px; font-size: 8px; font-weight: 600; }
