@@ -64,7 +64,7 @@ export async function POST(request: Request) {
   if (!email) return Response.json({ error: "Authentication required" }, { status: 401 });
   const db = getDb();
   const recent = await db.select().from(evaluationRuns).where(eq(evaluationRuns.organizationId, ORG_ID)).orderBy(desc(evaluationRuns.startedAt)).limit(1);
-  if (recent[0] && Date.now() - new Date(recent[0].startedAt).getTime() < 60_000) return Response.json({ error: "请等待 60 秒后再次运行，避免重复消耗模型额度" }, { status: 429 });
+  if (recent[0] && recent[0].status !== "failed" && Date.now() - new Date(recent[0].startedAt).getTime() < 60_000) return Response.json({ error: "请等待 60 秒后再次运行，避免重复消耗模型额度" }, { status: 429 });
   const items = evaluationSet.cases as EvaluationCase[];
   const runId = `ER-${crypto.randomUUID()}`;
   const startedAt = new Date().toISOString();
@@ -75,18 +75,20 @@ export async function POST(request: Request) {
     const highRisk = results.filter((item) => ["high-risk", "adversarial", "privacy"].includes(item.item.category));
     const highRiskPassed = highRisk.filter((item) => item.passed).length;
     const averageLatencyMs = Math.round(results.reduce((sum, item) => sum + item.latencyMs, 0) / Math.max(results.length, 1));
-    await db.insert(evaluationResults).values(results.map((result) => ({
+    const rows = results.map((result) => ({
       id: `EV-${crypto.randomUUID()}`, runId, caseId: result.item.id, category: result.item.category, query: result.item.query,
       passed: result.passed, expectedSource: result.item.expectedSource, actualSource: result.body.source?.id ?? null,
       expectedHandoff: result.item.expectedHandoff, actualHandoff: result.body.handoff, latencyMs: result.latencyMs,
       mode: result.body.mode, failuresJson: JSON.stringify(result.failures), answer: result.body.answer,
-    })));
+    }));
+    for (let index = 0; index < rows.length; index += 4) await db.insert(evaluationResults).values(rows.slice(index, index + 4));
     const summary = { status: "completed" as const, passedCases: passed, passRate: passed / items.length, highRiskPassRate: highRiskPassed / Math.max(highRisk.length, 1), averageLatencyMs, completedAt: new Date().toISOString() };
     await db.update(evaluationRuns).set(summary).where(eq(evaluationRuns.id, runId));
     await db.insert(auditLogs).values({ id: `A-EVAL-${crypto.randomUUID()}`, organizationId: ORG_ID, actorType: "user", action: "evaluation.run", resourceType: "evaluation_run", resourceId: runId, result: "allowed", risk: "low", metadataJson: JSON.stringify({ actorEmail: email, model: "qwen-plus", totalCases: items.length }) });
     return Response.json({ run: { id: runId, model: "qwen-plus", datasetVersion: evaluationSet.version, totalCases: items.length, ...summary }, results }, { status: 201 });
   } catch (error) {
     await db.update(evaluationRuns).set({ status: "failed", completedAt: new Date().toISOString() }).where(eq(evaluationRuns.id, runId));
-    return Response.json({ error: error instanceof Error ? error.message : "Evaluation failed", runId }, { status: 500 });
+    await db.insert(auditLogs).values({ id: `A-EVAL-FAIL-${crypto.randomUUID()}`, organizationId: ORG_ID, actorType: "system", action: "evaluation.fail", resourceType: "evaluation_run", resourceId: runId, result: "failed", risk: "medium", metadataJson: JSON.stringify({ errorType: error instanceof Error ? error.name : "unknown" }) });
+    return Response.json({ error: "评测运行未完成，系统已记录失败原因，请稍后重试", runId }, { status: 500 });
   }
 }
