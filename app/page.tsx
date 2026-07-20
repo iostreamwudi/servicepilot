@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type NavKey = "overview" | "conversations" | "tickets" | "knowledge" | "quality" | "strategy" | "analytics" | "audit";
 
@@ -217,10 +217,17 @@ function CustomerDemo({ onClose }: { onClose: () => void }) {
 export default function Home() {
   const [active, setActive] = useState<NavKey>("overview");
   const [demoOpen, setDemoOpen] = useState(false);
+  const [dataMode, setDataMode] = useState<"connecting" | "persistent" | "preview">("connecting");
   const title = useMemo(() => screenTitles[active], [active]);
+  useEffect(() => {
+    fetch("/api/bootstrap", { method: "POST" })
+      .then((response) => response.ok ? response.json() : Promise.reject(new Error("bootstrap failed")))
+      .then(() => setDataMode("persistent"))
+      .catch(() => setDataMode("preview"));
+  }, []);
   return <div className="app-shell">
     <aside className="sidebar"><div className="brand"><div className="brand-mark">S</div><div><b>ServicePilot</b><span>企业智能服务平台</span></div></div><div className="workspace"><span>当前空间</span><button><i>云</i><b>青屿商城</b><em>⌄</em></button></div><nav>{navItems.map((item) => <button key={item.key} className={active === item.key ? "active" : ""} onClick={() => setActive(item.key)}><i>{item.short}</i><span>{item.label}</span>{item.key === "conversations" && <em>12</em>}</button>)}</nav><div className="sidebar-bottom"><div className="system-health"><span><i />系统运行正常</span><small>所有服务可用</small></div><button className="profile"><span>王</span><p><b>王瑞峰</b><small>产品管理员</small></p><em>···</em></button></div></aside>
-    <main><header className="topbar"><div><h1>{title.title}</h1><p>{title.desc}</p></div><div className="top-actions"><button className="demo-button" onClick={() => setDemoOpen(true)}>体验用户端</button><button className="icon-button" aria-label="帮助">?</button><button className="icon-button notification" aria-label="通知">○<i /></button></div></header><div className="content">
+    <main><header className="topbar"><div><h1>{title.title}</h1><p>{title.desc}</p></div><div className="top-actions"><span className={`data-mode ${dataMode}`}>{dataMode === "persistent" ? "持久数据已连接" : dataMode === "preview" ? "安全预览模式" : "正在连接数据"}</span><button className="demo-button" onClick={() => setDemoOpen(true)}>体验用户端</button><button className="icon-button" aria-label="帮助">?</button><button className="icon-button notification" aria-label="通知">○<i /></button></div></header><div className="content">
       {active === "overview" && <Overview onNavigate={setActive} />}{active === "conversations" && <Conversations />}{active === "tickets" && <Tickets />}{active === "knowledge" && <Knowledge />}{active === "quality" && <Quality />}{active === "strategy" && <Strategy />}{active === "analytics" && <Analytics />}{active === "audit" && <Audit />}
     </div></main>{demoOpen && <CustomerDemo onClose={() => setDemoOpen(false)} />}
   </div>;
