@@ -65,9 +65,10 @@ export async function GET(request: Request) {
   const db = getDb();
   const runs = await db.select().from(evaluationRuns).where(eq(evaluationRuns.organizationId, ORG_ID)).orderBy(desc(evaluationRuns.startedAt)).limit(10);
   const latest = runs.find((run) => run.status === "completed") ?? null;
-  if (!latest) return Response.json({ runs, latest: null, results: [] });
+  const blindConsumed = runs.some((run) => run.suite === "blind" && run.systemVersion === SYSTEM_VERSION && run.status === "completed");
+  if (!latest) return Response.json({ runs, latest: null, results: [], blindConsumed });
   const results = await db.select().from(evaluationResults).where(eq(evaluationResults.runId, latest.id));
-  return Response.json({ runs, latest, results });
+  return Response.json({ runs, latest, results, blindConsumed });
 }
 
 export async function POST(request: Request) {

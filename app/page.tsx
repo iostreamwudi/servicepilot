@@ -181,13 +181,16 @@ function Knowledge() {
 type EvaluationRun = { id: string; model: string; datasetVersion: string; suite?: string; systemVersion?: string; totalCases: number; passedCases: number; passRate: number; highRiskPassRate: number; averageLatencyMs: number; completedAt?: string | null };
 type EvaluationResultView = { id: string; category: string; query: string; passed: boolean; failures: string[] };
 
-function EvaluationDashboard() {
+function EvaluationDashboard({ onCompleted }: { onCompleted?: () => void }) {
   const [run, setRun] = useState<EvaluationRun | null>(null);
   const [results, setResults] = useState<EvaluationResultView[]>([]);
   const [running, setRunning] = useState<"regression" | "blind" | null>(null);
   const [error, setError] = useState("");
-  function ingest(payload: { latest?: EvaluationRun | null; run?: EvaluationRun; results?: Array<Record<string, unknown>> }) {
+  const [blindConsumed, setBlindConsumed] = useState(false);
+  function ingest(payload: { latest?: EvaluationRun | null; run?: EvaluationRun; results?: Array<Record<string, unknown>>; blindConsumed?: boolean }) {
     setRun(payload.run ?? payload.latest ?? null);
+    if (typeof payload.blindConsumed === "boolean") setBlindConsumed(payload.blindConsumed);
+    if (payload.run?.suite === "blind") setBlindConsumed(true);
     setResults((payload.results ?? []).map((raw) => {
       const item = raw.item as { id?: string; category?: string; query?: string } | undefined;
       let failures: string[] = [];
@@ -201,14 +204,15 @@ function EvaluationDashboard() {
     setRunning(suite); setError("");
     try {
       const response = await fetch("/api/evaluations", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ suite }) });
-      const body = await response.json() as { error?: string; run?: EvaluationRun; results?: Array<Record<string, unknown>> };
+      const body = await response.json() as { error?: string; run?: EvaluationRun; results?: Array<Record<string, unknown>>; blindConsumed?: boolean };
       if (!response.ok) throw new Error(body.error || "评测运行失败");
       ingest(body);
+      onCompleted?.();
     } catch (cause) { setError(cause instanceof Error ? cause.message : "评测运行失败"); }
     finally { setRunning(null); }
   }
   const failed = results.filter((item) => !item.passed);
-  return <section className="panel evaluation-panel"><div className="evaluation-head"><div><span className="eyebrow">真实模型回归</span><h3>qwen-plus 基线评测</h3><p>回归集 100 条 · 冻结盲测 40 条 + 安全门禁 15 条 · 多轮上下文 · 结果写入 D1</p></div><div className="evaluation-actions"><button className="ghost-button" disabled={Boolean(running)} onClick={() => runEvaluation("blind")}>{running === "blind" ? "正在运行盲测…" : "运行冻结盲测"}</button><button className="primary-button" disabled={Boolean(running)} onClick={() => runEvaluation("regression")}>{running === "regression" ? "正在调用模型…" : run ? "重新运行回归" : "运行首轮回归"}</button></div></div>
+  return <section className="panel evaluation-panel"><div className="evaluation-head"><div><span className="eyebrow">真实模型回归</span><h3>qwen-plus 基线评测</h3><p>回归集 100 条 · 冻结盲测 40 条 + 安全门禁 15 条 · 多轮上下文 · 结果写入 D1</p></div><div className="evaluation-actions"><button className="ghost-button" disabled={Boolean(running) || blindConsumed} onClick={() => runEvaluation("blind")}>{running === "blind" ? "正在运行盲测…" : blindConsumed ? "本版本盲测已完成" : "运行冻结盲测"}</button><button className="primary-button" disabled={Boolean(running)} onClick={() => runEvaluation("regression")}>{running === "regression" ? "正在调用模型…" : run ? "重新运行回归" : "运行首轮回归"}</button></div></div>
     {error && <div className="evaluation-error">{error}</div>}
     {run ? <><div className="evaluation-kpis"><div><span>总体通过率</span><b>{(run.passRate * 100).toFixed(1)}%</b><small>{run.passedCases}/{run.totalCases} 条通过</small></div><div><span>高风险通过率</span><b>{(run.highRiskPassRate * 100).toFixed(1)}%</b><small>高风险 · 对抗 · 隐私</small></div><div><span>平均端到端时延</span><b>{run.averageLatencyMs}ms</b><small>包含检索与生成</small></div><div><span>数据集 / 模型</span><b>v{run.datasetVersion}</b><small>{run.model}</small></div></div>
       <div className="evaluation-results"><div className="evaluation-subhead"><b>{run.suite === "blind" ? "盲测失败案例" : "回归失败案例"}</b><span>{failed.length ? `优先处理 ${failed.length} 条` : "本轮全部通过"}</span></div>{failed.length ? failed.slice(0, 5).map((item) => <div className="evaluation-case" key={item.id}><Status kind="danger">{item.category}</Status><p><b>{item.query}</b><span>{item.failures.join("；")}</span></p><button className="text-button">加入优化任务 →</button></div>) : <div className="evaluation-empty">✓ 当前基线未发现规则性失败，可继续扩展长尾用例。</div>}</div></> : <div className="evaluation-placeholder"><b>还没有真实基线结果</b><span>运行后将调用生产 qwen-plus，并按知识来源、转人工决策、必要信息与禁止内容自动评分。</span></div>}
@@ -218,14 +222,14 @@ function EvaluationDashboard() {
 type ReviewDecision = "confirmed_failure" | "label_issue" | "accepted_behavior";
 type ReviewItem = { id: string; caseId: string; category: string; query: string; answer: string; expectedSource: string | null; actualSource: string | null; expectedHandoff: boolean; actualHandoff: boolean; routingIntent: string | null; routingConfidence: number | null; failures: string[]; routingSignals: string[]; review: { decision: ReviewDecision; reviewerEmail: string; note: string } | null };
 
-function EvaluationReviewWorkbench() {
+function EvaluationReviewWorkbench({ refreshKey }: { refreshKey: number }) {
   const [items, setItems] = useState<ReviewItem[]>([]);
   const [mode, setMode] = useState<"pending" | "reviewed">("pending");
   const [note, setNote] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const load = () => fetch("/api/evaluations/reviews").then((r) => r.ok ? r.json() : Promise.reject()).then((body: { items?: ReviewItem[] }) => setItems(body.items ?? [])).catch(() => setError("复核队列加载失败"));
-  useEffect(load, []);
+  useEffect(load, [refreshKey]);
   const visible = items.filter((item) => mode === "pending" ? !item.review : Boolean(item.review));
   const selected = visible[0];
   async function submit(decision: ReviewDecision) {
@@ -251,7 +255,8 @@ function EvaluationReviewWorkbench() {
 }
 
 function Quality() {
-  return <><EvaluationDashboard /><EvaluationReviewWorkbench /></>;
+  const [reviewRefreshKey, setReviewRefreshKey] = useState(0);
+  return <><EvaluationDashboard onCompleted={() => setReviewRefreshKey((value) => value + 1)} /><EvaluationReviewWorkbench refreshKey={reviewRefreshKey} /></>;
 }
 
 function Strategy() {
