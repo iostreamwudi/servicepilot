@@ -52,4 +52,6 @@ test("keeps enterprise tool calls read-only, validated and masked", async () => 
   assert.match(tool, /piiMasked: true/);
   assert.match(tool, /tool\.order_refund\.read/);
   assert.match(agent, /订单工具未返回结果，禁止模型猜测/);
+  assert.match(agent, /可信工具结果（只读、已脱敏）/);
+  assert.match(agent, /订单状态只能引用此结果，不得自行推断/);
 });

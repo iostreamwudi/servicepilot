@@ -24,7 +24,7 @@ function retrieve(query: string) {
   return scored[0].score > 0 ? scored[0].rule : null;
 }
 
-async function generateWithGateway(query: string, rule: KnowledgeRule, config: RuntimeConfig) {
+async function generateWithGateway(query: string, rule: KnowledgeRule, config: RuntimeConfig, toolContext?: string) {
   if (!config.LLM_API_KEY || !config.LLM_BASE_URL || !config.LLM_MODEL) return null;
   const response = await fetch(`${config.LLM_BASE_URL.replace(/\/$/, "")}/chat/completions`, {
     method: "POST",
@@ -32,6 +32,7 @@ async function generateWithGateway(query: string, rule: KnowledgeRule, config: R
     body: JSON.stringify({ model: config.LLM_MODEL, temperature: 0.1, messages: [
       { role: "system", content: "你是企业客服助手。只能依据给定知识回答，不得承诺赔付或执行资金、账户操作；依据不足时明确转人工。回答控制在150字以内。" },
       { role: "system", content: `可信知识：${rule.title} ${rule.version}\n${rule.answer}` },
+      ...(toolContext ? [{ role: "system", content: `可信工具结果（只读、已脱敏）：${toolContext}。订单状态只能引用此结果，不得自行推断。` }] : []),
       { role: "user", content: query },
     ] }),
     signal: AbortSignal.timeout(8_000),
@@ -59,8 +60,9 @@ export async function POST(request: Request) {
   const config = env as unknown as RuntimeConfig;
   const orderId = query.toUpperCase().match(/OR-\d{6}/)?.[0];
   const toolResult = rule.id === "KB-114" && orderId ? lookupRefund(orderId) : null;
+  const toolContext = toolResult?.ok ? JSON.stringify(toolResult.record) : undefined;
   let generated: string | null = null;
-  try { generated = orderId && !toolResult?.ok ? null : await generateWithGateway(query, rule, config); } catch { generated = null; }
+  try { generated = orderId && !toolResult?.ok ? null : await generateWithGateway(query, rule, config, toolContext); } catch { generated = null; }
   const toolAnswer = toolResult?.ok ? `订单 ${toolResult.record.orderId} 的退款状态为${toolResult.record.status === "approved" ? "已审核通过" : toolResult.record.status === "processing" ? "处理中" : "已完成"}，支付渠道为${toolResult.record.paymentChannelMasked}。${rule.answer}` : null;
   const failedToolAnswer = orderId && !toolResult?.ok ? `暂时无法核验订单 ${orderId} 的退款状态。为避免根据不完整信息推测，我已建议转接人工客服继续核查。` : null;
   return Response.json({ answer: generated ?? toolAnswer ?? failedToolAnswer ?? rule.answer, source: { id: rule.id, title: rule.title, version: rule.version }, tool: toolResult?.ok ? { name: "order.refund.get", status: "success", data: toolResult.record, readOnly: true } : orderId ? { name: "order.refund.get", status: "failed", code: toolResult?.code } : null, confidence: orderId && !toolResult?.ok ? 0.5 : rule.confidence, risk: rule.risk, handoff: rule.handoff || Boolean(orderId && !toolResult?.ok), mode: generated ? "model-grounded" : orderId && !toolResult?.ok ? "safe-fallback" : "deterministic-safe", trace: [
