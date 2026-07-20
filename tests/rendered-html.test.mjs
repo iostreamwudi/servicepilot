@@ -66,6 +66,7 @@ test("runs guarded model evaluations and exposes the quality dashboard", async (
   assert.match(route, /请等待 60 秒后再次运行/);
   assert.match(route, /index \+= 4/);
   assert.match(route, /评测运行未完成，系统已记录失败原因/);
+  assert.match(route, /run\.status === "completed"/);
   assert.match(route, /知识来源不符合预期/);
   assert.match(route, /转人工决策不符合预期/);
   assert.match(schema, /evaluation_runs/);

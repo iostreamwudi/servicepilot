@@ -54,9 +54,10 @@ export async function GET(request: Request) {
   if (!authenticatedEmail(request)) return Response.json({ error: "Authentication required" }, { status: 401 });
   const db = getDb();
   const runs = await db.select().from(evaluationRuns).where(eq(evaluationRuns.organizationId, ORG_ID)).orderBy(desc(evaluationRuns.startedAt)).limit(10);
-  if (!runs.length) return Response.json({ runs: [], latest: null, results: [] });
-  const results = await db.select().from(evaluationResults).where(eq(evaluationResults.runId, runs[0].id));
-  return Response.json({ runs, latest: runs[0], results });
+  const latest = runs.find((run) => run.status === "completed") ?? null;
+  if (!latest) return Response.json({ runs, latest: null, results: [] });
+  const results = await db.select().from(evaluationResults).where(eq(evaluationResults.runId, latest.id));
+  return Response.json({ runs, latest, results });
 }
 
 export async function POST(request: Request) {

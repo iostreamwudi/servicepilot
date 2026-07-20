@@ -25,6 +25,7 @@
 
 - `docs/PRODUCT_BLUEPRINT.md`：产品定位、角色权限、业务闭环、功能地图、指标和异常兜底
 - `docs/DELIVERY_ROADMAP.md`：用户研究、AI 接入、试用验证和生产化路线
+- `docs/EVALUATION_BASELINE.md`：真实 qwen-plus 基线结果、评分方法、调试发现与结论边界
 
 ## 下一阶段
 
