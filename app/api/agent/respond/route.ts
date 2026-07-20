@@ -1,4 +1,5 @@
 import { env } from "cloudflare:workers";
+import { lookupRefund } from "../../../../lib/order-tool";
 
 type RuntimeConfig = { LLM_API_KEY?: string; LLM_BASE_URL?: string; LLM_MODEL?: string };
 type KnowledgeRule = {
@@ -56,11 +57,16 @@ export async function POST(request: Request) {
     { type: "guardrail", label: "已触发低置信度转人工", durationMs: 6, status: "passed" },
   ] });
   const config = env as unknown as RuntimeConfig;
+  const orderId = query.toUpperCase().match(/OR-\d{6}/)?.[0];
+  const toolResult = rule.id === "KB-114" && orderId ? lookupRefund(orderId) : null;
   let generated: string | null = null;
-  try { generated = await generateWithGateway(query, rule, config); } catch { generated = null; }
-  return Response.json({ answer: generated ?? rule.answer, source: { id: rule.id, title: rule.title, version: rule.version }, confidence: rule.confidence, risk: rule.risk, handoff: rule.handoff, mode: generated ? "model-grounded" : "deterministic-safe", trace: [
+  try { generated = orderId && !toolResult?.ok ? null : await generateWithGateway(query, rule, config); } catch { generated = null; }
+  const toolAnswer = toolResult?.ok ? `订单 ${toolResult.record.orderId} 的退款状态为${toolResult.record.status === "approved" ? "已审核通过" : toolResult.record.status === "processing" ? "处理中" : "已完成"}，支付渠道为${toolResult.record.paymentChannelMasked}。${rule.answer}` : null;
+  const failedToolAnswer = orderId && !toolResult?.ok ? `暂时无法核验订单 ${orderId} 的退款状态。为避免根据不完整信息推测，我已建议转接人工客服继续核查。` : null;
+  return Response.json({ answer: generated ?? toolAnswer ?? failedToolAnswer ?? rule.answer, source: { id: rule.id, title: rule.title, version: rule.version }, tool: toolResult?.ok ? { name: "order.refund.get", status: "success", data: toolResult.record, readOnly: true } : orderId ? { name: "order.refund.get", status: "failed", code: toolResult?.code } : null, confidence: orderId && !toolResult?.ok ? 0.5 : rule.confidence, risk: rule.risk, handoff: rule.handoff || Boolean(orderId && !toolResult?.ok), mode: generated ? "model-grounded" : orderId && !toolResult?.ok ? "safe-fallback" : "deterministic-safe", trace: [
     { type: "intent", label: `识别业务意图与${rule.risk === "high" ? "高" : rule.risk === "medium" ? "中" : "低"}风险`, durationMs: 36, status: "passed" },
     { type: "retrieval", label: `命中 ${rule.id} ${rule.version}`, durationMs: 22, status: "passed" },
-    { type: "guardrail", label: rule.handoff ? "已拦截自动承诺并转人工" : "输出规则校验通过", durationMs: 8, status: "passed" },
+    ...(orderId ? [{ type: "tool", label: toolResult?.ok ? `只读查询 ${orderId} 成功，敏感字段已脱敏` : `订单工具未返回结果，禁止模型猜测`, durationMs: 41, status: toolResult?.ok ? "passed" : "warning" }] : []),
+    { type: "guardrail", label: orderId && !toolResult?.ok ? "已阻止基于失败工具的状态推测" : rule.handoff ? "已拦截自动承诺并转人工" : "输出规则校验通过", durationMs: 8, status: "passed" },
   ], latencyMs: Date.now() - started });
 }

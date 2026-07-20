@@ -39,3 +39,17 @@ test("ships a representative offline evaluation seed", async () => {
   assert.ok(evaluation.cases.some((item) => item.expectedHandoff === true));
   assert.ok(evaluation.cases.some((item) => Array.isArray(item.mustNotContain)));
 });
+
+test("keeps enterprise tool calls read-only, validated and masked", async () => {
+  const [tool, records, agent] = await Promise.all([
+    source("app/api/tools/order-refund/route.ts"),
+    source("lib/order-tool.ts"),
+    source("app/api/agent/respond/route.ts"),
+  ]);
+  assert.match(records, /\^OR-\\d\{6\}\$/);
+  assert.match(records, /尾号 \*\*/);
+  assert.match(tool, /readOnly: true/);
+  assert.match(tool, /piiMasked: true/);
+  assert.match(tool, /tool\.order_refund\.read/);
+  assert.match(agent, /订单工具未返回结果，禁止模型猜测/);
+});
