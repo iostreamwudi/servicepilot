@@ -1,8 +1,9 @@
 import { env } from "cloudflare:workers";
 import { lookupRefund } from "../../../../lib/order-tool";
+import { routeIntent, shouldHandoff, type ConversationTurn } from "../../../../lib/intent-router";
 
 type RuntimeConfig = { LLM_API_KEY?: string; LLM_BASE_URL?: string; LLM_MODEL?: string };
-type HistoryTurn = { role: "user" | "assistant"; content: string };
+type HistoryTurn = ConversationTurn;
 type KnowledgeRule = {
   id: string; title: string; version: string; terms: string[]; answer: string;
   confidence: number; risk: "low" | "medium" | "high"; handoff: boolean;
@@ -18,11 +19,6 @@ const rules: KnowledgeRule[] = [
 function authenticated(request: Request) {
   const host = new URL(request.url).hostname;
   return Boolean(request.headers.get("oai-authenticated-user-email")) || host === "localhost" || host === "127.0.0.1";
-}
-
-function retrieve(query: string) {
-  const scored = rules.map((rule) => ({ rule, score: rule.terms.reduce((n, term) => n + (query.includes(term) ? 1 : 0), 0) })).sort((a, b) => b.score - a.score);
-  return scored[0].score > 0 ? scored[0].rule : null;
 }
 
 async function generateWithGateway(query: string, history: HistoryTurn[], rule: KnowledgeRule, config: RuntimeConfig, toolContext?: string) {
@@ -57,25 +53,26 @@ export async function POST(request: Request) {
   const history = rawHistory.filter((turn): turn is HistoryTurn => Boolean(turn) && typeof turn === "object" && ((turn as HistoryTurn).role === "user" || (turn as HistoryTurn).role === "assistant") && typeof (turn as HistoryTurn).content === "string" && (turn as HistoryTurn).content.trim().length > 0 && (turn as HistoryTurn).content.length <= 500);
   if (history.length !== rawHistory.length) return Response.json({ error: "history contains an invalid turn" }, { status: 400 });
   const started = Date.now();
-  const retrievalText = `${history.map((turn) => turn.content).join("\n")}\n${query}`;
-  const rule = retrieve(retrievalText);
-  if (!rule) return Response.json({ answer: "这个问题超出了当前已验证的知识范围。为了避免给出不准确的信息，我已建议转接人工客服。", source: null, confidence: 0.45, risk: "medium", handoff: true, mode: "safe-fallback", trace: [
+  const routing = routeIntent(query, history);
+  const rule = routing ? rules.find((item) => item.id === routing.knowledgeId) ?? null : null;
+  if (!rule || !routing) return Response.json({ answer: "这个问题超出了当前已验证的知识范围。为了避免给出不准确的信息，我已建议转接人工客服。", source: null, confidence: 0.45, risk: "medium", handoff: true, mode: "safe-fallback", routing: null, trace: [
     { type: "intent", label: "未识别到稳定业务意图", durationMs: 32, status: "warning" },
     { type: "retrieval", label: "可信知识未命中", durationMs: 18, status: "warning" },
     { type: "guardrail", label: "已触发低置信度转人工", durationMs: 6, status: "passed" },
   ] });
   const config = env as unknown as RuntimeConfig;
   const orderId = query.toUpperCase().match(/OR-\d{6}/)?.[0];
+  const policyHandoff = shouldHandoff(routing.intent, query);
   const toolResult = rule.id === "KB-114" && orderId ? lookupRefund(orderId) : null;
   const toolContext = toolResult?.ok ? JSON.stringify(toolResult.record) : undefined;
   let generated: string | null = null;
   try { generated = orderId && !toolResult?.ok ? null : await generateWithGateway(query, history, rule, config, toolContext); } catch { generated = null; }
   const toolAnswer = toolResult?.ok ? `订单 ${toolResult.record.orderId} 的退款状态为${toolResult.record.status === "approved" ? "已审核通过" : toolResult.record.status === "processing" ? "处理中" : "已完成"}，支付渠道为${toolResult.record.paymentChannelMasked}。${rule.answer}` : null;
   const failedToolAnswer = orderId && !toolResult?.ok ? `暂时无法核验订单 ${orderId} 的退款状态。为避免根据不完整信息推测，我已建议转接人工客服继续核查。` : null;
-  return Response.json({ answer: generated ?? toolAnswer ?? failedToolAnswer ?? rule.answer, source: { id: rule.id, title: rule.title, version: rule.version }, tool: toolResult?.ok ? { name: "order.refund.get", status: "success", data: toolResult.record, readOnly: true } : orderId ? { name: "order.refund.get", status: "failed", code: toolResult?.code } : null, confidence: orderId && !toolResult?.ok ? 0.5 : rule.confidence, risk: rule.risk, handoff: rule.handoff || Boolean(orderId && !toolResult?.ok), mode: generated ? "model-grounded" : orderId && !toolResult?.ok ? "safe-fallback" : "deterministic-safe", trace: [
-    { type: "intent", label: `识别业务意图与${rule.risk === "high" ? "高" : rule.risk === "medium" ? "中" : "低"}风险`, durationMs: 36, status: "passed" },
-    { type: "retrieval", label: `命中 ${rule.id} ${rule.version}`, durationMs: 22, status: "passed" },
+  return Response.json({ answer: generated ?? toolAnswer ?? failedToolAnswer ?? rule.answer, source: { id: rule.id, title: rule.title, version: rule.version }, tool: toolResult?.ok ? { name: "order.refund.get", status: "success", data: toolResult.record, readOnly: true } : orderId ? { name: "order.refund.get", status: "failed", code: toolResult?.code } : null, routing, confidence: orderId && !toolResult?.ok ? 0.5 : Math.min(rule.confidence, routing.confidence), risk: rule.risk, handoff: policyHandoff || Boolean(orderId && !toolResult?.ok), mode: generated ? "model-grounded" : orderId && !toolResult?.ok ? "safe-fallback" : "deterministic-safe", trace: [
+    { type: "intent", label: `识别 ${routing.intent} 意图，置信度 ${routing.confidence}`, durationMs: 36, status: "passed" },
+    { type: "retrieval", label: `混合检索命中 ${rule.id} ${rule.version} · ${routing.matchedSignals.join(" / ")}`, durationMs: 22, status: "passed" },
     ...(orderId ? [{ type: "tool", label: toolResult?.ok ? `只读查询 ${orderId} 成功，敏感字段已脱敏` : `订单工具未返回结果，禁止模型猜测`, durationMs: 41, status: toolResult?.ok ? "passed" : "warning" }] : []),
-    { type: "guardrail", label: orderId && !toolResult?.ok ? "已阻止基于失败工具的状态推测" : rule.handoff ? "已拦截自动承诺并转人工" : "输出规则校验通过", durationMs: 8, status: "passed" },
+    { type: "guardrail", label: orderId && !toolResult?.ok ? "已阻止基于失败工具的状态推测" : policyHandoff ? "策略命中并转人工" : "输出规则校验通过", durationMs: 8, status: "passed" },
   ], latencyMs: Date.now() - started });
 }

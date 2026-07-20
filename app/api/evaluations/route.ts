@@ -13,7 +13,10 @@ type EvaluationCase = {
   mustContain?: string[]; mustNotContain?: string[]; history?: HistoryTurn[]; contextRequired?: boolean;
   source?: { dataset: string; dialogueId?: string };
 };
-type AgentResponse = { answer: string; source: { id: string } | null; handoff: boolean; latencyMs?: number; mode: string; error?: string };
+type AgentResponse = {
+  answer: string; source: { id: string } | null; handoff: boolean; latencyMs?: number; mode: string; error?: string;
+  routing?: { intent: string; confidence: number; matchedSignals: string[] } | null;
+};
 
 function authenticatedEmail(request: Request) {
   const host = new URL(request.url).hostname;
@@ -89,6 +92,9 @@ export async function POST(request: Request) {
       sourceRecordId: result.item.source?.dialogueId ?? result.item.id,
       contextRequired: result.item.contextRequired ?? false,
       historyJson: JSON.stringify(result.item.history ?? []),
+      routingIntent: result.body.routing?.intent ?? null,
+      routingConfidence: result.body.routing?.confidence ?? null,
+      routingSignalsJson: JSON.stringify(result.body.routing?.matchedSignals ?? []),
     }));
     for (let index = 0; index < rows.length; index += 4) await db.insert(evaluationResults).values(rows.slice(index, index + 4));
     const summary = { status: "completed" as const, passedCases: passed, passRate: passed / items.length, highRiskPassRate: highRiskPassed / Math.max(highRisk.length, 1), averageLatencyMs, completedAt: new Date().toISOString() };

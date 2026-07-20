@@ -26,6 +26,8 @@ test("enforces grounded answers and safe fallback in the Agent route", async () 
   assert.match(route, /model-grounded/);
   assert.match(route, /LLM_API_KEY/);
   assert.match(route, /AbortSignal\.timeout\(8_000\)/);
+  assert.match(route, /routeIntent/);
+  assert.match(route, /matchedSignals/);
 });
 
 test("ships a representative offline evaluation seed", async () => {
@@ -86,6 +88,8 @@ test("runs guarded model evaluations and exposes the quality dashboard", async (
   assert.match(schema, /evaluation_results/);
   assert.match(schema, /source_dataset/);
   assert.match(schema, /context_required/);
+  assert.match(schema, /routing_intent/);
+  assert.match(schema, /routing_signals_json/);
   assert.match(page, /qwen-plus 基线评测/);
   assert.match(page, /85 条真实客服语料/);
   assert.match(page, /总体通过率/);

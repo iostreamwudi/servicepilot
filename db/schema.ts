@@ -94,5 +94,7 @@ export const evaluationResults = sqliteTable("evaluation_results", {
   latencyMs: integer("latency_ms").notNull(), mode: text("mode").notNull(), failuresJson: text("failures_json").notNull().default("[]"),
   answer: text("answer").notNull(), sourceDataset: text("source_dataset").notNull().default("ServicePilot synthetic seed"),
   sourceRecordId: text("source_record_id"), contextRequired: integer("context_required", { mode: "boolean" }).notNull().default(false),
-  historyJson: text("history_json").notNull().default("[]"), createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  historyJson: text("history_json").notNull().default("[]"), routingIntent: text("routing_intent"),
+  routingConfidence: real("routing_confidence"), routingSignalsJson: text("routing_signals_json").notNull().default("[]"),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
