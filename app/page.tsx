@@ -178,13 +178,13 @@ function Knowledge() {
   </section>;
 }
 
-type EvaluationRun = { id: string; model: string; datasetVersion: string; totalCases: number; passedCases: number; passRate: number; highRiskPassRate: number; averageLatencyMs: number; completedAt?: string | null };
+type EvaluationRun = { id: string; model: string; datasetVersion: string; suite?: string; systemVersion?: string; totalCases: number; passedCases: number; passRate: number; highRiskPassRate: number; averageLatencyMs: number; completedAt?: string | null };
 type EvaluationResultView = { id: string; category: string; query: string; passed: boolean; failures: string[] };
 
 function EvaluationDashboard() {
   const [run, setRun] = useState<EvaluationRun | null>(null);
   const [results, setResults] = useState<EvaluationResultView[]>([]);
-  const [running, setRunning] = useState(false);
+  const [running, setRunning] = useState<"regression" | "blind" | null>(null);
   const [error, setError] = useState("");
   function ingest(payload: { latest?: EvaluationRun | null; run?: EvaluationRun; results?: Array<Record<string, unknown>> }) {
     setRun(payload.run ?? payload.latest ?? null);
@@ -197,31 +197,61 @@ function EvaluationDashboard() {
     }));
   }
   useEffect(() => { fetch("/api/evaluations").then((r) => r.ok ? r.json() : Promise.reject()).then(ingest).catch(() => undefined); }, []);
-  async function runEvaluation() {
-    setRunning(true); setError("");
+  async function runEvaluation(suite: "regression" | "blind") {
+    setRunning(suite); setError("");
     try {
-      const response = await fetch("/api/evaluations", { method: "POST" });
+      const response = await fetch("/api/evaluations", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ suite }) });
       const body = await response.json() as { error?: string; run?: EvaluationRun; results?: Array<Record<string, unknown>> };
       if (!response.ok) throw new Error(body.error || "评测运行失败");
       ingest(body);
     } catch (cause) { setError(cause instanceof Error ? cause.message : "评测运行失败"); }
-    finally { setRunning(false); }
+    finally { setRunning(null); }
   }
   const failed = results.filter((item) => !item.passed);
-  return <section className="panel evaluation-panel"><div className="evaluation-head"><div><span className="eyebrow">真实模型回归</span><h3>qwen-plus 基线评测</h3><p>100 条评测 · 85 条真实客服语料 + 15 条安全种子 · 多轮上下文 · 结果写入 D1</p></div><button className="primary-button" disabled={running} onClick={runEvaluation}>{running ? "正在调用模型…" : run ? "重新运行评测" : "运行首轮评测"}</button></div>
+  return <section className="panel evaluation-panel"><div className="evaluation-head"><div><span className="eyebrow">真实模型回归</span><h3>qwen-plus 基线评测</h3><p>回归集 100 条 · 冻结盲测 40 条 + 安全门禁 15 条 · 多轮上下文 · 结果写入 D1</p></div><div className="evaluation-actions"><button className="ghost-button" disabled={Boolean(running)} onClick={() => runEvaluation("blind")}>{running === "blind" ? "正在运行盲测…" : "运行冻结盲测"}</button><button className="primary-button" disabled={Boolean(running)} onClick={() => runEvaluation("regression")}>{running === "regression" ? "正在调用模型…" : run ? "重新运行回归" : "运行首轮回归"}</button></div></div>
     {error && <div className="evaluation-error">{error}</div>}
     {run ? <><div className="evaluation-kpis"><div><span>总体通过率</span><b>{(run.passRate * 100).toFixed(1)}%</b><small>{run.passedCases}/{run.totalCases} 条通过</small></div><div><span>高风险通过率</span><b>{(run.highRiskPassRate * 100).toFixed(1)}%</b><small>高风险 · 对抗 · 隐私</small></div><div><span>平均端到端时延</span><b>{run.averageLatencyMs}ms</b><small>包含检索与生成</small></div><div><span>数据集 / 模型</span><b>v{run.datasetVersion}</b><small>{run.model}</small></div></div>
-      <div className="evaluation-results"><div className="evaluation-subhead"><b>失败案例</b><span>{failed.length ? `优先处理 ${failed.length} 条` : "本轮全部通过"}</span></div>{failed.length ? failed.slice(0, 5).map((item) => <div className="evaluation-case" key={item.id}><Status kind="danger">{item.category}</Status><p><b>{item.query}</b><span>{item.failures.join("；")}</span></p><button className="text-button">加入优化任务 →</button></div>) : <div className="evaluation-empty">✓ 当前基线未发现规则性失败，可继续扩展长尾用例。</div>}</div></> : <div className="evaluation-placeholder"><b>还没有真实基线结果</b><span>运行后将调用生产 qwen-plus，并按知识来源、转人工决策、必要信息与禁止内容自动评分。</span></div>}
+      <div className="evaluation-results"><div className="evaluation-subhead"><b>{run.suite === "blind" ? "盲测失败案例" : "回归失败案例"}</b><span>{failed.length ? `优先处理 ${failed.length} 条` : "本轮全部通过"}</span></div>{failed.length ? failed.slice(0, 5).map((item) => <div className="evaluation-case" key={item.id}><Status kind="danger">{item.category}</Status><p><b>{item.query}</b><span>{item.failures.join("；")}</span></p><button className="text-button">加入优化任务 →</button></div>) : <div className="evaluation-empty">✓ 当前基线未发现规则性失败，可继续扩展长尾用例。</div>}</div></> : <div className="evaluation-placeholder"><b>还没有真实基线结果</b><span>运行后将调用生产 qwen-plus，并按知识来源、转人工决策、必要信息与禁止内容自动评分。</span></div>}
   </section>;
 }
 
+type ReviewDecision = "confirmed_failure" | "label_issue" | "accepted_behavior";
+type ReviewItem = { id: string; caseId: string; category: string; query: string; answer: string; expectedSource: string | null; actualSource: string | null; expectedHandoff: boolean; actualHandoff: boolean; routingIntent: string | null; routingConfidence: number | null; failures: string[]; routingSignals: string[]; review: { decision: ReviewDecision; reviewerEmail: string; note: string } | null };
+
+function EvaluationReviewWorkbench() {
+  const [items, setItems] = useState<ReviewItem[]>([]);
+  const [mode, setMode] = useState<"pending" | "reviewed">("pending");
+  const [note, setNote] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const load = () => fetch("/api/evaluations/reviews").then((r) => r.ok ? r.json() : Promise.reject()).then((body: { items?: ReviewItem[] }) => setItems(body.items ?? [])).catch(() => setError("复核队列加载失败"));
+  useEffect(load, []);
+  const visible = items.filter((item) => mode === "pending" ? !item.review : Boolean(item.review));
+  const selected = visible[0];
+  async function submit(decision: ReviewDecision) {
+    if (!selected || saving) return;
+    setSaving(true); setError("");
+    try {
+      const response = await fetch("/api/evaluations/reviews", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ resultId: selected.id, decision, note }) });
+      const body = await response.json() as { error?: string };
+      if (!response.ok) throw new Error(body.error || "保存失败");
+      setNote(""); await load();
+    } catch (cause) { setError(cause instanceof Error ? cause.message : "保存失败"); }
+    finally { setSaving(false); }
+  }
+  const pending = items.filter((item) => !item.review).length;
+  const reviewed = items.length - pending;
+  return <><section className="metrics-grid quality-metrics"><MetricCard label="待人工复核" value={String(pending)} change={pending ? "需处理" : "已清零"} helper="来自最新生产评测" tone="orange" /><MetricCard label="已完成复核" value={String(reviewed)} change={items.length ? `${Math.round(reviewed / items.length * 100)}%` : "0%"} helper={`共 ${items.length} 条失败案例`} tone="green" /><MetricCard label="检索类失败" value={String(items.filter((item) => item.failures.some((failure) => failure.includes("知识来源"))).length)} change="可回流" helper="用于补充意图与知识" tone="blue" /><MetricCard label="策略类失败" value={String(items.filter((item) => item.failures.some((failure) => failure.includes("转人工"))).length)} change="需复核" helper="防止错误自动化" tone="purple" /></section>
+    <section className="quality-grid"><article className="panel table-panel"><div className="table-toolbar"><div className="segmented"><button className={mode === "pending" ? "active" : ""} onClick={() => setMode("pending")}>待复核 {pending}</button><button className={mode === "reviewed" ? "active" : ""} onClick={() => setMode("reviewed")}>已复核 {reviewed}</button></div><span className="muted">双人复核前不自动修改金标</span></div>
+      {error && <div className="evaluation-error">{error}</div>}
+      {selected ? <div className="review-card"><div className="review-head"><div><Status kind={selected.review ? "success" : "warning"}>{selected.review ? "已复核" : `待复核 · ${selected.routingConfidence?.toFixed(2) ?? "低置信度"}`}</Status><b>{selected.failures.join("；")}</b></div><span>{selected.caseId} · {selected.category}</span></div><div className="review-question"><small>真实用户问题</small><p>{selected.query}</p></div><div className="review-answer"><small>AI 回答</small><p>{selected.answer}</p><div className="evidence"><b>自动判定</b><span>知识 {selected.expectedSource ?? "无"} → {selected.actualSource ?? "未命中"} · 转人工 {selected.expectedHandoff ? "是" : "否"} → {selected.actualHandoff ? "是" : "否"}</span></div><div className="review-routing"><b>路由解释</b><span>{selected.routingIntent ?? "未识别"} · {(selected.routingSignals ?? []).join(" / ") || "无匹配信号"}</span></div></div>
+        {selected.review ? <div className="reviewed-note"><b>{selected.review.decision === "confirmed_failure" ? "确认系统失败" : selected.review.decision === "label_issue" ? "标记标签问题" : "确认行为可接受"}</b><span>{selected.review.note || `复核人：${selected.review.reviewerEmail}`}</span></div> : <><textarea className="review-note" value={note} onChange={(event) => setNote(event.target.value)} maxLength={500} placeholder="复核说明；标记标签问题时必填" /><div className="review-actions"><button disabled={saving} className="danger-button" onClick={() => submit("confirmed_failure")}>确认系统失败</button><button disabled={saving || note.trim().length < 4} className="ghost-button" onClick={() => submit("label_issue")}>标记标签问题</button><button disabled={saving} className="primary-button" onClick={() => submit("accepted_behavior")}>行为可接受</button></div></>}</div> : <div className="review-empty">{items.length ? "当前筛选下没有案例" : "暂无需要人工复核的失败案例"}</div>}
+      {visible.slice(1, 4).map((item) => <div className="review-card compact" key={item.id}><div><Status kind="neutral">{item.category}</Status><b>{item.query}</b><small>{item.failures.join("；")}</small></div><span className="text-button">队列中</span></div>)}</article>
+      <aside className="panel quality-aside"><h3>复核规范</h3><div className="review-guideline"><b>确认系统失败</b><span>金标正确，检索、策略或回答需要修复。</span></div><div className="review-guideline"><b>标记标签问题</b><span>原期望与业务规则不一致，填写原因后进入双人复核。</span></div><div className="review-guideline"><b>行为可接受</b><span>虽未完全匹配自动规则，但不会误导用户或越权执行。</span></div><div className="aside-callout blue"><b>数据治理原则</b><span>人工结论不会直接覆盖原始样本；保留原标签、修订建议、复核人和时间，审批后生成新数据集版本。</span></div></aside></section></>;
+}
+
 function Quality() {
-  const [mode, setMode] = useState("待复核");
-  return <><EvaluationDashboard /><section className="metrics-grid quality-metrics"><MetricCard label="综合质量分" value="91.3" change="+1.8" helper="目标 92.0" tone="blue" /><MetricCard label="事实忠实度" value="94.8%" change="+2.1%" helper="引用一致性" tone="green" /><MetricCard label="幻觉率" value="2.7%" change="-0.9%" helper="高风险场景 1.1%" tone="purple" /><MetricCard label="人工复核一致率" value="87.6%" change="+3.4%" helper="Judge 与人工一致" tone="orange" /></section>
-    <section className="quality-grid"><article className="panel table-panel"><div className="table-toolbar"><div className="segmented">{["待复核", "高风险", "已确认"].map((m) => <button className={mode === m ? "active" : ""} key={m} onClick={() => setMode(m)}>{m}</button>)}</div><span className="muted">当前 14 条结果需要人工判断</span></div>
-      <div className="review-card"><div className="review-head"><div><Status kind="warning">低置信度 0.67</Status><b>回答引用依据不充分</b></div><span>C-28411 · 12分钟前</span></div><div className="review-question"><small>用户问题</small><p>生鲜商品已经拆封了，还可以申请无理由退款吗？</p></div><div className="review-answer"><small>AI回答</small><p>生鲜商品支持7天无理由退货，您可以直接提交退款申请。</p><div className="evidence"><b>引用依据</b><span>《生鲜售后规则》：鲜活易腐商品不适用七天无理由退货；质量问题可按赔付标准处理。</span></div></div><div className="review-actions"><button className="danger-button">确认错误</button><button className="ghost-button">模型判断有误</button><button className="primary-button">修正并回流</button></div></div>
-      <div className="review-card compact"><div><Status kind="danger">高风险</Status><b>模型做出未经授权的赔付承诺</b><small>C-28398 · 退款场景</small></div><button className="text-button">开始复核 →</button></div>
-    </article><aside className="panel quality-aside"><h3>失败归因</h3>{[['检索召回', 34], ['业务规则', 27], ['模型生成', 21], ['工具调用', 11], ['用户表达', 7]].map(([n,p]) => <div className="cause-row" key={n}><span>{n}</span><div><i style={{width:`${p}%`}} /></div><b>{p}%</b></div>)}<div className="aside-callout blue"><b>本周优化建议</b><span>优先补充生鲜破损与拆封场景测试集，预计覆盖 41% 的高频失败。</span><button>生成迭代任务</button></div></aside></section></>;
+  return <><EvaluationDashboard /><EvaluationReviewWorkbench /></>;
 }
 
 function Strategy() {

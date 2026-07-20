@@ -3,10 +3,11 @@ import { readFile, writeFile } from "node:fs/promises";
 
 const input = process.argv[2];
 const output = process.argv[3] ?? "data/eval-csds-real.json";
+const split = process.argv[4] ?? "test";
 if (!input) throw new Error("Usage: node scripts/build-csds-eval.mjs <csds-test.json> [output]");
 
 const dialogues = JSON.parse(await readFile(input, "utf8"));
-const quotas = { refund: 25, invoice: 20, address: 20, damage: 20 };
+const quotas = split === "val" ? { refund: 10, invoice: 10, address: 10, damage: 10 } : { refund: 25, invoice: 20, address: 20, damage: 20 };
 const buckets = { refund: [], invoice: [], address: [], damage: [] };
 const explicitSignals = {
   refund: /退款|到账|退回|退钱|返还|退货|钱/,
@@ -66,7 +67,7 @@ for (const dialogue of dialogues) {
     const sourceMap = { refund: "KB-114", damage: "KB-208", address: "KB-301", invoice: "KB-401" };
     const fingerprint = createHash("sha256").update(`${dialogue.DialogueID}:${qaIndex}:${query}`).digest("hex");
     buckets[category].push({
-      id: `csds-${category}-${dialogue.DialogueID}-${qaIndex}`,
+      id: split === "test" ? `csds-${category}-${dialogue.DialogueID}-${qaIndex}` : `csds-${split}-${category}-${dialogue.DialogueID}-${qaIndex}`,
       category: `real-${category}`,
       query,
       history,
@@ -75,7 +76,7 @@ for (const dialogue of dialogues) {
       expectedHandoff: expectedHandoff(category, query),
       source: {
         dataset: "CSDS",
-        split: "test",
+        split,
         dialogueId: dialogue.DialogueID,
         originalIntent: qa.intent || "unlabeled",
         questionUtteranceIds: qa.QueSummUttIDs ?? [],
@@ -102,7 +103,7 @@ for (const item of cases) {
 
 const result = {
   version: "1.0",
-  description: "从 CSDS 官方测试集分层抽取的真实中文电商客服问题；仅用于私有研究评测。",
+  description: split === "val" ? "从 CSDS 官方验证集冻结抽取的中文电商客服盲测问题；首次运行前禁止查看具体样本。" : "从 CSDS 官方测试集分层抽取的真实中文电商客服问题；仅用于私有研究评测。",
   source: {
     name: "CSDS: A Fine-grained Chinese Dataset for Customer Service Dialogue Summarization",
     upstream: "https://github.com/xiaolinAndy/CSDS",
@@ -113,6 +114,7 @@ const result = {
   },
   sampling: { method: "deterministic-stratified-sha256", quotas, total: cases.length, contextRequired: cases.filter((item) => item.contextRequired).length },
   privacy: { upstreamAnonymized: true, secondaryScan: true, directIdentifiersFound: 0 },
+  freeze: { locked: split === "val", casesSha256: createHash("sha256").update(JSON.stringify(cases.map((item) => ({ id: item.id, query: item.query, expectedSource: item.expectedSource, expectedHandoff: item.expectedHandoff })))).digest("hex") },
   cases: cases.map((item) => Object.fromEntries(Object.entries(item).filter(([key]) => key !== "fingerprint"))),
 };
 

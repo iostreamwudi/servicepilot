@@ -53,6 +53,15 @@ test("ships a traceable, privacy-scanned real-world evaluation set", async () =>
   assert.ok(evaluation.cases.some((item) => item.contextRequired === true));
 });
 
+test("ships a frozen blind suite from an unseen upstream split", async () => {
+  const blind = JSON.parse(await source("data/eval-csds-blind.json"));
+  assert.equal(blind.cases.length, 40);
+  assert.equal(blind.freeze.locked, true);
+  assert.match(blind.freeze.casesSha256, /^[a-f0-9]{64}$/);
+  assert.equal(blind.privacy.directIdentifiersFound, 0);
+  assert.ok(blind.cases.every((item) => item.source.split === "val"));
+});
+
 test("keeps enterprise tool calls read-only, validated and masked", async () => {
   const [tool, records, agent] = await Promise.all([
     source("app/api/tools/order-refund/route.ts"),
@@ -70,14 +79,17 @@ test("keeps enterprise tool calls read-only, validated and masked", async () => 
 });
 
 test("runs guarded model evaluations and exposes the quality dashboard", async () => {
-  const [route, schema, page] = await Promise.all([
+  const [route, reviews, schema, page] = await Promise.all([
     source("app/api/evaluations/route.ts"),
+    source("app/api/evaluations/reviews/route.ts"),
     source("db/schema.ts"),
     source("app/page.tsx"),
   ]);
   assert.match(route, /runWithConcurrency\(items, request, 5\)/);
   assert.match(route, /请等待 5 分钟后再次运行/);
   assert.match(route, /realEvaluationSet/);
+  assert.match(route, /blindEvaluationSet/);
+  assert.match(route, /当前系统版本已经运行过冻结盲测/);
   assert.match(route, /history: item\.history/);
   assert.match(route, /index \+= 4/);
   assert.match(route, /评测运行未完成，系统已记录失败原因/);
@@ -86,12 +98,20 @@ test("runs guarded model evaluations and exposes the quality dashboard", async (
   assert.match(route, /转人工决策不符合预期/);
   assert.match(schema, /evaluation_runs/);
   assert.match(schema, /evaluation_results/);
+  assert.match(schema, /evaluation_reviews/);
+  assert.match(schema, /system_version/);
   assert.match(schema, /source_dataset/);
   assert.match(schema, /context_required/);
   assert.match(schema, /routing_intent/);
   assert.match(schema, /routing_signals_json/);
   assert.match(page, /qwen-plus 基线评测/);
-  assert.match(page, /85 条真实客服语料/);
+  assert.match(page, /冻结盲测 40 条/);
+  assert.match(page, /确认系统失败/);
+  assert.match(page, /标记标签问题/);
+  assert.match(page, /行为可接受/);
+  assert.match(reviews, /Reviewer role required/);
+  assert.match(reviews, /evaluation\.review/);
+  assert.match(reviews, /onConflictDoUpdate/);
   assert.match(page, /总体通过率/);
   assert.match(page, /高风险通过率/);
 });

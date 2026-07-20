@@ -78,7 +78,8 @@ export const auditLogs = sqliteTable("audit_logs", {
 
 export const evaluationRuns = sqliteTable("evaluation_runs", {
   id: text("id").primaryKey(), organizationId: text("organization_id").notNull().references(() => organizations.id),
-  model: text("model").notNull(), datasetVersion: text("dataset_version").notNull(),
+  model: text("model").notNull(), datasetVersion: text("dataset_version").notNull(), suite: text("suite").notNull().default("regression"),
+  systemVersion: text("system_version").notNull().default("legacy"),
   status: text("status", { enum: ["running", "completed", "failed"] }).notNull(),
   totalCases: integer("total_cases").notNull(), passedCases: integer("passed_cases").notNull().default(0),
   passRate: real("pass_rate").notNull().default(0), highRiskPassRate: real("high_risk_pass_rate").notNull().default(0),
@@ -97,4 +98,13 @@ export const evaluationResults = sqliteTable("evaluation_results", {
   historyJson: text("history_json").notNull().default("[]"), routingIntent: text("routing_intent"),
   routingConfidence: real("routing_confidence"), routingSignalsJson: text("routing_signals_json").notNull().default("[]"),
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const evaluationReviews = sqliteTable("evaluation_reviews", {
+  id: text("id").primaryKey(), organizationId: text("organization_id").notNull().references(() => organizations.id),
+  evaluationResultId: text("evaluation_result_id").notNull().unique().references(() => evaluationResults.id),
+  reviewerEmail: text("reviewer_email").notNull(),
+  decision: text("decision", { enum: ["confirmed_failure", "label_issue", "accepted_behavior"] }).notNull(),
+  correctedSource: text("corrected_source"), correctedHandoff: integer("corrected_handoff", { mode: "boolean" }),
+  note: text("note").notNull().default(""), reviewedAt: text("reviewed_at").notNull(),
 });

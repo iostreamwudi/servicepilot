@@ -1,12 +1,15 @@
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { auditLogs, evaluationResults, evaluationRuns } from "../../../db/schema";
 import evaluationSet from "../../../data/eval-seed.json";
 import realEvaluationSet from "../../../data/eval-csds-real.json";
+import blindEvaluationSet from "../../../data/eval-csds-blind.json";
 import { POST as respond } from "../agent/respond/route";
 
 const ORG_ID = "org-qingyu";
 const DATASET_VERSION = "1.0-real85+seed15";
+const BLIND_DATASET_VERSION = "1.0-blind40+seed15";
+const SYSTEM_VERSION = "router-v2.0";
 type HistoryTurn = { role: "user" | "assistant"; content: string };
 type EvaluationCase = {
   id: string; category: string; query: string; expectedSource: string | null; expectedHandoff: boolean;
@@ -71,12 +74,20 @@ export async function POST(request: Request) {
   const email = authenticatedEmail(request);
   if (!email) return Response.json({ error: "Authentication required" }, { status: 401 });
   const db = getDb();
+  let suite: "regression" | "blind" = "regression";
+  try { const raw = await request.text(); if (raw) { const body = JSON.parse(raw) as { suite?: unknown }; if (body.suite === "blind") suite = "blind"; } }
+  catch { return Response.json({ error: "Invalid JSON body" }, { status: 400 }); }
   const recent = await db.select().from(evaluationRuns).where(eq(evaluationRuns.organizationId, ORG_ID)).orderBy(desc(evaluationRuns.startedAt)).limit(1);
   if (recent[0] && recent[0].status !== "failed" && Date.now() - new Date(recent[0].startedAt).getTime() < 300_000) return Response.json({ error: "请等待 5 分钟后再次运行，避免重复消耗模型额度" }, { status: 429 });
-  const items = [...evaluationSet.cases, ...realEvaluationSet.cases] as EvaluationCase[];
+  if (suite === "blind") {
+    const consumed = await db.select({ id: evaluationRuns.id }).from(evaluationRuns).where(and(eq(evaluationRuns.organizationId, ORG_ID), eq(evaluationRuns.suite, "blind"), eq(evaluationRuns.systemVersion, SYSTEM_VERSION), eq(evaluationRuns.status, "completed"))).limit(1);
+    if (consumed[0]) return Response.json({ error: "当前系统版本已经运行过冻结盲测；请升级系统版本后再使用新的盲测集" }, { status: 409 });
+  }
+  const items = (suite === "blind" ? [...evaluationSet.cases, ...blindEvaluationSet.cases] : [...evaluationSet.cases, ...realEvaluationSet.cases]) as EvaluationCase[];
+  const datasetVersion = suite === "blind" ? BLIND_DATASET_VERSION : DATASET_VERSION;
   const runId = `ER-${crypto.randomUUID()}`;
   const startedAt = new Date().toISOString();
-  await db.insert(evaluationRuns).values({ id: runId, organizationId: ORG_ID, model: "qwen-plus", datasetVersion: DATASET_VERSION, status: "running", totalCases: items.length, startedAt });
+  await db.insert(evaluationRuns).values({ id: runId, organizationId: ORG_ID, model: "qwen-plus", datasetVersion, suite, systemVersion: SYSTEM_VERSION, status: "running", totalCases: items.length, startedAt });
   try {
     const results = await runWithConcurrency(items, request, 5);
     const passed = results.filter((item) => item.passed).length;
@@ -99,8 +110,8 @@ export async function POST(request: Request) {
     for (let index = 0; index < rows.length; index += 4) await db.insert(evaluationResults).values(rows.slice(index, index + 4));
     const summary = { status: "completed" as const, passedCases: passed, passRate: passed / items.length, highRiskPassRate: highRiskPassed / Math.max(highRisk.length, 1), averageLatencyMs, completedAt: new Date().toISOString() };
     await db.update(evaluationRuns).set(summary).where(eq(evaluationRuns.id, runId));
-    await db.insert(auditLogs).values({ id: `A-EVAL-${crypto.randomUUID()}`, organizationId: ORG_ID, actorType: "user", action: "evaluation.run", resourceType: "evaluation_run", resourceId: runId, result: "allowed", risk: "low", metadataJson: JSON.stringify({ actorEmail: email, model: "qwen-plus", totalCases: items.length }) });
-    return Response.json({ run: { id: runId, model: "qwen-plus", datasetVersion: DATASET_VERSION, totalCases: items.length, ...summary }, results }, { status: 201 });
+    await db.insert(auditLogs).values({ id: `A-EVAL-${crypto.randomUUID()}`, organizationId: ORG_ID, actorType: "user", action: "evaluation.run", resourceType: "evaluation_run", resourceId: runId, result: "allowed", risk: "low", metadataJson: JSON.stringify({ actorEmail: email, model: "qwen-plus", totalCases: items.length, suite, systemVersion: SYSTEM_VERSION }) });
+    return Response.json({ run: { id: runId, model: "qwen-plus", datasetVersion, suite, systemVersion: SYSTEM_VERSION, totalCases: items.length, ...summary }, results }, { status: 201 });
   } catch (error) {
     await db.update(evaluationRuns).set({ status: "failed", completedAt: new Date().toISOString() }).where(eq(evaluationRuns.id, runId));
     await db.insert(auditLogs).values({ id: `A-EVAL-FAIL-${crypto.randomUUID()}`, organizationId: ORG_ID, actorType: "system", action: "evaluation.fail", resourceType: "evaluation_run", resourceId: runId, result: "failed", risk: "medium", metadataJson: JSON.stringify({ errorType: error instanceof Error ? error.name : "unknown" }) });

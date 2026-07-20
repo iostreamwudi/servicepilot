@@ -6,6 +6,7 @@
 .handoff-button { width: 100%; border: 0; background: #fff0e3; color: #aa5b19; border-radius: 7px; padding: 7px; margin-top: 8px; font-size: 8px; font-weight: 600; }
 .evaluation-panel { padding: 16px; margin-bottom: 14px; }
 .evaluation-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.evaluation-actions { display: flex; align-items: center; gap: 8px; }
 .evaluation-head h3 { margin: 3px 0; font-size: 13px; }
 .evaluation-head p { margin: 0; color: var(--muted); font-size: 9px; }
 .evaluation-head .primary-button:disabled { opacity: .6; cursor: wait; }
