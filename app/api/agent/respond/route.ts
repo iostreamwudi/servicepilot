@@ -2,6 +2,7 @@ import { env } from "cloudflare:workers";
 import { lookupRefund } from "../../../../lib/order-tool";
 
 type RuntimeConfig = { LLM_API_KEY?: string; LLM_BASE_URL?: string; LLM_MODEL?: string };
+type HistoryTurn = { role: "user" | "assistant"; content: string };
 type KnowledgeRule = {
   id: string; title: string; version: string; terms: string[]; answer: string;
   confidence: number; risk: "low" | "medium" | "high"; handoff: boolean;
@@ -24,7 +25,7 @@ function retrieve(query: string) {
   return scored[0].score > 0 ? scored[0].rule : null;
 }
 
-async function generateWithGateway(query: string, rule: KnowledgeRule, config: RuntimeConfig, toolContext?: string) {
+async function generateWithGateway(query: string, history: HistoryTurn[], rule: KnowledgeRule, config: RuntimeConfig, toolContext?: string) {
   if (!config.LLM_API_KEY || !config.LLM_BASE_URL || !config.LLM_MODEL) return null;
   const response = await fetch(`${config.LLM_BASE_URL.replace(/\/$/, "")}/chat/completions`, {
     method: "POST",
@@ -33,6 +34,7 @@ async function generateWithGateway(query: string, rule: KnowledgeRule, config: R
       { role: "system", content: "你是企业客服助手。只能依据给定知识回答，不得承诺赔付或执行资金、账户操作；依据不足时明确转人工。回答控制在150字以内。" },
       { role: "system", content: `可信知识：${rule.title} ${rule.version}\n${rule.answer}` },
       ...(toolContext ? [{ role: "system", content: `可信工具结果（只读、已脱敏）：${toolContext}。订单状态只能引用此结果，不得自行推断。` }] : []),
+      ...history,
       { role: "user", content: query },
     ] }),
     signal: AbortSignal.timeout(8_000),
@@ -44,14 +46,19 @@ async function generateWithGateway(query: string, rule: KnowledgeRule, config: R
 
 export async function POST(request: Request) {
   if (!authenticated(request)) return Response.json({ error: "Authentication required" }, { status: 401 });
-  let payload: { query?: unknown };
-  try { payload = await request.json() as { query?: unknown }; }
+  let payload: { query?: unknown; history?: unknown };
+  try { payload = await request.json() as { query?: unknown; history?: unknown }; }
   catch { return Response.json({ error: "Invalid JSON body" }, { status: 400 }); }
   if (typeof payload.query !== "string" || !payload.query.trim()) return Response.json({ error: "query is required" }, { status: 400 });
   const query = payload.query.trim();
   if (query.length > 500) return Response.json({ error: "query must be 500 characters or fewer" }, { status: 400 });
+  const rawHistory = payload.history ?? [];
+  if (!Array.isArray(rawHistory) || rawHistory.length > 6) return Response.json({ error: "history must contain 6 turns or fewer" }, { status: 400 });
+  const history = rawHistory.filter((turn): turn is HistoryTurn => Boolean(turn) && typeof turn === "object" && ((turn as HistoryTurn).role === "user" || (turn as HistoryTurn).role === "assistant") && typeof (turn as HistoryTurn).content === "string" && (turn as HistoryTurn).content.trim().length > 0 && (turn as HistoryTurn).content.length <= 500);
+  if (history.length !== rawHistory.length) return Response.json({ error: "history contains an invalid turn" }, { status: 400 });
   const started = Date.now();
-  const rule = retrieve(query);
+  const retrievalText = `${history.map((turn) => turn.content).join("\n")}\n${query}`;
+  const rule = retrieve(retrievalText);
   if (!rule) return Response.json({ answer: "这个问题超出了当前已验证的知识范围。为了避免给出不准确的信息，我已建议转接人工客服。", source: null, confidence: 0.45, risk: "medium", handoff: true, mode: "safe-fallback", trace: [
     { type: "intent", label: "未识别到稳定业务意图", durationMs: 32, status: "warning" },
     { type: "retrieval", label: "可信知识未命中", durationMs: 18, status: "warning" },
@@ -62,7 +69,7 @@ export async function POST(request: Request) {
   const toolResult = rule.id === "KB-114" && orderId ? lookupRefund(orderId) : null;
   const toolContext = toolResult?.ok ? JSON.stringify(toolResult.record) : undefined;
   let generated: string | null = null;
-  try { generated = orderId && !toolResult?.ok ? null : await generateWithGateway(query, rule, config, toolContext); } catch { generated = null; }
+  try { generated = orderId && !toolResult?.ok ? null : await generateWithGateway(query, history, rule, config, toolContext); } catch { generated = null; }
   const toolAnswer = toolResult?.ok ? `订单 ${toolResult.record.orderId} 的退款状态为${toolResult.record.status === "approved" ? "已审核通过" : toolResult.record.status === "processing" ? "处理中" : "已完成"}，支付渠道为${toolResult.record.paymentChannelMasked}。${rule.answer}` : null;
   const failedToolAnswer = orderId && !toolResult?.ok ? `暂时无法核验订单 ${orderId} 的退款状态。为避免根据不完整信息推测，我已建议转接人工客服继续核查。` : null;
   return Response.json({ answer: generated ?? toolAnswer ?? failedToolAnswer ?? rule.answer, source: { id: rule.id, title: rule.title, version: rule.version }, tool: toolResult?.ok ? { name: "order.refund.get", status: "success", data: toolResult.record, readOnly: true } : orderId ? { name: "order.refund.get", status: "failed", code: toolResult?.code } : null, confidence: orderId && !toolResult?.ok ? 0.5 : rule.confidence, risk: rule.risk, handoff: rule.handoff || Boolean(orderId && !toolResult?.ok), mode: generated ? "model-grounded" : orderId && !toolResult?.ok ? "safe-fallback" : "deterministic-safe", trace: [

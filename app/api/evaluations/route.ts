@@ -2,12 +2,16 @@ import { desc, eq } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { auditLogs, evaluationResults, evaluationRuns } from "../../../db/schema";
 import evaluationSet from "../../../data/eval-seed.json";
+import realEvaluationSet from "../../../data/eval-csds-real.json";
 import { POST as respond } from "../agent/respond/route";
 
 const ORG_ID = "org-qingyu";
+const DATASET_VERSION = "1.0-real85+seed15";
+type HistoryTurn = { role: "user" | "assistant"; content: string };
 type EvaluationCase = {
   id: string; category: string; query: string; expectedSource: string | null; expectedHandoff: boolean;
-  mustContain?: string[]; mustNotContain?: string[];
+  mustContain?: string[]; mustNotContain?: string[]; history?: HistoryTurn[]; contextRequired?: boolean;
+  source?: { dataset: string; dialogueId?: string };
 };
 type AgentResponse = { answer: string; source: { id: string } | null; handoff: boolean; latencyMs?: number; mode: string; error?: string };
 
@@ -24,7 +28,7 @@ async function evaluateCase(item: EvaluationCase, request: Request) {
   const response = await respond(new Request(new URL("/api/agent/respond", request.url), {
     method: "POST",
     headers: { "content-type": "application/json", "oai-authenticated-user-email": email },
-    body: JSON.stringify({ query: item.query }),
+    body: JSON.stringify({ query: item.query, history: item.history ?? [] }),
   }));
   const body = await response.json() as AgentResponse;
   if (!response.ok) throw new Error(body.error || `Agent returned ${response.status}`);
@@ -65,13 +69,13 @@ export async function POST(request: Request) {
   if (!email) return Response.json({ error: "Authentication required" }, { status: 401 });
   const db = getDb();
   const recent = await db.select().from(evaluationRuns).where(eq(evaluationRuns.organizationId, ORG_ID)).orderBy(desc(evaluationRuns.startedAt)).limit(1);
-  if (recent[0] && recent[0].status !== "failed" && Date.now() - new Date(recent[0].startedAt).getTime() < 60_000) return Response.json({ error: "请等待 60 秒后再次运行，避免重复消耗模型额度" }, { status: 429 });
-  const items = evaluationSet.cases as EvaluationCase[];
+  if (recent[0] && recent[0].status !== "failed" && Date.now() - new Date(recent[0].startedAt).getTime() < 300_000) return Response.json({ error: "请等待 5 分钟后再次运行，避免重复消耗模型额度" }, { status: 429 });
+  const items = [...evaluationSet.cases, ...realEvaluationSet.cases] as EvaluationCase[];
   const runId = `ER-${crypto.randomUUID()}`;
   const startedAt = new Date().toISOString();
-  await db.insert(evaluationRuns).values({ id: runId, organizationId: ORG_ID, model: "qwen-plus", datasetVersion: evaluationSet.version, status: "running", totalCases: items.length, startedAt });
+  await db.insert(evaluationRuns).values({ id: runId, organizationId: ORG_ID, model: "qwen-plus", datasetVersion: DATASET_VERSION, status: "running", totalCases: items.length, startedAt });
   try {
-    const results = await runWithConcurrency(items, request, 3);
+    const results = await runWithConcurrency(items, request, 5);
     const passed = results.filter((item) => item.passed).length;
     const highRisk = results.filter((item) => ["high-risk", "adversarial", "privacy"].includes(item.item.category));
     const highRiskPassed = highRisk.filter((item) => item.passed).length;
@@ -81,12 +85,16 @@ export async function POST(request: Request) {
       passed: result.passed, expectedSource: result.item.expectedSource, actualSource: result.body.source?.id ?? null,
       expectedHandoff: result.item.expectedHandoff, actualHandoff: result.body.handoff, latencyMs: result.latencyMs,
       mode: result.body.mode, failuresJson: JSON.stringify(result.failures), answer: result.body.answer,
+      sourceDataset: result.item.source?.dataset ?? "ServicePilot synthetic seed",
+      sourceRecordId: result.item.source?.dialogueId ?? result.item.id,
+      contextRequired: result.item.contextRequired ?? false,
+      historyJson: JSON.stringify(result.item.history ?? []),
     }));
     for (let index = 0; index < rows.length; index += 4) await db.insert(evaluationResults).values(rows.slice(index, index + 4));
     const summary = { status: "completed" as const, passedCases: passed, passRate: passed / items.length, highRiskPassRate: highRiskPassed / Math.max(highRisk.length, 1), averageLatencyMs, completedAt: new Date().toISOString() };
     await db.update(evaluationRuns).set(summary).where(eq(evaluationRuns.id, runId));
     await db.insert(auditLogs).values({ id: `A-EVAL-${crypto.randomUUID()}`, organizationId: ORG_ID, actorType: "user", action: "evaluation.run", resourceType: "evaluation_run", resourceId: runId, result: "allowed", risk: "low", metadataJson: JSON.stringify({ actorEmail: email, model: "qwen-plus", totalCases: items.length }) });
-    return Response.json({ run: { id: runId, model: "qwen-plus", datasetVersion: evaluationSet.version, totalCases: items.length, ...summary }, results }, { status: 201 });
+    return Response.json({ run: { id: runId, model: "qwen-plus", datasetVersion: DATASET_VERSION, totalCases: items.length, ...summary }, results }, { status: 201 });
   } catch (error) {
     await db.update(evaluationRuns).set({ status: "failed", completedAt: new Date().toISOString() }).where(eq(evaluationRuns.id, runId));
     await db.insert(auditLogs).values({ id: `A-EVAL-FAIL-${crypto.randomUUID()}`, organizationId: ORG_ID, actorType: "system", action: "evaluation.fail", resourceType: "evaluation_run", resourceId: runId, result: "failed", risk: "medium", metadataJson: JSON.stringify({ errorType: error instanceof Error ? error.name : "unknown" }) });

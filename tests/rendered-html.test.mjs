@@ -40,6 +40,17 @@ test("ships a representative offline evaluation seed", async () => {
   assert.ok(evaluation.cases.some((item) => Array.isArray(item.mustNotContain)));
 });
 
+test("ships a traceable, privacy-scanned real-world evaluation set", async () => {
+  const evaluation = JSON.parse(await source("data/eval-csds-real.json"));
+  assert.equal(evaluation.version, "1.0");
+  assert.equal(evaluation.cases.length, 85);
+  assert.equal(evaluation.privacy.directIdentifiersFound, 0);
+  assert.equal(new Set(evaluation.cases.map((item) => item.id)).size, 85);
+  assert.ok(evaluation.cases.every((item) => item.source.dataset === "CSDS" && item.source.dialogueId !== undefined));
+  assert.ok(evaluation.cases.every((item) => Array.isArray(item.history) && item.history.length <= 4));
+  assert.ok(evaluation.cases.some((item) => item.contextRequired === true));
+});
+
 test("keeps enterprise tool calls read-only, validated and masked", async () => {
   const [tool, records, agent] = await Promise.all([
     source("app/api/tools/order-refund/route.ts"),
@@ -62,8 +73,10 @@ test("runs guarded model evaluations and exposes the quality dashboard", async (
     source("db/schema.ts"),
     source("app/page.tsx"),
   ]);
-  assert.match(route, /runWithConcurrency\(items, request, 3\)/);
-  assert.match(route, /请等待 60 秒后再次运行/);
+  assert.match(route, /runWithConcurrency\(items, request, 5\)/);
+  assert.match(route, /请等待 5 分钟后再次运行/);
+  assert.match(route, /realEvaluationSet/);
+  assert.match(route, /history: item\.history/);
   assert.match(route, /index \+= 4/);
   assert.match(route, /评测运行未完成，系统已记录失败原因/);
   assert.match(route, /run\.status === "completed"/);
@@ -71,7 +84,10 @@ test("runs guarded model evaluations and exposes the quality dashboard", async (
   assert.match(route, /转人工决策不符合预期/);
   assert.match(schema, /evaluation_runs/);
   assert.match(schema, /evaluation_results/);
+  assert.match(schema, /source_dataset/);
+  assert.match(schema, /context_required/);
   assert.match(page, /qwen-plus 基线评测/);
+  assert.match(page, /85 条真实客服语料/);
   assert.match(page, /总体通过率/);
   assert.match(page, /高风险通过率/);
 });

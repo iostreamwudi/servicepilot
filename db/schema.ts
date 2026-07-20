@@ -92,5 +92,7 @@ export const evaluationResults = sqliteTable("evaluation_results", {
   passed: integer("passed", { mode: "boolean" }).notNull(), expectedSource: text("expected_source"), actualSource: text("actual_source"),
   expectedHandoff: integer("expected_handoff", { mode: "boolean" }).notNull(), actualHandoff: integer("actual_handoff", { mode: "boolean" }).notNull(),
   latencyMs: integer("latency_ms").notNull(), mode: text("mode").notNull(), failuresJson: text("failures_json").notNull().default("[]"),
-  answer: text("answer").notNull(), createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  answer: text("answer").notNull(), sourceDataset: text("source_dataset").notNull().default("ServicePilot synthetic seed"),
+  sourceRecordId: text("source_record_id"), contextRequired: integer("context_required", { mode: "boolean" }).notNull().default(false),
+  historyJson: text("history_json").notNull().default("[]"), createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
