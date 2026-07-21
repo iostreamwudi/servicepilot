@@ -33,11 +33,17 @@ async function retrieveKnowledge(intent: BusinessIntent, query: string, defaultK
     ));
     if (!documents.length) throw new Error("No active knowledge documents");
     const normalized = query.toLowerCase().replace(/\s+/g, "");
+    const genericSignals: Record<BusinessIntent, Set<string>> = {
+      refund: new Set(["退款", "退货", "七天", "七日", "无理由"]),
+      damage: new Set(["破损", "坏了", "质量问题"]),
+      address: new Set(["地址", "物流", "收货地址"]),
+      invoice: new Set(["发票", "电子发票", "数电发票"]),
+    };
     const scored = documents.map((document) => {
       let keywords: string[] = [];
       try { keywords = JSON.parse(document.keywordsJson) as string[]; } catch { /* invalid keywords do not block retrieval */ }
       const keywordHits = keywords.filter((keyword) => normalized.includes(keyword.toLowerCase().replace(/\s+/g, "")));
-      const score = keywordHits.reduce((total, keyword) => total + Math.min(keyword.length, 6), 0) + (document.id === defaultKnowledgeId ? 2 : 0);
+      const score = keywordHits.reduce((total, keyword) => total + (genericSignals[intent].has(keyword) ? 1 : 8 + Math.min(keyword.length, 4)), 0) + (document.id === defaultKnowledgeId ? 2 : 0);
       return { document, keywords, score };
     }).sort((left, right) => right.score - left.score || Number(right.document.id === defaultKnowledgeId) - Number(left.document.id === defaultKnowledgeId));
     const selected = scored[0];
