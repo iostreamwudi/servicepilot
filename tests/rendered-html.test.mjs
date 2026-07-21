@@ -55,10 +55,10 @@ test("ships a traceable database-backed knowledge library", async () => {
   }
   assert.ok(seed.documents.filter((item) => item.sourceType === "official" && item.sourceUrl?.startsWith("https://")).length >= 12);
   assert.ok(seed.documents.every((item) => Array.isArray(item.keywords) && item.keywords.length >= 4));
-  assert.equal(corpus.documents.length, 378);
-  assert.equal(new Set(corpus.documents.map((item) => item.id)).size, 378);
+  assert.ok(corpus.documents.length >= 1000);
+  assert.equal(new Set(corpus.documents.map((item) => item.id)).size, corpus.documents.length);
   assert.ok(corpus.documents.every((item) => item.state === "review" && item.sourceType === "official" && /^[a-f0-9]{64}$/.test(item.contentSha256)));
-  assert.equal(corpus.sources.length, 7);
+  assert.ok(corpus.sources.length >= 20);
   assert.match(schema, /source_type/);
   assert.match(schema, /keywords_json/);
   assert.match(bootstrap, /onConflictDoUpdate/);
@@ -68,25 +68,30 @@ test("ships a traceable database-backed knowledge library", async () => {
   assert.doesNotMatch(page, /知识条目<\/span><b>1,284/);
 });
 
-test("ships a thousand-case reproducible routing evaluation", async () => {
-  const [regressionText, blindText, reportText, api, page] = await Promise.all([
-    source("data/eval-csds-scale.json"),
-    source("data/eval-csds-scale-blind.json"),
-    source("data/routing-scale-baseline.json"),
+test("ships a four-thousand-case reproducible routing evaluation", async () => {
+  const [trainText, valText, testText, reportText, manifestText, api, page] = await Promise.all([
+    source("data/eval-csds-full-train.json"),
+    source("data/eval-csds-full-val.json"),
+    source("data/eval-csds-full-test.json"),
+    source("data/routing-full-baseline.json"),
+    source("data/real-data-manifest.json"),
     source("app/api/evaluations/scale/route.ts"),
     source("app/page.tsx"),
   ]);
-  const regression = JSON.parse(regressionText);
-  const blind = JSON.parse(blindText);
+  const datasets = [JSON.parse(trainText), JSON.parse(valText), JSON.parse(testText)];
   const report = JSON.parse(reportText);
-  assert.equal(regression.cases.length, 960);
-  assert.equal(blind.cases.length, 100);
-  assert.equal(report.overall.total, 1060);
-  assert.match(blind.freeze.casesSha256, /^[a-f0-9]{64}$/);
-  assert.equal(regression.privacy.directIdentifiersFound, 0);
-  assert.equal(blind.privacy.directIdentifiersFound, 0);
-  assert.match(api, /scaleSet/);
-  assert.match(page, /1,060 条公开真实语料/);
+  const manifest = JSON.parse(manifestText);
+  assert.equal(datasets.reduce((sum, item) => sum + item.cases.length, 0), 4196);
+  assert.equal(report.overall.total, 4196);
+  assert.equal(manifest.totals.upstreamDialogues, 10701);
+  assert.equal(manifest.quality.duplicateEvaluationQueries, 0);
+  assert.equal(manifest.quality.directIdentifiersFound, 0);
+  assert.ok(datasets.every((item) => /^[a-f0-9]{64}$/.test(item.freeze.casesSha256)));
+  assert.ok(datasets.every((item) => item.privacy.directIdentifiersFound === 0));
+  assert.match(api, /trainSet/);
+  assert.match(api, /manifest/);
+  assert.match(page, /4,196 条公开真实匿名客服场景/);
+  assert.match(page, /真实场景数据浏览器/);
   assert.match(page, /规模评测边界/);
 });
 
@@ -166,7 +171,7 @@ test("runs guarded model evaluations and exposes the quality dashboard", async (
   assert.match(schema, /routing_intent/);
   assert.match(schema, /routing_signals_json/);
   assert.match(page, /规模路由评测 \+ qwen-plus 端到端回归/);
-  assert.match(page, /960 回归 \+ 100 冻结盲测/);
+  assert.match(page, /训练 \/ 验证 \/ 独立测试三切分/);
   assert.match(page, /确认系统失败/);
   assert.match(page, /标记标签问题/);
   assert.match(page, /行为可接受/);

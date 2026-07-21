@@ -1,0 +1,238 @@
+{
+  "version": "2026.07-real-data-1",
+  "generatedAt": "2026-07-21T12:05:55.847Z",
+  "policy": "公开真实匿名语料仅用于私有研究评测；官方规则原文仅进入待复核区；内部演示流程不得被表述为真实企业业务数据。",
+  "totals": {
+    "upstreamDialogues": 10701,
+    "evaluationCases": 4196,
+    "uniqueEvaluationQueries": 4196,
+    "contextRequiredCases": 891,
+    "officialKnowledgeSources": 21,
+    "officialKnowledgeChunks": 1008,
+    "curatedKnowledgeDocuments": 20,
+    "totalKnowledgeDocuments": 1028,
+    "activeOfficialSummaries": 17,
+    "internalDemoRules": 3
+  },
+  "sources": [
+    {
+      "id": "CSDS",
+      "authenticity": "public_real_anonymized",
+      "name": "CSDS: A Fine-grained Chinese Dataset for Customer Service Dialogue Summarization",
+      "upstream": "https://github.com/xiaolinAndy/CSDS",
+      "paper": "https://aclanthology.org/2021.emnlp-main.365/",
+      "upstreamCommit": "1421348842ae3041574cc85fea21e15c3a2106cb",
+      "licenseNote": "Upstream repository does not state an explicit dataset license; keep this derived subset private and use for research/evaluation only.",
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ],
+      "splitStats": {
+        "train": {
+          "rawDialogues": 9101,
+          "eligibleCases": 3587,
+          "contextRequired": 768,
+          "fingerprint": "f9b331f630894cacc4d9ce530eb5bf19ae69b97eaa24b0afeee3458a0b585230",
+          "directIdentifiersFound": 0
+        },
+        "val": {
+          "rawDialogues": 800,
+          "eligibleCases": 300,
+          "contextRequired": 61,
+          "fingerprint": "074fca2c7a4d1b9f70518e5875b7eed0b346c195f2cd4f39a4882141b8109ced",
+          "directIdentifiersFound": 0
+        },
+        "test": {
+          "rawDialogues": 800,
+          "eligibleCases": 309,
+          "contextRequired": 62,
+          "fingerprint": "8318818bf753354bdad217136f97cb1d8c2b91e41bfe897ec22b0c5d4461be68",
+          "directIdentifiersFound": 0
+        }
+      }
+    },
+    {
+      "id": "CPL",
+      "authenticity": "official_public_rule",
+      "name": "中华人民共和国消费者权益保护法",
+      "upstream": "https://www.samr.gov.cn/zfjcj/tzgg/art/2023/art_615af9ed6bcd4974bf853dd2e02bc663.html",
+      "processedChunks": 63,
+      "releaseState": "review"
+    },
+    {
+      "id": "CPLREG",
+      "authenticity": "official_public_rule",
+      "name": "中华人民共和国消费者权益保护法实施条例",
+      "upstream": "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/bgt/art/2024/art_0aea188276a44f0baf940ab95ee00e0a.html",
+      "processedChunks": 53,
+      "releaseState": "review"
+    },
+    {
+      "id": "RETURN",
+      "authenticity": "official_public_rule",
+      "name": "网络购买商品七日无理由退货暂行办法",
+      "upstream": "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2023/art_26ca8fe29e184edd899fa0a7a060d935.html",
+      "processedChunks": 38,
+      "releaseState": "review"
+    },
+    {
+      "id": "EXPRESS",
+      "authenticity": "official_public_rule",
+      "name": "快递暂行条例（2025年修订）",
+      "upstream": "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/bgt/art/2023/art_ccea5d29862840979d0ff2304edabbb2.html",
+      "processedChunks": 60,
+      "releaseState": "review"
+    },
+    {
+      "id": "EXPRESSMARKET",
+      "authenticity": "official_public_rule",
+      "name": "快递市场管理办法",
+      "upstream": "https://xxgk.mot.gov.cn/2020/gz/202401/t20240104_3980684.html",
+      "processedChunks": 57,
+      "releaseState": "review"
+    },
+    {
+      "id": "TRADE",
+      "authenticity": "official_public_rule",
+      "name": "网络交易监督管理办法（2025年修正）",
+      "upstream": "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2025/art_4b47c79b8d994a42bba4835997688faa.html",
+      "processedChunks": 49,
+      "releaseState": "review"
+    },
+    {
+      "id": "ECOM",
+      "authenticity": "official_public_rule",
+      "name": "中华人民共和国电子商务法",
+      "upstream": "https://www.samr.gov.cn/zfjcj/tzgg/art/2023/art_d337c3291e8b40459ca03dea54395856.html",
+      "processedChunks": 83,
+      "releaseState": "review"
+    },
+    {
+      "id": "QUALITY",
+      "authenticity": "official_public_rule",
+      "name": "中华人民共和国产品质量法",
+      "upstream": "https://www.samr.gov.cn/zfjcj/tzgg/art/2023/art_579118cd202a45fba28b7edfd9f6fd72.html",
+      "processedChunks": 68,
+      "releaseState": "review"
+    },
+    {
+      "id": "THREE",
+      "authenticity": "official_public_rule",
+      "name": "部分商品修理更换退货责任规定",
+      "upstream": "https://www.samr.gov.cn/zw/zfxxgk/zc/xzgfxwj/art/2019/art_f943e66de125437d92df701e1654c47c.html",
+      "processedChunks": 24,
+      "releaseState": "review"
+    },
+    {
+      "id": "PRICE",
+      "authenticity": "official_public_rule",
+      "name": "中华人民共和国价格法",
+      "upstream": "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/jls/art/2023/art_3da9131ab041449d9af2af886ee33766.html",
+      "processedChunks": 45,
+      "releaseState": "review"
+    },
+    {
+      "id": "PRICEMARK",
+      "authenticity": "official_public_rule",
+      "name": "明码标价和禁止价格欺诈规定",
+      "upstream": "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2023/art_9a1f82a007964950a1a0f6c056f2fedf.html",
+      "processedChunks": 24,
+      "releaseState": "review"
+    },
+    {
+      "id": "ADVERT",
+      "authenticity": "official_public_rule",
+      "name": "中华人民共和国广告法",
+      "upstream": "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2023/art_5474cf75173c45d6a0379730fb4e8d97.html",
+      "processedChunks": 71,
+      "releaseState": "review"
+    },
+    {
+      "id": "PIPL",
+      "authenticity": "official_public_rule",
+      "name": "中华人民共和国个人信息保护法",
+      "upstream": "https://www.cac.gov.cn/2021-08/20/c_1631050028355286.htm",
+      "processedChunks": 73,
+      "releaseState": "review"
+    },
+    {
+      "id": "DATA",
+      "authenticity": "official_public_rule",
+      "name": "中华人民共和国数据安全法",
+      "upstream": "https://www.cac.gov.cn/2021-06/11/c_1624994566919140.htm",
+      "processedChunks": 53,
+      "releaseState": "review"
+    },
+    {
+      "id": "CYBER",
+      "authenticity": "official_public_rule",
+      "name": "中华人民共和国网络安全法（2025年修正）",
+      "upstream": "https://www.cac.gov.cn/2025-12/29/c_1768735112911946.htm",
+      "processedChunks": 72,
+      "releaseState": "review"
+    },
+    {
+      "id": "ALGO",
+      "authenticity": "official_public_rule",
+      "name": "互联网信息服务算法推荐管理规定",
+      "upstream": "https://www.cac.gov.cn/2022-01/04/c_1642894606364259.htm",
+      "processedChunks": 35,
+      "releaseState": "review"
+    },
+    {
+      "id": "NETCOMP",
+      "authenticity": "official_public_rule",
+      "name": "网络反不正当竞争暂行规定",
+      "upstream": "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2024/art_80019fe59e464196bef173dc56678a42.html",
+      "processedChunks": 34,
+      "releaseState": "review"
+    },
+    {
+      "id": "CONSUMERPENALTY",
+      "authenticity": "official_public_rule",
+      "name": "侵害消费者权益行为处罚办法",
+      "upstream": "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2023/art_85a1509b801143bc8a37a1aa2722542a.html",
+      "processedChunks": 19,
+      "releaseState": "review"
+    },
+    {
+      "id": "BLINDBOX",
+      "authenticity": "official_public_rule",
+      "name": "盲盒经营行为规范指引（试行）",
+      "upstream": "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/zfjcs/art/2023/art_e2facd76a7fb4e90b03912cffb5e7d53.html",
+      "processedChunks": 29,
+      "releaseState": "review"
+    },
+    {
+      "id": "COMPLAINT",
+      "authenticity": "official_public_rule",
+      "name": "市场监督管理投诉举报处理办法",
+      "upstream": "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2026/art_e4d03a20c0fd49769e408c7bf3791ff5.html",
+      "processedChunks": 46,
+      "releaseState": "review"
+    },
+    {
+      "id": "EINV",
+      "authenticity": "official_public_rule",
+      "name": "国家税务总局关于推广应用全面数字化电子发票的公告",
+      "upstream": "https://fgk.chinatax.gov.cn/zcfgk/c100012/c5236067/content.html",
+      "processedChunks": 12,
+      "releaseState": "review"
+    },
+    {
+      "id": "SERVICEPILOT-DEMO-SOP",
+      "authenticity": "synthetic_internal_demo",
+      "name": "ServicePilot 演示商城内部流程",
+      "processedChunks": 3,
+      "releaseState": "active_demo_only"
+    }
+  ],
+  "quality": {
+    "duplicateEvaluationQueries": 0,
+    "directIdentifiersFound": 0,
+    "traceableEvaluationCases": 4196,
+    "traceableOfficialChunks": 1008
+  },
+  "manifestSha256": "769d8997d01dd808bb424aafc17e21b036c3df2afcc23c63686ed1dc3cd9a17b"
+}

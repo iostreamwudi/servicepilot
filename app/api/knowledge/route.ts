@@ -36,7 +36,7 @@ export async function GET(request: Request) {
     const sourceRows = await db.select({ sourceType: knowledgeDocuments.sourceType, value: count() }).from(knowledgeDocuments).where(eq(knowledgeDocuments.organizationId, ORG_ID)).groupBy(knowledgeDocuments.sourceType);
     const sourceCounts = Object.fromEntries(sourceRows.map((row) => [row.sourceType, row.value]));
     return Response.json({
-      version: "2026.07-scale-1",
+      version: "2026.07-scale-2",
       total: totalRow.value,
       offset,
       limit,

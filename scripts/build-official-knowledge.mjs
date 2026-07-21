@@ -4,11 +4,25 @@ import { writeFile } from "node:fs/promises";
 const output = process.argv[2] ?? "data/knowledge-official-corpus.json";
 const sources = [
   { code: "CPL", title: "中华人民共和国消费者权益保护法", url: "https://www.samr.gov.cn/zfjcj/tzgg/art/2023/art_615af9ed6bcd4974bf853dd2e02bc663.html", category: "refund" },
+  { code: "CPLREG", title: "中华人民共和国消费者权益保护法实施条例", url: "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/bgt/art/2024/art_0aea188276a44f0baf940ab95ee00e0a.html", category: "refund" },
   { code: "RETURN", title: "网络购买商品七日无理由退货暂行办法", url: "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2023/art_26ca8fe29e184edd899fa0a7a060d935.html", category: "refund" },
   { code: "EXPRESS", title: "快递暂行条例（2025年修订）", url: "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/bgt/art/2023/art_ccea5d29862840979d0ff2304edabbb2.html", category: "address" },
+  { code: "EXPRESSMARKET", title: "快递市场管理办法", url: "https://xxgk.mot.gov.cn/2020/gz/202401/t20240104_3980684.html", category: "address" },
   { code: "TRADE", title: "网络交易监督管理办法（2025年修正）", url: "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2025/art_4b47c79b8d994a42bba4835997688faa.html", category: "refund" },
   { code: "ECOM", title: "中华人民共和国电子商务法", url: "https://www.samr.gov.cn/zfjcj/tzgg/art/2023/art_d337c3291e8b40459ca03dea54395856.html", category: "refund" },
+  { code: "QUALITY", title: "中华人民共和国产品质量法", url: "https://www.samr.gov.cn/zfjcj/tzgg/art/2023/art_579118cd202a45fba28b7edfd9f6fd72.html", category: "damage" },
+  { code: "THREE", title: "部分商品修理更换退货责任规定", url: "https://www.samr.gov.cn/zw/zfxxgk/zc/xzgfxwj/art/2019/art_f943e66de125437d92df701e1654c47c.html", category: "damage" },
+  { code: "PRICE", title: "中华人民共和国价格法", url: "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/jls/art/2023/art_3da9131ab041449d9af2af886ee33766.html", category: "refund" },
+  { code: "PRICEMARK", title: "明码标价和禁止价格欺诈规定", url: "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2023/art_9a1f82a007964950a1a0f6c056f2fedf.html", category: "refund" },
+  { code: "ADVERT", title: "中华人民共和国广告法", url: "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2023/art_5474cf75173c45d6a0379730fb4e8d97.html", category: "refund" },
   { code: "PIPL", title: "中华人民共和国个人信息保护法", url: "https://www.cac.gov.cn/2021-08/20/c_1631050028355286.htm", category: "address" },
+  { code: "DATA", title: "中华人民共和国数据安全法", url: "https://www.cac.gov.cn/2021-06/11/c_1624994566919140.htm", category: "address" },
+  { code: "CYBER", title: "中华人民共和国网络安全法（2025年修正）", url: "https://www.cac.gov.cn/2025-12/29/c_1768735112911946.htm", category: "address" },
+  { code: "ALGO", title: "互联网信息服务算法推荐管理规定", url: "https://www.cac.gov.cn/2022-01/04/c_1642894606364259.htm", category: "address" },
+  { code: "NETCOMP", title: "网络反不正当竞争暂行规定", url: "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2024/art_80019fe59e464196bef173dc56678a42.html", category: "refund" },
+  { code: "CONSUMERPENALTY", title: "侵害消费者权益行为处罚办法", url: "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2023/art_85a1509b801143bc8a37a1aa2722542a.html", category: "refund" },
+  { code: "BLINDBOX", title: "盲盒经营行为规范指引（试行）", url: "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/zfjcs/art/2023/art_e2facd76a7fb4e90b03912cffb5e7d53.html", category: "refund" },
+  { code: "COMPLAINT", title: "市场监督管理投诉举报处理办法", url: "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2026/art_e4d03a20c0fd49769e408c7bf3791ff5.html", category: "refund" },
   { code: "EINV", title: "国家税务总局关于推广应用全面数字化电子发票的公告", url: "https://fgk.chinatax.gov.cn/zcfgk/c100012/c5236067/content.html", category: "invoice" },
 ];
 
@@ -38,7 +52,7 @@ function chineseNumber(value) {
 }
 
 function categoryFor(source, content) {
-  if (source.code === "EXPRESS" && /损毁|丢失|短少|赔偿|保价|验收|包装/.test(content)) return "damage";
+  if (["EXPRESS", "EXPRESSMARKET"].includes(source.code) && /损毁|丢失|短少|赔偿|保价|验收|包装/.test(content)) return "damage";
   return source.category;
 }
 
@@ -86,7 +100,7 @@ for (const source of sources) {
 }
 
 const result = {
-  version: "2026.07-scale-1",
+  version: "2026.07-scale-2",
   generatedAt: new Date().toISOString(),
   policy: "官方原文按条切片，仅进入待复核区；不得在未完成人工审核前用于自动回答。",
   sources,

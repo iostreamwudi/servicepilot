@@ -4,8 +4,10 @@ import { readFile, writeFile } from "node:fs/promises";
 const input = process.argv[2];
 const output = process.argv[3] ?? "data/eval-csds-real.json";
 const split = process.argv[4] ?? "test";
-const perCategory = Number(process.argv[5] ?? (split === "val" ? 10 : split === "train" ? 250 : 25));
-if (!input || !Number.isInteger(perCategory) || perCategory < 1) throw new Error("Usage: node scripts/build-csds-eval.mjs <csds.json> [output] [split] [per-category]");
+const quotaArg = process.argv[5] ?? (split === "val" ? "10" : split === "train" ? "250" : "25");
+const includeAll = quotaArg === "all";
+const perCategory = includeAll ? null : Number(quotaArg);
+if (!input || (!includeAll && (!Number.isInteger(perCategory) || perCategory < 1))) throw new Error("Usage: node scripts/build-csds-eval.mjs <csds.json> [output] [split] [per-category|all]");
 
 const dialogues = JSON.parse(await readFile(input, "utf8"));
 const quotas = { refund: perCategory, invoice: perCategory, address: perCategory, damage: perCategory };
@@ -90,8 +92,11 @@ for (const dialogue of dialogues) {
 }
 
 const cases = [];
-for (const [category, quota] of Object.entries(quotas)) {
+const actualQuotas = {};
+for (const [category, configuredQuota] of Object.entries(quotas)) {
   const unique = [...new Map(buckets[category].map((item) => [item.query, item])).values()].sort((a, b) => a.fingerprint.localeCompare(b.fingerprint));
+  const quota = configuredQuota ?? unique.length;
+  actualQuotas[category] = quota;
   if (unique.length < quota) throw new Error(`Not enough ${category} cases: ${unique.length}/${quota}`);
   cases.push(...unique.slice(0, quota));
 }
@@ -113,7 +118,7 @@ const result = {
     rawSplitSize: dialogues.length,
     licenseNote: "Upstream repository does not state an explicit dataset license; keep this derived subset private and use for research/evaluation only.",
   },
-  sampling: { method: "deterministic-stratified-sha256", quotas, total: cases.length, contextRequired: cases.filter((item) => item.contextRequired).length },
+  sampling: { method: includeAll ? "all-unique-eligible-cases" : "deterministic-stratified-sha256", quotas: actualQuotas, total: cases.length, contextRequired: cases.filter((item) => item.contextRequired).length },
   privacy: { upstreamAnonymized: true, secondaryScan: true, directIdentifiersFound: 0 },
   freeze: { locked: split === "val", casesSha256: createHash("sha256").update(JSON.stringify(cases.map((item) => ({ id: item.id, query: item.query, expectedSource: item.expectedSource, expectedHandoff: item.expectedHandoff })))).digest("hex") },
   cases: cases.map((item) => Object.fromEntries(Object.entries(item).filter(([key]) => key !== "fingerprint"))),

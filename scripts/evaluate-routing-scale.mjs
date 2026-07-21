@@ -3,9 +3,16 @@ import { readFile, writeFile } from "node:fs/promises";
 import { routeIntent, shouldHandoff } from "../lib/intent-router.ts";
 
 const inputs = process.argv.slice(2);
+const outputFlag = inputs.indexOf("--output");
+const output = outputFlag >= 0 ? inputs.splice(outputFlag, 2)[1] : "data/routing-scale-baseline.json";
+if (!output) throw new Error("--output requires a path");
 if (!inputs.length) inputs.push("data/eval-csds-scale.json", "data/eval-csds-scale-blind.json");
 const cases = [];
 for (const path of inputs) cases.push(...JSON.parse(await readFile(path, "utf8")).cases.map((item) => ({ ...item, datasetFile: path })));
+
+function splitName(path) {
+  return path.match(/-(train|val|test)\.json$/)?.[1] ?? path;
+}
 
 const results = cases.map((item) => {
   const routing = routeIntent(item.query, item.history ?? []);
@@ -28,12 +35,12 @@ function metrics(items) {
 }
 
 const report = {
-  version: "router-v2.0-scale-1",
+  version: "router-v2.0-scale-2",
   generatedAt: new Date().toISOString(),
   sourceFiles: inputs,
   datasetFingerprint: createHash("sha256").update(JSON.stringify(cases.map((item) => item.id))).digest("hex"),
   overall: metrics(results),
-  bySplit: Object.fromEntries(inputs.map((path) => [path, metrics(results.filter((item) => item.datasetFile === path))])),
+  bySplit: Object.fromEntries(inputs.map((path) => [splitName(path), metrics(results.filter((item) => item.datasetFile === path))])),
   byCategory: Object.fromEntries([...new Set(results.map((item) => item.category))].sort().map((category) => [category, metrics(results.filter((item) => item.category === category))])),
   contextRequired: metrics(results.filter((item) => item.contextRequired)),
   standalone: metrics(results.filter((item) => !item.contextRequired)),
@@ -41,5 +48,5 @@ const report = {
   failureSample: results.filter((item) => !item.passed).slice(0, 50),
 };
 
-await writeFile("data/routing-scale-baseline.json", `${JSON.stringify(report, null, 2)}\n`, "utf8");
+await writeFile(output, `${JSON.stringify(report, null, 2)}\n`, "utf8");
 console.log(JSON.stringify(report, null, 2));
