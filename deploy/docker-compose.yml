@@ -1,0 +1,31 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - servicepilot-data:/data
+      - ./secrets/.dev.vars:/app/.dev.vars:ro
+    networks:
+      - servicepilot
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./secrets/htpasswd:/etc/nginx/htpasswd:ro
+    networks:
+      - servicepilot
+
+volumes:
+  servicepilot-data:
+
+networks:
+  servicepilot:

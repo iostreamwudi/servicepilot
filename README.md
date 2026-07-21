@@ -30,3 +30,7 @@
 ## 下一阶段
 
 运行 qwen-plus 基线并分析失败案例；随后升级向量检索与 Rerank，将订单 Mock 替换为企业沙箱接口，并将评测集扩展至 100 条。
+
+## 自托管部署
+
+`deploy/` 提供 Docker Compose、Nginx Basic Auth、API 限流、本地持久化 D1 兼容运行时与健康检查。运行时密钥放在被 Git 忽略的 `deploy/secrets/.dev.vars`，数据库卷独立于应用容器，版本更新不会清除评测与会话状态。
