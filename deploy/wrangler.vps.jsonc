@@ -17,7 +17,7 @@
     }
   ],
   "vars": {
-    "LLM_BASE_URL": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "LLM_BASE_URL": "http://nginx:3100/compatible-mode/v1",
     "LLM_MODEL": "qwen-plus"
   }
 }
