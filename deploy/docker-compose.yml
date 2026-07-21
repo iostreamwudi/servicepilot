@@ -7,6 +7,7 @@ services:
     volumes:
       - servicepilot-data:/data
       - ./secrets/.dev.vars:/app/deploy/.dev.vars:ro
+      - /etc/ssl/certs:/etc/ssl/certs:ro
     networks:
       - servicepilot
 
