@@ -32,6 +32,8 @@ const profiles: IntentProfile[] = [
 ];
 
 const unsafeOrOutOfScope = /忽略.*规则|系统提示词|管理员密码|其他客户|别人.*(电话|手机|地址)|股票|彩票|验证码/;
+const followupPattern = /^(那|这个|它|这样|好的|可以|明白|请问|所以|然后)|多久|几个工作日|怎么办|怎么处理|能不能|可以吗|还有吗|周末算不算/;
+const knowledgeByIntent: Record<BusinessIntent, string> = { refund: "KB-114", damage: "KB-208", address: "KB-301", invoice: "KB-401" };
 
 function normalize(value: string) {
   return value.toLowerCase().replace(/\s+/g, "").replace(/[，。！？、,.!?]/g, "");
@@ -69,6 +71,20 @@ export function routeIntent(query: string, history: ConversationTurn[] = []) {
     score: Number(best.score.toFixed(2)),
     confidence: Number(Math.min(0.98, 0.66 + best.score * 0.04 + Math.max(0, margin) * 0.02).toFixed(2)),
     matchedSignals: best.matches.slice(0, 4),
+    contextSource: best.matches.some((match) => match.startsWith("上下文:")) ? "history" as const : "current" as const,
+  };
+}
+
+export function continueIntent(previousIntent: BusinessIntent | null, query: string) {
+  const current = normalize(query);
+  if (!previousIntent || unsafeOrOutOfScope.test(current) || current.length > 60 || !followupPattern.test(current)) return null;
+  return {
+    intent: previousIntent,
+    knowledgeId: knowledgeByIntent[previousIntent],
+    score: 1,
+    confidence: 0.68,
+    matchedSignals: [`会话状态:${previousIntent}`],
+    contextSource: "memory" as const,
   };
 }
 

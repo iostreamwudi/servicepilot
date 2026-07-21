@@ -1,9 +1,15 @@
 import { env } from "cloudflare:workers";
+import { and, eq, gt } from "drizzle-orm";
+import { getDb } from "../../../../db";
+import { agentConversationStates } from "../../../../db/schema";
 import { lookupRefund } from "../../../../lib/order-tool";
-import { routeIntent, shouldHandoff, type ConversationTurn } from "../../../../lib/intent-router";
+import { continueIntent, routeIntent, shouldHandoff, type BusinessIntent, type ConversationTurn } from "../../../../lib/intent-router";
 
 type RuntimeConfig = { LLM_API_KEY?: string; LLM_BASE_URL?: string; LLM_MODEL?: string };
 type HistoryTurn = ConversationTurn;
+type ConversationState = { activeIntent: string | null; summary: string; turnCount: number; expiresAt: string };
+const ORG_ID = "org-qingyu";
+const businessIntents: BusinessIntent[] = ["refund", "damage", "address", "invoice"];
 type KnowledgeRule = {
   id: string; title: string; version: string; terms: string[]; answer: string;
   confidence: number; risk: "low" | "medium" | "high"; handoff: boolean;
@@ -21,7 +27,34 @@ function authenticated(request: Request) {
   return Boolean(request.headers.get("oai-authenticated-user-email")) || host === "localhost" || host === "127.0.0.1";
 }
 
-async function generateWithGateway(query: string, history: HistoryTurn[], rule: KnowledgeRule, config: RuntimeConfig, toolContext?: string) {
+function redactMemory(value: string) {
+  return value.replace(/OR-\d{6}/gi, "[订单]").replace(/1[3-9]\d{9}/g, "[电话]").replace(/\d{17}[\dXx]/g, "[身份证号]").replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, "[邮箱]").slice(0, 160);
+}
+
+function asBusinessIntent(value: string | null | undefined): BusinessIntent | null {
+  return value && businessIntents.includes(value as BusinessIntent) ? value as BusinessIntent : null;
+}
+
+async function loadConversationState(conversationId: string) {
+  const db = getDb();
+  const state = await db.select({ activeIntent: agentConversationStates.activeIntent, summary: agentConversationStates.summary, turnCount: agentConversationStates.turnCount, expiresAt: agentConversationStates.expiresAt })
+    .from(agentConversationStates).where(and(eq(agentConversationStates.id, `${ORG_ID}:${conversationId}`), gt(agentConversationStates.expiresAt, new Date().toISOString()))).limit(1);
+  return state[0] ?? null;
+}
+
+async function saveConversationState(conversationId: string, previous: ConversationState | null, activeIntent: BusinessIntent | null, query: string) {
+  const db = getDb();
+  const now = new Date();
+  const updatedAt = now.toISOString();
+  const expiresAt = new Date(now.getTime() + 30 * 60_000).toISOString();
+  const lastUserMessage = redactMemory(query);
+  const summary = activeIntent ? `当前业务意图：${activeIntent}；最近问题：${lastUserMessage}` : previous?.summary ?? `最近问题：${lastUserMessage}`;
+  const values = { id: `${ORG_ID}:${conversationId}`, organizationId: ORG_ID, conversationId, activeIntent, summary, lastUserMessage, turnCount: (previous?.turnCount ?? 0) + 1, expiresAt, updatedAt };
+  await db.insert(agentConversationStates).values(values).onConflictDoUpdate({ target: agentConversationStates.id, set: { activeIntent, summary, lastUserMessage, turnCount: values.turnCount, expiresAt, updatedAt } });
+  return { activeIntent, summary, turnCount: values.turnCount, expiresAt };
+}
+
+async function generateWithGateway(query: string, history: HistoryTurn[], rule: KnowledgeRule, config: RuntimeConfig, toolContext?: string, memorySummary?: string) {
   if (!config.LLM_API_KEY || !config.LLM_BASE_URL || !config.LLM_MODEL) return null;
   const response = await fetch(`${config.LLM_BASE_URL.replace(/\/$/, "")}/chat/completions`, {
     method: "POST",
@@ -30,6 +63,7 @@ async function generateWithGateway(query: string, history: HistoryTurn[], rule: 
       { role: "system", content: "你是企业客服助手。只能依据给定知识回答，不得承诺赔付或执行资金、账户操作；依据不足时明确转人工。回答控制在150字以内。" },
       { role: "system", content: `可信知识：${rule.title} ${rule.version}\n${rule.answer}` },
       ...(toolContext ? [{ role: "system", content: `可信工具结果（只读、已脱敏）：${toolContext}。订单状态只能引用此结果，不得自行推断。` }] : []),
+      ...(memorySummary ? [{ role: "system", content: `会话状态摘要（仅用于理解指代，不可作为业务事实）：${memorySummary}` }] : []),
       ...history,
       { role: "user", content: query },
     ] }),
@@ -42,8 +76,8 @@ async function generateWithGateway(query: string, history: HistoryTurn[], rule: 
 
 export async function POST(request: Request) {
   if (!authenticated(request)) return Response.json({ error: "Authentication required" }, { status: 401 });
-  let payload: { query?: unknown; history?: unknown };
-  try { payload = await request.json() as { query?: unknown; history?: unknown }; }
+  let payload: { query?: unknown; history?: unknown; conversationId?: unknown };
+  try { payload = await request.json() as { query?: unknown; history?: unknown; conversationId?: unknown }; }
   catch { return Response.json({ error: "Invalid JSON body" }, { status: 400 }); }
   if (typeof payload.query !== "string" || !payload.query.trim()) return Response.json({ error: "query is required" }, { status: 400 });
   const query = payload.query.trim();
@@ -52,25 +86,36 @@ export async function POST(request: Request) {
   if (!Array.isArray(rawHistory) || rawHistory.length > 6) return Response.json({ error: "history must contain 6 turns or fewer" }, { status: 400 });
   const history = rawHistory.filter((turn): turn is HistoryTurn => Boolean(turn) && typeof turn === "object" && ((turn as HistoryTurn).role === "user" || (turn as HistoryTurn).role === "assistant") && typeof (turn as HistoryTurn).content === "string" && (turn as HistoryTurn).content.trim().length > 0 && (turn as HistoryTurn).content.length <= 500);
   if (history.length !== rawHistory.length) return Response.json({ error: "history contains an invalid turn" }, { status: 400 });
+  const conversationId = payload.conversationId === undefined ? null : typeof payload.conversationId === "string" && /^C-[A-Za-z0-9-]{1,80}$/.test(payload.conversationId) ? payload.conversationId : null;
+  if (payload.conversationId !== undefined && !conversationId) return Response.json({ error: "conversationId is invalid" }, { status: 400 });
   const started = Date.now();
-  const routing = routeIntent(query, history);
+  let memory: ConversationState | null = null;
+  if (conversationId) { try { memory = await loadConversationState(conversationId); } catch { memory = null; } }
+  const routing = routeIntent(query, history) ?? continueIntent(asBusinessIntent(memory?.activeIntent), query);
   const rule = routing ? rules.find((item) => item.id === routing.knowledgeId) ?? null : null;
-  if (!rule || !routing) return Response.json({ answer: "这个问题超出了当前已验证的知识范围。为了避免给出不准确的信息，我已建议转接人工客服。", source: null, confidence: 0.45, risk: "medium", handoff: true, mode: "safe-fallback", routing: null, trace: [
+  if (!rule || !routing) {
+    let savedMemory = memory;
+    if (conversationId) { try { savedMemory = await saveConversationState(conversationId, memory, asBusinessIntent(memory?.activeIntent), query); } catch { /* memory is non-blocking */ } }
+    return Response.json({ answer: "这个问题超出了当前已验证的知识范围。为了避免给出不准确的信息，我已建议转接人工客服。", source: null, confidence: 0.45, risk: "medium", handoff: true, mode: "safe-fallback", routing: null, memory: savedMemory ? { conversationId, activeIntent: savedMemory.activeIntent, turnCount: savedMemory.turnCount, expiresAt: savedMemory.expiresAt, source: "retained" } : null, trace: [
     { type: "intent", label: "未识别到稳定业务意图", durationMs: 32, status: "warning" },
     { type: "retrieval", label: "可信知识未命中", durationMs: 18, status: "warning" },
     { type: "guardrail", label: "已触发低置信度转人工", durationMs: 6, status: "passed" },
   ] });
+  }
   const config = env as unknown as RuntimeConfig;
   const orderId = query.toUpperCase().match(/OR-\d{6}/)?.[0];
   const policyHandoff = shouldHandoff(routing.intent, query);
   const toolResult = rule.id === "KB-114" && orderId ? lookupRefund(orderId) : null;
   const toolContext = toolResult?.ok ? JSON.stringify(toolResult.record) : undefined;
   let generated: string | null = null;
-  try { generated = orderId && !toolResult?.ok ? null : await generateWithGateway(query, history, rule, config, toolContext); } catch { generated = null; }
+  try { generated = orderId && !toolResult?.ok ? null : await generateWithGateway(query, history, rule, config, toolContext, memory?.summary); } catch { generated = null; }
   const toolAnswer = toolResult?.ok ? `订单 ${toolResult.record.orderId} 的退款状态为${toolResult.record.status === "approved" ? "已审核通过" : toolResult.record.status === "processing" ? "处理中" : "已完成"}，支付渠道为${toolResult.record.paymentChannelMasked}。${rule.answer}` : null;
   const failedToolAnswer = orderId && !toolResult?.ok ? `暂时无法核验订单 ${orderId} 的退款状态。为避免根据不完整信息推测，我已建议转接人工客服继续核查。` : null;
-  return Response.json({ answer: generated ?? toolAnswer ?? failedToolAnswer ?? rule.answer, source: { id: rule.id, title: rule.title, version: rule.version }, tool: toolResult?.ok ? { name: "order.refund.get", status: "success", data: toolResult.record, readOnly: true } : orderId ? { name: "order.refund.get", status: "failed", code: toolResult?.code } : null, routing, confidence: orderId && !toolResult?.ok ? 0.5 : Math.min(rule.confidence, routing.confidence), risk: rule.risk, handoff: policyHandoff || Boolean(orderId && !toolResult?.ok), mode: generated ? "model-grounded" : orderId && !toolResult?.ok ? "safe-fallback" : "deterministic-safe", trace: [
+  let savedMemory: ConversationState | null = memory;
+  if (conversationId) { try { savedMemory = await saveConversationState(conversationId, memory, routing.intent, query); } catch { /* memory is non-blocking */ } }
+  return Response.json({ answer: generated ?? toolAnswer ?? failedToolAnswer ?? rule.answer, source: { id: rule.id, title: rule.title, version: rule.version }, tool: toolResult?.ok ? { name: "order.refund.get", status: "success", data: toolResult.record, readOnly: true } : orderId ? { name: "order.refund.get", status: "failed", code: toolResult?.code } : null, routing, memory: savedMemory ? { conversationId, activeIntent: savedMemory.activeIntent, turnCount: savedMemory.turnCount, expiresAt: savedMemory.expiresAt, source: routing.contextSource } : null, confidence: orderId && !toolResult?.ok ? 0.5 : Math.min(rule.confidence, routing.confidence), risk: rule.risk, handoff: policyHandoff || Boolean(orderId && !toolResult?.ok), mode: generated ? "model-grounded" : orderId && !toolResult?.ok ? "safe-fallback" : "deterministic-safe", trace: [
     { type: "intent", label: `识别 ${routing.intent} 意图，置信度 ${routing.confidence}`, durationMs: 36, status: "passed" },
+    ...(routing.contextSource === "memory" ? [{ type: "memory", label: `继承会话状态 ${routing.intent} · 第 ${(savedMemory?.turnCount ?? 1)} 轮`, durationMs: 12, status: "passed" }] : []),
     { type: "retrieval", label: `混合检索命中 ${rule.id} ${rule.version} · ${routing.matchedSignals.join(" / ")}`, durationMs: 22, status: "passed" },
     ...(orderId ? [{ type: "tool", label: toolResult?.ok ? `只读查询 ${orderId} 成功，敏感字段已脱敏` : `订单工具未返回结果，禁止模型猜测`, durationMs: 41, status: toolResult?.ok ? "passed" : "warning" }] : []),
     { type: "guardrail", label: orderId && !toolResult?.ok ? "已阻止基于失败工具的状态推测" : policyHandoff ? "策略命中并转人工" : "输出规则校验通过", durationMs: 8, status: "passed" },

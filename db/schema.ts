@@ -38,6 +38,14 @@ export const messages = sqliteTable("messages", {
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
+export const agentConversationStates = sqliteTable("agent_conversation_states", {
+  id: text("id").primaryKey(), organizationId: text("organization_id").notNull().references(() => organizations.id),
+  conversationId: text("conversation_id").notNull().unique(), activeIntent: text("active_intent"),
+  summary: text("summary").notNull().default(""), lastUserMessage: text("last_user_message").notNull().default(""),
+  turnCount: integer("turn_count").notNull().default(0), expiresAt: text("expires_at").notNull(),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`), updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
 export const tickets = sqliteTable("tickets", {
   id: text("id").primaryKey(), organizationId: text("organization_id").notNull().references(() => organizations.id),
   conversationId: text("conversation_id").references(() => conversations.id), title: text("title").notNull(), customerName: text("customer_name").notNull(),

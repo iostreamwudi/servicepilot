@@ -28,6 +28,10 @@ test("enforces grounded answers and safe fallback in the Agent route", async () 
   assert.match(route, /AbortSignal\.timeout\(8_000\)/);
   assert.match(route, /routeIntent/);
   assert.match(route, /matchedSignals/);
+  assert.match(route, /agentConversationStates/);
+  assert.match(route, /conversationId is invalid/);
+  assert.match(route, /30 \* 60_000/);
+  assert.match(route, /继承会话状态/);
 });
 
 test("ships a representative offline evaluation seed", async () => {
@@ -99,6 +103,7 @@ test("runs guarded model evaluations and exposes the quality dashboard", async (
   assert.match(schema, /evaluation_runs/);
   assert.match(schema, /evaluation_results/);
   assert.match(schema, /evaluation_reviews/);
+  assert.match(schema, /agent_conversation_states/);
   assert.match(schema, /system_version/);
   assert.match(schema, /source_dataset/);
   assert.match(schema, /context_required/);
@@ -109,6 +114,7 @@ test("runs guarded model evaluations and exposes the quality dashboard", async (
   assert.match(page, /确认系统失败/);
   assert.match(page, /标记标签问题/);
   assert.match(page, /行为可接受/);
+  assert.match(page, /30 分钟会话记忆/);
   assert.match(reviews, /Reviewer role required/);
   assert.match(reviews, /evaluation\.review/);
   assert.match(reviews, /onConflictDoUpdate/);

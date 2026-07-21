@@ -282,8 +282,11 @@ function Audit() {
 }
 
 function CustomerDemo({ onClose }: { onClose: () => void }) {
-  type AgentResult = { answer: string; source: { id: string; title: string; version: string } | null; confidence: number; handoff: boolean; mode: string; trace: Array<{ label: string }> };
+  type DemoTurn = { role: "user" | "assistant"; content: string };
+  type AgentResult = { answer: string; source: { id: string; title: string; version: string } | null; confidence: number; handoff: boolean; mode: string; trace: Array<{ label: string }>; memory?: { activeIntent: string | null; turnCount: number; source: string } | null };
   const [query, setQuery] = useState("订单 OR-773928 的退款什么时候到账？");
+  const [conversationId, setConversationId] = useState("");
+  const [history, setHistory] = useState<DemoTurn[]>([]);
   const [submitted, setSubmitted] = useState("");
   const [result, setResult] = useState<AgentResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -293,15 +296,18 @@ function CustomerDemo({ onClose }: { onClose: () => void }) {
     if (!value || loading) return;
     setSubmitted(value); setQuery(value); setLoading(true); setError(""); setResult(null);
     try {
-      const response = await fetch("/api/agent/respond", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ query: value }) });
+      const activeConversationId = conversationId || `C-DEMO-${crypto.randomUUID()}`;
+      if (!conversationId) setConversationId(activeConversationId);
+      const response = await fetch("/api/agent/respond", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ query: value, history: history.slice(-6), conversationId: activeConversationId }) });
       const body = await response.json() as AgentResult & { error?: string };
       if (!response.ok) throw new Error(body.error || "服务暂时不可用");
-      setResult(body);
+      setResult(body); setHistory((previous) => [...previous, { role: "user", content: value }, { role: "assistant", content: body.answer }].slice(-6) as DemoTurn[]);
     } catch (cause) { setError(cause instanceof Error ? cause.message : "服务暂时不可用"); }
     finally { setLoading(false); }
   }
-  const quick = ["订单 OR-773928 的退款什么时候到账？", "收到的生鲜破损了怎么办？", "订单还没发货怎么改地址？"];
-  return <div className="modal-backdrop" onClick={onClose}><div className="customer-demo" onClick={(e) => e.stopPropagation()}><div className="demo-head"><div className="brand-mark small">S</div><div><b>商城智能客服</b><span>Agent API 已连接 · 随时可转人工</span></div><button onClick={onClose}>×</button></div><div className="demo-body"><div className="demo-welcome"><b>您好，我是商城智能客服</b><span>回答会展示知识依据、置信度与安全决策。</span></div><div className="quick-questions">{quick.map((item) => <button key={item} onClick={() => send(item)}>{item.replace("？", "")}</button>)}</div>{submitted && <div className="demo-user">{submitted}</div>}{loading && <div className="demo-ai loading"><b>正在执行 Agent 工作流</b><span>意图识别 → 知识检索 → 风险校验</span></div>}{error && <div className="demo-ai error"><b>请求失败</b><span>{error}</span></div>}{result && <div className="demo-ai"><b>{result.handoff ? "已生成安全答复并建议转人工" : "已基于可信知识回答"}</b><span>{result.answer}</span>{result.source && <a>依据：{result.source.title} {result.source.version} · {result.source.id}</a>}<small>置信度 {(result.confidence * 100).toFixed(0)}% · {result.mode === "model-grounded" ? "大模型生成（有依据约束）" : result.mode === "safe-fallback" ? "低置信度安全兜底" : "确定性安全模式"}</small><div className="demo-trace">{result.trace.map((step, index) => <i key={step.label}>{index + 1}. {step.label}</i>)}</div>{result.handoff && <button className="handoff-button">转接人工客服</button>}</div>}</div><div className="demo-input"><input value={query} maxLength={500} onChange={(e) => setQuery(e.target.value)} placeholder="请输入您的问题" onKeyDown={(e) => e.key === 'Enter' && send()} /><button disabled={loading} onClick={() => send()}>{loading ? "处理中" : "发送"}</button></div><div className="demo-footer">AI生成内容仅供参考 · 涉及资金、赔付和账户操作需人工确认</div></div></div>;
+  const quick = ["订单 OR-773928 的退款什么时候到账？", "那周末算工作日吗？", "收到的生鲜破损了怎么办？", "订单还没发货怎么改地址？"];
+  const resetConversation = () => { setConversationId(""); setHistory([]); setSubmitted(""); setResult(null); setError(""); };
+  return <div className="modal-backdrop" onClick={onClose}><div className="customer-demo" onClick={(e) => e.stopPropagation()}><div className="demo-head"><div className="brand-mark small">S</div><div><b>商城智能客服</b><span>Agent API 已连接 · 30 分钟会话记忆 · 随时可转人工</span></div><button aria-label="新会话" onClick={resetConversation}>↻</button><button aria-label="关闭" onClick={onClose}>×</button></div><div className="demo-body"><div className="demo-welcome"><b>您好，我是商城智能客服</b><span>先询问退款，再追问“那周末算工作日吗”，体验多轮意图继承。</span></div><div className="quick-questions">{quick.map((item) => <button key={item} onClick={() => send(item)}>{item.replace("？", "")}</button>)}</div>{submitted && <div className="demo-user">{submitted}</div>}{loading && <div className="demo-ai loading"><b>正在执行 Agent 工作流</b><span>会话状态 → 意图识别 → 知识检索 → 风险校验</span></div>}{error && <div className="demo-ai error"><b>请求失败</b><span>{error}</span></div>}{result && <div className="demo-ai"><b>{result.handoff ? "已生成安全答复并建议转人工" : "已基于可信知识回答"}</b><span>{result.answer}</span>{result.source && <a>依据：{result.source.title} {result.source.version} · {result.source.id}</a>}<small>置信度 {(result.confidence * 100).toFixed(0)}% · {result.mode === "model-grounded" ? "大模型生成（有依据约束）" : result.mode === "safe-fallback" ? "低置信度安全兜底" : "确定性安全模式"}</small>{result.memory && <small>会话记忆：{result.memory.activeIntent ?? "未识别"} · 第 {result.memory.turnCount} 轮 · {result.memory.source === "memory" ? "状态继承" : result.memory.source === "history" ? "历史上下文" : "当前问题"}</small>}<div className="demo-trace">{result.trace.map((step, index) => <i key={step.label}>{index + 1}. {step.label}</i>)}</div>{result.handoff && <button className="handoff-button">转接人工客服</button>}</div>}</div><div className="demo-input"><input value={query} maxLength={500} onChange={(e) => setQuery(e.target.value)} placeholder="请输入您的问题" onKeyDown={(e) => e.key === 'Enter' && send()} /><button disabled={loading} onClick={() => send()}>{loading ? "处理中" : "发送"}</button></div><div className="demo-footer">AI生成内容仅供参考 · 会话记忆 30 分钟后自动失效 · 涉及资金、赔付和账户操作需人工确认</div></div></div>;
 }
 
 export default function Home() {

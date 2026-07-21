@@ -43,6 +43,13 @@
       "when": 1784563290800,
       "tag": "0005_spicy_dark_phoenix",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1784614175741,
+      "tag": "0006_tranquil_jane_foster",
+      "breakpoints": true
     }
   ]
 }

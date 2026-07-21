@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { routeIntent, shouldHandoff } from "../lib/intent-router.ts";
+import { continueIntent, routeIntent, shouldHandoff } from "../lib/intent-router.ts";
 
 test("routes paraphrased service intents with explainable signals", () => {
   assert.equal(routeIntent("钱怎么还没返回来")?.knowledgeId, "KB-114");
@@ -13,6 +13,14 @@ test("routes paraphrased service intents with explainable signals", () => {
 test("uses sanitized history for elliptical follow-up questions", () => {
   const result = routeIntent("好的，几个工作日", [{ role: "user", content: "退款审核通过了" }]);
   assert.equal(result?.knowledgeId, "KB-114");
+});
+
+test("inherits a short follow-up from expiring server-side conversation state", () => {
+  const result = continueIntent("refund", "那周末算工作日吗？");
+  assert.equal(result?.knowledgeId, "KB-114");
+  assert.equal(result?.contextSource, "memory");
+  assert.equal(continueIntent("refund", "你觉得股票会涨吗"), null);
+  assert.equal(continueIntent(null, "那需要多久"), null);
 });
 
 test("keeps unsafe and unrelated requests outside business routing", () => {
