@@ -33,4 +33,4 @@
 
 ## 自托管部署
 
-`deploy/` 提供 Docker Compose、Nginx Basic Auth、API 限流、本地持久化 D1 兼容运行时与健康检查。运行时密钥放在被 Git 忽略的 `deploy/secrets/.dev.vars`，数据库卷独立于应用容器，版本更新不会清除评测与会话状态。
+`deploy/` 提供 Docker Compose、Nginx 反向代理、API 限流、本地持久化 D1 兼容运行时与健康检查。运行时密钥放在被 Git 忽略的 `deploy/secrets/.dev.vars`，数据库卷独立于应用容器，版本更新不会清除评测与会话状态。当前演示部署默认公开访问，生产部署应在网关层接入企业身份认证。
