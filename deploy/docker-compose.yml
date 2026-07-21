@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     volumes:
       - servicepilot-data:/data
-      - ./secrets/.dev.vars:/app/.dev.vars:ro
+      - ./secrets/.dev.vars:/app/deploy/.dev.vars:ro
     networks:
       - servicepilot
 
