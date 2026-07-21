@@ -229,7 +229,7 @@ function EvaluationReviewWorkbench({ refreshKey }: { refreshKey: number }) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const load = () => fetch("/api/evaluations/reviews").then((r) => r.ok ? r.json() : Promise.reject()).then((body: { items?: ReviewItem[] }) => setItems(body.items ?? [])).catch(() => setError("复核队列加载失败"));
-  useEffect(load, [refreshKey]);
+  useEffect(() => { void load(); }, [refreshKey]);
   const visible = items.filter((item) => mode === "pending" ? !item.review : Boolean(item.review));
   const selected = visible[0];
   async function submit(decision: ReviewDecision) {

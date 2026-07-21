@@ -115,6 +115,7 @@ test("runs guarded model evaluations and exposes the quality dashboard", async (
   assert.match(page, /标记标签问题/);
   assert.match(page, /行为可接受/);
   assert.match(page, /30 分钟会话记忆/);
+  assert.doesNotMatch(page, /useEffect\(load,/);
   assert.match(reviews, /Reviewer role required/);
   assert.match(reviews, /evaluation\.review/);
   assert.match(reviews, /onConflictDoUpdate/);
