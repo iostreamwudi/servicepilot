@@ -38,14 +38,16 @@ test("enforces grounded answers and safe fallback in the Agent route", async () 
 });
 
 test("ships a traceable database-backed knowledge library", async () => {
-  const [seedText, schema, bootstrap, api, page] = await Promise.all([
+  const [seedText, corpusText, schema, bootstrap, api, page] = await Promise.all([
     source("data/knowledge-seed.json"),
+    source("data/knowledge-official-corpus.json"),
     source("db/schema.ts"),
     source("app/api/bootstrap/route.ts"),
     source("app/api/knowledge/route.ts"),
     source("app/page.tsx"),
   ]);
   const seed = JSON.parse(seedText);
+  const corpus = JSON.parse(corpusText);
   assert.ok(seed.documents.length >= 20);
   assert.equal(new Set(seed.documents.map((item) => item.id)).size, seed.documents.length);
   for (const category of ["refund", "damage", "address", "invoice"]) {
@@ -53,12 +55,39 @@ test("ships a traceable database-backed knowledge library", async () => {
   }
   assert.ok(seed.documents.filter((item) => item.sourceType === "official" && item.sourceUrl?.startsWith("https://")).length >= 12);
   assert.ok(seed.documents.every((item) => Array.isArray(item.keywords) && item.keywords.length >= 4));
+  assert.equal(corpus.documents.length, 378);
+  assert.equal(new Set(corpus.documents.map((item) => item.id)).size, 378);
+  assert.ok(corpus.documents.every((item) => item.state === "review" && item.sourceType === "official" && /^[a-f0-9]{64}$/.test(item.contentSha256)));
+  assert.equal(corpus.sources.length, 7);
   assert.match(schema, /source_type/);
   assert.match(schema, /keywords_json/);
   assert.match(bootstrap, /onConflictDoUpdate/);
   assert.match(api, /documents\.map/);
+  assert.match(api, /\.limit\(limit\)\.offset\(offset\)/);
   assert.match(page, /\/api\/knowledge/);
   assert.doesNotMatch(page, /知识条目<\/span><b>1,284/);
+});
+
+test("ships a thousand-case reproducible routing evaluation", async () => {
+  const [regressionText, blindText, reportText, api, page] = await Promise.all([
+    source("data/eval-csds-scale.json"),
+    source("data/eval-csds-scale-blind.json"),
+    source("data/routing-scale-baseline.json"),
+    source("app/api/evaluations/scale/route.ts"),
+    source("app/page.tsx"),
+  ]);
+  const regression = JSON.parse(regressionText);
+  const blind = JSON.parse(blindText);
+  const report = JSON.parse(reportText);
+  assert.equal(regression.cases.length, 960);
+  assert.equal(blind.cases.length, 100);
+  assert.equal(report.overall.total, 1060);
+  assert.match(blind.freeze.casesSha256, /^[a-f0-9]{64}$/);
+  assert.equal(regression.privacy.directIdentifiersFound, 0);
+  assert.equal(blind.privacy.directIdentifiersFound, 0);
+  assert.match(api, /scaleSet/);
+  assert.match(page, /1,060 条公开真实语料/);
+  assert.match(page, /规模评测边界/);
 });
 
 test("ships a representative offline evaluation seed", async () => {
@@ -136,8 +165,8 @@ test("runs guarded model evaluations and exposes the quality dashboard", async (
   assert.match(schema, /context_required/);
   assert.match(schema, /routing_intent/);
   assert.match(schema, /routing_signals_json/);
-  assert.match(page, /qwen-plus 基线评测/);
-  assert.match(page, /冻结盲测 40 条/);
+  assert.match(page, /规模路由评测 \+ qwen-plus 端到端回归/);
+  assert.match(page, /960 回归 \+ 100 冻结盲测/);
   assert.match(page, /确认系统失败/);
   assert.match(page, /标记标签问题/);
   assert.match(page, /行为可接受/);

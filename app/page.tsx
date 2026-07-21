@@ -170,24 +170,25 @@ function Tickets() {
 
 function Knowledge() {
   const [query, setQuery] = useState("");
-  const [allDocs, setAllDocs] = useState<Array<{ id: string; title: string; version: string; ownerTeam: string; category: string; coverage: number; state: string; sourceType: string; sourceTitle?: string | null; sourceUrl?: string | null; updatedAt: string }>>([]);
+  const [docs, setDocs] = useState<Array<{ id: string; title: string; version: string; ownerTeam: string; category: string; coverage: number; state: string; sourceType: string; sourceTitle?: string | null; sourceUrl?: string | null; updatedAt: string }>>([]);
+  const [stats, setStats] = useState({ total: 0, active: 0, review: 0, official: 0 });
+  const [total, setTotal] = useState(0);
+  const [offset, setOffset] = useState(0);
   const [error, setError] = useState("");
   useEffect(() => {
-    fetch("/api/knowledge")
+    const timer = window.setTimeout(() => fetch(`/api/knowledge?limit=50&offset=${offset}&q=${encodeURIComponent(query)}`)
       .then((response) => response.ok ? response.json() : Promise.reject(new Error("知识库读取失败")))
-      .then((payload: { documents: typeof allDocs }) => setAllDocs(payload.documents))
-      .catch((cause) => setError(cause instanceof Error ? cause.message : "知识库读取失败"));
-  }, []);
-  const docs = allDocs.filter((document) => [document.title, document.ownerTeam, document.category, document.sourceTitle].some((value) => value?.toLowerCase().includes(query.toLowerCase())));
-  const activeCount = allDocs.filter((document) => document.state === "active").length;
-  const reviewCount = allDocs.filter((document) => document.state === "review").length;
-  const averageCoverage = allDocs.length ? allDocs.reduce((sum, document) => sum + document.coverage, 0) / allDocs.length : 0;
+      .then((payload: { documents: typeof docs; total: number; stats: typeof stats }) => { setDocs(payload.documents); setTotal(payload.total); setStats(payload.stats); setError(""); })
+      .catch((cause) => setError(cause instanceof Error ? cause.message : "知识库读取失败")), 180);
+    return () => window.clearTimeout(timer);
+  }, [query, offset]);
   const stateLabel: Record<string, string> = { active: "生效中", review: "待复核", draft: "草稿", archived: "已归档" };
   return <section className="knowledge-layout">
-    <article className="panel knowledge-main"><div className="table-toolbar"><div className="search-box wide">⌕ <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="搜索知识、规则或负责人" /></div><button className="ghost-button">批量导入</button><button className="primary-button">＋ 新建知识</button></div>
-      <div className="knowledge-summary"><div><span>知识条目</span><b>{allDocs.length || "—"}</b></div><div><span>生效中</span><b>{activeCount || "—"}</b></div><div><span>待复核</span><b className="warning-text">{reviewCount}</b></div><div><span>平均覆盖率</span><b>{allDocs.length ? `${(averageCoverage * 100).toFixed(1)}%` : "—"}</b></div></div>
+    <article className="panel knowledge-main"><div className="table-toolbar"><div className="search-box wide">⌕ <input value={query} onChange={(e) => { setQuery(e.target.value); setOffset(0); }} placeholder="搜索知识、规则或负责人" /></div><button className="ghost-button">批量导入</button><button className="primary-button">＋ 新建知识</button></div>
+      <div className="knowledge-summary"><div><span>知识条目</span><b>{stats.total || "—"}</b></div><div><span>已审核生效</span><b>{stats.active || "—"}</b></div><div><span>待人工复核</span><b className="warning-text">{stats.review}</b></div><div><span>官方来源</span><b>{stats.official || "—"}</b></div></div>
       {error && <div className="evaluation-error">{error}</div>}
-      <table><thead><tr><th>知识文档</th><th>版本</th><th>责任团队</th><th>问题覆盖率</th><th>来源</th><th>状态</th></tr></thead><tbody>{docs.map((doc) => <tr key={doc.id}><td><b>{doc.title}</b><small>{doc.id} · {doc.category}</small></td><td>{doc.version}</td><td>{doc.ownerTeam}</td><td><div className="coverage"><i style={{ width: `${doc.coverage * 100}%` }} /><span>{(doc.coverage * 100).toFixed(0)}%</span></div></td><td>{doc.sourceUrl ? <a href={doc.sourceUrl} target="_blank" rel="noreferrer">{doc.sourceType === "official" ? "官方依据 ↗" : "演示规则"}</a> : <span>{doc.sourceType === "official" ? "官方依据" : "演示规则"}</span>}<small>{doc.sourceTitle}</small></td><td><Status kind={doc.state === "active" ? "success" : doc.state === "review" ? "warning" : "neutral"}>{stateLabel[doc.state] ?? doc.state}</Status></td></tr>)}</tbody></table>
+      <table><thead><tr><th>知识文档</th><th>版本</th><th>责任团队</th><th>问题覆盖率</th><th>来源</th><th>状态</th></tr></thead><tbody>{docs.map((doc) => <tr key={doc.id}><td><b>{doc.title}</b><small>{doc.id} · {doc.category}</small></td><td>{doc.version}</td><td>{doc.ownerTeam}</td><td>{doc.state === "active" ? <div className="coverage"><i style={{ width: `${doc.coverage * 100}%` }} /><span>{(doc.coverage * 100).toFixed(0)}%</span></div> : <span>待评测</span>}</td><td>{doc.sourceUrl ? <a href={doc.sourceUrl} target="_blank" rel="noreferrer">{doc.sourceType === "official" ? "官方依据 ↗" : "演示规则"}</a> : <span>{doc.sourceType === "official" ? "官方依据" : "演示规则"}</span>}<small>{doc.sourceTitle}</small></td><td><Status kind={doc.state === "active" ? "success" : doc.state === "review" ? "warning" : "neutral"}>{stateLabel[doc.state] ?? doc.state}</Status></td></tr>)}</tbody></table>
+      <div className="table-toolbar"><span>显示 {total ? offset + 1 : 0}-{Math.min(offset + docs.length, total)} / {total}</span><div><button className="ghost-button" disabled={offset === 0} onClick={() => setOffset(Math.max(0, offset - 50))}>上一页</button><button className="ghost-button" disabled={offset + 50 >= total} onClick={() => setOffset(offset + 50)}>下一页</button></div></div>
     </article>
     <aside className="panel knowledge-aside"><h3>内容治理流程</h3><div className="governance-step done"><i>1</i><p><b>内容录入</b><span>来源、责任人、有效期</span></p></div><div className="governance-step done"><i>2</i><p><b>自动解析</b><span>切片、标签、冲突检测</span></p></div><div className="governance-step active"><i>3</i><p><b>双人复核</b><span>业务与合规共同确认</span></p></div><div className="governance-step"><i>4</i><p><b>灰度发布</b><span>小流量验证命中效果</span></p></div><div className="governance-step"><i>5</i><p><b>失效归档</b><span>保留版本与审计记录</span></p></div><div className="aside-callout"><b>检测到 3 处潜在冲突</b><span>“生鲜赔付标准”与旧版客服 SOP 存在口径差异。</span><button>查看冲突</button></div></aside>
   </section>;
@@ -195,6 +196,7 @@ function Knowledge() {
 
 type EvaluationRun = { id: string; model: string; datasetVersion: string; suite?: string; systemVersion?: string; totalCases: number; passedCases: number; passRate: number; highRiskPassRate: number; averageLatencyMs: number; completedAt?: string | null };
 type EvaluationResultView = { id: string; category: string; query: string; passed: boolean; failures: string[] };
+type ScaleSummary = { overall: { total: number; passRate: number; sourceAccuracy: number; handoffAccuracy: number }; standalone: { total: number; passRate: number }; contextRequired: { total: number; passRate: number }; bySplit: Record<string, { total: number; passRate: number }> };
 
 function EvaluationDashboard({ onCompleted }: { onCompleted?: () => void }) {
   const [run, setRun] = useState<EvaluationRun | null>(null);
@@ -202,6 +204,7 @@ function EvaluationDashboard({ onCompleted }: { onCompleted?: () => void }) {
   const [running, setRunning] = useState<"regression" | "blind" | null>(null);
   const [error, setError] = useState("");
   const [blindConsumed, setBlindConsumed] = useState(false);
+  const [scale, setScale] = useState<ScaleSummary | null>(null);
   function ingest(payload: { latest?: EvaluationRun | null; run?: EvaluationRun; results?: Array<Record<string, unknown>>; blindConsumed?: boolean }) {
     setRun(payload.run ?? payload.latest ?? null);
     if (typeof payload.blindConsumed === "boolean") setBlindConsumed(payload.blindConsumed);
@@ -215,6 +218,7 @@ function EvaluationDashboard({ onCompleted }: { onCompleted?: () => void }) {
     }));
   }
   useEffect(() => { fetch("/api/evaluations").then((r) => r.ok ? r.json() : Promise.reject()).then(ingest).catch(() => undefined); }, []);
+  useEffect(() => { fetch("/api/evaluations/scale?limit=1").then((r) => r.ok ? r.json() : Promise.reject()).then((payload: { summary: ScaleSummary }) => setScale(payload.summary)).catch(() => undefined); }, []);
   async function runEvaluation(suite: "regression" | "blind") {
     setRunning(suite); setError("");
     try {
@@ -227,7 +231,8 @@ function EvaluationDashboard({ onCompleted }: { onCompleted?: () => void }) {
     finally { setRunning(null); }
   }
   const failed = results.filter((item) => !item.passed);
-  return <section className="panel evaluation-panel"><div className="evaluation-head"><div><span className="eyebrow">真实模型回归</span><h3>qwen-plus 基线评测</h3><p>回归集 100 条 · 冻结盲测 40 条 + 安全门禁 15 条 · 多轮上下文 · 结果写入 D1</p></div><div className="evaluation-actions"><button className="ghost-button" disabled={Boolean(running) || blindConsumed} onClick={() => runEvaluation("blind")}>{running === "blind" ? "正在运行盲测…" : blindConsumed ? "本版本盲测已完成" : "运行冻结盲测"}</button><button className="primary-button" disabled={Boolean(running)} onClick={() => runEvaluation("regression")}>{running === "regression" ? "正在调用模型…" : run ? "重新运行回归" : "运行首轮回归"}</button></div></div>
+  return <section className="panel evaluation-panel"><div className="evaluation-head"><div><span className="eyebrow">分层评测体系</span><h3>规模路由评测 + qwen-plus 端到端回归</h3><p>1,060 条公开真实语料用于低成本全量路由测试；100 条回归与 55 条盲测/安全门禁调用真实模型</p></div><div className="evaluation-actions"><button className="ghost-button" disabled={Boolean(running) || blindConsumed} onClick={() => runEvaluation("blind")}>{running === "blind" ? "正在运行盲测…" : blindConsumed ? "本版本盲测已完成" : "运行冻结盲测"}</button><button className="primary-button" disabled={Boolean(running)} onClick={() => runEvaluation("regression")}>{running === "regression" ? "正在调用模型…" : run ? "重新运行回归" : "运行首轮回归"}</button></div></div>
+    {scale && <><div className="evaluation-kpis"><div><span>规模语料</span><b>{scale.overall.total.toLocaleString()}</b><small>960 回归 + 100 冻结盲测</small></div><div><span>路由联合通过率</span><b>{(scale.overall.passRate * 100).toFixed(1)}%</b><small>来源与转人工同时正确</small></div><div><span>独立盲测通过率</span><b>{(Object.values(scale.bySplit).at(-1)?.passRate ?? 0) * 100}%</b><small>未参与路由调试</small></div><div><span>独立问句通过率</span><b>{(scale.standalone.passRate * 100).toFixed(1)}%</b><small>{scale.standalone.total} 条无上下文样本</small></div></div><div className="process-note"><b>规模评测边界</b><span>全量规模测试仅评估意图来源与转人工策略，不调用大模型；端到端答案质量仍以 qwen-plus 回归和冻结盲测为准。上下文依赖样本通过率 {(scale.contextRequired.passRate * 100).toFixed(1)}%，是下一版本重点。</span></div></>}
     {error && <div className="evaluation-error">{error}</div>}
     {run ? <><div className="evaluation-kpis"><div><span>总体通过率</span><b>{(run.passRate * 100).toFixed(1)}%</b><small>{run.passedCases}/{run.totalCases} 条通过</small></div><div><span>高风险通过率</span><b>{(run.highRiskPassRate * 100).toFixed(1)}%</b><small>高风险 · 对抗 · 隐私</small></div><div><span>平均端到端时延</span><b>{run.averageLatencyMs}ms</b><small>包含检索与生成</small></div><div><span>数据集 / 模型</span><b>v{run.datasetVersion}</b><small>{run.model}</small></div></div>
       <div className="evaluation-results"><div className="evaluation-subhead"><b>{run.suite === "blind" ? "盲测失败案例" : "回归失败案例"}</b><span>{failed.length ? `优先处理 ${failed.length} 条` : "本轮全部通过"}</span></div>{failed.length ? failed.slice(0, 5).map((item) => <div className="evaluation-case" key={item.id}><Status kind="danger">{item.category}</Status><p><b>{item.query}</b><span>{item.failures.join("；")}</span></p><button className="text-button">加入优化任务 →</button></div>) : <div className="evaluation-empty">✓ 当前基线未发现规则性失败，可继续扩展长尾用例。</div>}</div></> : <div className="evaluation-placeholder"><b>还没有真实基线结果</b><span>运行后将调用生产 qwen-plus，并按知识来源、转人工决策、必要信息与禁止内容自动评分。</span></div>}

@@ -4,10 +4,11 @@ import { readFile, writeFile } from "node:fs/promises";
 const input = process.argv[2];
 const output = process.argv[3] ?? "data/eval-csds-real.json";
 const split = process.argv[4] ?? "test";
-if (!input) throw new Error("Usage: node scripts/build-csds-eval.mjs <csds-test.json> [output]");
+const perCategory = Number(process.argv[5] ?? (split === "val" ? 10 : split === "train" ? 250 : 25));
+if (!input || !Number.isInteger(perCategory) || perCategory < 1) throw new Error("Usage: node scripts/build-csds-eval.mjs <csds.json> [output] [split] [per-category]");
 
 const dialogues = JSON.parse(await readFile(input, "utf8"));
-const quotas = split === "val" ? { refund: 10, invoice: 10, address: 10, damage: 10 } : { refund: 25, invoice: 20, address: 20, damage: 20 };
+const quotas = { refund: perCategory, invoice: perCategory, address: perCategory, damage: perCategory };
 const buckets = { refund: [], invoice: [], address: [], damage: [] };
 const explicitSignals = {
   refund: /退款|到账|退回|退钱|返还|退货|钱/,
@@ -67,7 +68,7 @@ for (const dialogue of dialogues) {
     const sourceMap = { refund: "KB-114", damage: "KB-208", address: "KB-301", invoice: "KB-401" };
     const fingerprint = createHash("sha256").update(`${dialogue.DialogueID}:${qaIndex}:${query}`).digest("hex");
     buckets[category].push({
-      id: split === "test" ? `csds-${category}-${dialogue.DialogueID}-${qaIndex}` : `csds-${split}-${category}-${dialogue.DialogueID}-${qaIndex}`,
+      id: `csds-${split}-${category}-${dialogue.DialogueID}-${qaIndex}`,
       category: `real-${category}`,
       query,
       history,
@@ -102,8 +103,8 @@ for (const item of cases) {
 }
 
 const result = {
-  version: "1.0",
-  description: split === "val" ? "从 CSDS 官方验证集冻结抽取的中文电商客服盲测问题；首次运行前禁止查看具体样本。" : "从 CSDS 官方测试集分层抽取的真实中文电商客服问题；仅用于私有研究评测。",
+  version: "2.0",
+  description: split === "val" ? "从 CSDS 官方验证集冻结抽取的中文电商客服盲测问题；首次运行前禁止查看具体样本。" : `从 CSDS 官方${split === "train" ? "训练" : "测试"}集分层抽取的真实中文电商客服问题；仅用于私有研究评测。`,
   source: {
     name: "CSDS: A Fine-grained Chinese Dataset for Customer Service Dialogue Summarization",
     upstream: "https://github.com/xiaolinAndy/CSDS",

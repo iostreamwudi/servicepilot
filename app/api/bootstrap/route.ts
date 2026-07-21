@@ -2,8 +2,10 @@ import { count, eq } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { auditLogs, conversations, knowledgeDocuments, memberships, organizations, qualityReviews, strategyVersions, tickets, users } from "../../../db/schema";
 import knowledgeSeed from "../../../data/knowledge-seed.json";
+import knowledgeCorpus from "../../../data/knowledge-official-corpus.json";
 
 const ORG_ID = "org-qingyu";
+const KNOWLEDGE_SEED_AUDIT_ID = `A-KB-${knowledgeSeed.version}-${knowledgeCorpus.version}`.replace(/[^A-Za-z0-9-]/g, "-");
 
 function actorFrom(request: Request) {
   const email = request.headers.get("oai-authenticated-user-email");
@@ -43,7 +45,8 @@ export async function POST(request: Request) {
         await db.insert(memberships).values({ id: `membership-${userId}`, organizationId: ORG_ID, userId, role: "product_admin" });
       }
     }
-    for (const document of knowledgeSeed.documents) {
+    const seeded = await db.select({ id: auditLogs.id }).from(auditLogs).where(eq(auditLogs.id, KNOWLEDGE_SEED_AUDIT_ID)).limit(1);
+    if (!seeded.length) for (const document of [...knowledgeSeed.documents, ...knowledgeCorpus.documents]) {
       const values = {
         id: document.id,
         organizationId: ORG_ID,
@@ -67,6 +70,18 @@ export async function POST(request: Request) {
         set: values,
       });
     }
+    if (!seeded.length) await db.insert(auditLogs).values({
+      id: KNOWLEDGE_SEED_AUDIT_ID,
+      organizationId: ORG_ID,
+      actorUserId: userId,
+      actorType: "system",
+      action: "knowledge.corpus.import",
+      resourceType: "knowledge_corpus",
+      resourceId: knowledgeCorpus.corpusSha256,
+      result: "allowed",
+      risk: "low",
+      metadataJson: JSON.stringify({ curated: knowledgeSeed.documents.length, officialReview: knowledgeCorpus.documents.length, sources: knowledgeCorpus.sources.length }),
+    });
     const [conversationCount] = await db.select({ value: count() }).from(conversations).where(eq(conversations.organizationId, ORG_ID));
     const [ticketCount] = await db.select({ value: count() }).from(tickets).where(eq(tickets.organizationId, ORG_ID));
     const [knowledgeCount] = await db.select({ value: count() }).from(knowledgeDocuments).where(eq(knowledgeDocuments.organizationId, ORG_ID));
