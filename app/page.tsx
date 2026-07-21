@@ -30,13 +30,6 @@ const tickets = [
   { id: "T-9018", title: "发票信息更正", customer: "赵先生", priority: "P3", owner: "孙悦", sla: "已完成", state: "已解决" },
 ];
 
-const knowledgeDocs = [
-  { title: "退款与到账时效规则", version: "v3.4", owner: "售后运营", updated: "今天 09:42", coverage: 96, state: "生效中" },
-  { title: "生鲜商品破损赔付标准", version: "v2.8", owner: "生鲜业务", updated: "昨天 17:10", coverage: 88, state: "待复核" },
-  { title: "物流地址修改操作指引", version: "v1.9", owner: "履约团队", updated: "07-18", coverage: 92, state: "生效中" },
-  { title: "电子发票常见问题", version: "v4.1", owner: "财税运营", updated: "07-16", coverage: 99, state: "生效中" },
-];
-
 const screenTitles: Record<NavKey, { title: string; desc: string }> = {
   overview: { title: "运营总览", desc: "从业务结果到模型质量，定位今日服务风险" },
   conversations: { title: "会话中心", desc: "处理 AI 会话、人工接管与上下文协同" },
@@ -177,11 +170,24 @@ function Tickets() {
 
 function Knowledge() {
   const [query, setQuery] = useState("");
-  const docs = knowledgeDocs.filter((d) => d.title.includes(query));
+  const [allDocs, setAllDocs] = useState<Array<{ id: string; title: string; version: string; ownerTeam: string; category: string; coverage: number; state: string; sourceType: string; sourceTitle?: string | null; sourceUrl?: string | null; updatedAt: string }>>([]);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    fetch("/api/knowledge")
+      .then((response) => response.ok ? response.json() : Promise.reject(new Error("知识库读取失败")))
+      .then((payload: { documents: typeof allDocs }) => setAllDocs(payload.documents))
+      .catch((cause) => setError(cause instanceof Error ? cause.message : "知识库读取失败"));
+  }, []);
+  const docs = allDocs.filter((document) => [document.title, document.ownerTeam, document.category, document.sourceTitle].some((value) => value?.toLowerCase().includes(query.toLowerCase())));
+  const activeCount = allDocs.filter((document) => document.state === "active").length;
+  const reviewCount = allDocs.filter((document) => document.state === "review").length;
+  const averageCoverage = allDocs.length ? allDocs.reduce((sum, document) => sum + document.coverage, 0) / allDocs.length : 0;
+  const stateLabel: Record<string, string> = { active: "生效中", review: "待复核", draft: "草稿", archived: "已归档" };
   return <section className="knowledge-layout">
     <article className="panel knowledge-main"><div className="table-toolbar"><div className="search-box wide">⌕ <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="搜索知识、规则或负责人" /></div><button className="ghost-button">批量导入</button><button className="primary-button">＋ 新建知识</button></div>
-      <div className="knowledge-summary"><div><span>知识条目</span><b>1,284</b></div><div><span>近7日更新</span><b>46</b></div><div><span>待复核</span><b className="warning-text">12</b></div><div><span>问答覆盖率</span><b>91.6%</b></div></div>
-      <table><thead><tr><th>知识文档</th><th>版本</th><th>责任团队</th><th>问题覆盖率</th><th>更新时间</th><th>状态</th></tr></thead><tbody>{docs.map((doc) => <tr key={doc.title}><td><b>{doc.title}</b><small>结构化规则 · 可追溯引用</small></td><td>{doc.version}</td><td>{doc.owner}</td><td><div className="coverage"><i style={{ width: `${doc.coverage}%` }} /><span>{doc.coverage}%</span></div></td><td>{doc.updated}</td><td><Status kind={doc.state === "生效中" ? "success" : "warning"}>{doc.state}</Status></td></tr>)}</tbody></table>
+      <div className="knowledge-summary"><div><span>知识条目</span><b>{allDocs.length || "—"}</b></div><div><span>生效中</span><b>{activeCount || "—"}</b></div><div><span>待复核</span><b className="warning-text">{reviewCount}</b></div><div><span>平均覆盖率</span><b>{allDocs.length ? `${(averageCoverage * 100).toFixed(1)}%` : "—"}</b></div></div>
+      {error && <div className="evaluation-error">{error}</div>}
+      <table><thead><tr><th>知识文档</th><th>版本</th><th>责任团队</th><th>问题覆盖率</th><th>来源</th><th>状态</th></tr></thead><tbody>{docs.map((doc) => <tr key={doc.id}><td><b>{doc.title}</b><small>{doc.id} · {doc.category}</small></td><td>{doc.version}</td><td>{doc.ownerTeam}</td><td><div className="coverage"><i style={{ width: `${doc.coverage * 100}%` }} /><span>{(doc.coverage * 100).toFixed(0)}%</span></div></td><td>{doc.sourceUrl ? <a href={doc.sourceUrl} target="_blank" rel="noreferrer">{doc.sourceType === "official" ? "官方依据 ↗" : "演示规则"}</a> : <span>{doc.sourceType === "official" ? "官方依据" : "演示规则"}</span>}<small>{doc.sourceTitle}</small></td><td><Status kind={doc.state === "active" ? "success" : doc.state === "review" ? "warning" : "neutral"}>{stateLabel[doc.state] ?? doc.state}</Status></td></tr>)}</tbody></table>
     </article>
     <aside className="panel knowledge-aside"><h3>内容治理流程</h3><div className="governance-step done"><i>1</i><p><b>内容录入</b><span>来源、责任人、有效期</span></p></div><div className="governance-step done"><i>2</i><p><b>自动解析</b><span>切片、标签、冲突检测</span></p></div><div className="governance-step active"><i>3</i><p><b>双人复核</b><span>业务与合规共同确认</span></p></div><div className="governance-step"><i>4</i><p><b>灰度发布</b><span>小流量验证命中效果</span></p></div><div className="governance-step"><i>5</i><p><b>失效归档</b><span>保留版本与审计记录</span></p></div><div className="aside-callout"><b>检测到 3 处潜在冲突</b><span>“生鲜赔付标准”与旧版客服 SOP 存在口径差异。</span><button>查看冲突</button></div></aside>
   </section>;

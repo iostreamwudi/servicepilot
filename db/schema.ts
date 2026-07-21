@@ -57,6 +57,12 @@ export const tickets = sqliteTable("tickets", {
 export const knowledgeDocuments = sqliteTable("knowledge_documents", {
   id: text("id").primaryKey(), organizationId: text("organization_id").notNull().references(() => organizations.id), title: text("title").notNull(),
   version: text("version").notNull(), ownerTeam: text("owner_team").notNull(), content: text("content").notNull(),
+  category: text("category", { enum: ["refund", "damage", "address", "invoice"] }).notNull().default("refund"),
+  keywordsJson: text("keywords_json").notNull().default("[]"),
+  risk: text("risk", { enum: ["low", "medium", "high"] }).notNull().default("medium"),
+  handoff: integer("handoff", { mode: "boolean" }).notNull().default(false),
+  sourceType: text("source_type", { enum: ["official", "internal_demo"] }).notNull().default("internal_demo"),
+  sourceTitle: text("source_title"), sourceUrl: text("source_url"),
   state: text("state", { enum: ["draft", "review", "active", "archived"] }).notNull(), coverage: real("coverage").notNull().default(0),
   validFrom: text("valid_from"), validUntil: text("valid_until"), createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),

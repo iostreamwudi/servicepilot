@@ -32,6 +32,33 @@ test("enforces grounded answers and safe fallback in the Agent route", async () 
   assert.match(route, /conversationId is invalid/);
   assert.match(route, /30 \* 60_000/);
   assert.match(route, /继承会话状态/);
+  assert.match(route, /retrieveKnowledge/);
+  assert.match(route, /knowledgeDocuments/);
+  assert.match(route, /eq\(knowledgeDocuments\.state, "active"\)/);
+});
+
+test("ships a traceable database-backed knowledge library", async () => {
+  const [seedText, schema, bootstrap, api, page] = await Promise.all([
+    source("data/knowledge-seed.json"),
+    source("db/schema.ts"),
+    source("app/api/bootstrap/route.ts"),
+    source("app/api/knowledge/route.ts"),
+    source("app/page.tsx"),
+  ]);
+  const seed = JSON.parse(seedText);
+  assert.ok(seed.documents.length >= 20);
+  assert.equal(new Set(seed.documents.map((item) => item.id)).size, seed.documents.length);
+  for (const category of ["refund", "damage", "address", "invoice"]) {
+    assert.ok(seed.documents.some((item) => item.category === category));
+  }
+  assert.ok(seed.documents.filter((item) => item.sourceType === "official" && item.sourceUrl?.startsWith("https://")).length >= 12);
+  assert.ok(seed.documents.every((item) => Array.isArray(item.keywords) && item.keywords.length >= 4));
+  assert.match(schema, /source_type/);
+  assert.match(schema, /keywords_json/);
+  assert.match(bootstrap, /onConflictDoUpdate/);
+  assert.match(api, /documents\.map/);
+  assert.match(page, /\/api\/knowledge/);
+  assert.doesNotMatch(page, /知识条目<\/span><b>1,284/);
 });
 
 test("ships a representative offline evaluation seed", async () => {

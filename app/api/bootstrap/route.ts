@@ -1,6 +1,7 @@
 import { count, eq } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { auditLogs, conversations, knowledgeDocuments, memberships, organizations, qualityReviews, strategyVersions, tickets, users } from "../../../db/schema";
+import knowledgeSeed from "../../../data/knowledge-seed.json";
 
 const ORG_ID = "org-qingyu";
 
@@ -32,10 +33,6 @@ export async function POST(request: Request) {
         { id: "T-9034", organizationId: ORG_ID, conversationId: "C-28463", title: "生鲜破损理赔", customerName: "陈女士", priority: "P1", state: "in_progress", slaDueAt: new Date(Date.now() + 18 * 60_000).toISOString() },
         { id: "T-9032", organizationId: ORG_ID, conversationId: "C-28471", title: "退款到账异常", customerName: "林女士", priority: "P1", state: "unassigned", slaDueAt: new Date(Date.now() + 36 * 60_000).toISOString() },
       ]);
-      await db.insert(knowledgeDocuments).values([
-        { id: "KB-114", organizationId: ORG_ID, title: "退款与到账时效规则", version: "v3.4", ownerTeam: "售后运营", content: "审核通过后预计1至3个工作日原路退回。不得承诺具体到账日期。", state: "active", coverage: 0.96 },
-        { id: "KB-208", organizationId: ORG_ID, title: "生鲜商品破损赔付标准", version: "v2.8", ownerTeam: "生鲜业务", content: "鲜活易腐商品不适用七天无理由退货；质量问题按证据和赔付标准处理。", state: "review", coverage: 0.88 },
-      ]);
       await db.insert(qualityReviews).values({ id: "QR-1021", organizationId: ORG_ID, conversationId: "C-28463", status: "pending", risk: "high", autoScore: 0.67, failureCategory: "business_rule" });
       await db.insert(strategyVersions).values({ id: "SV-27", organizationId: ORG_ID, version: "v2.7", state: "active", configJson: JSON.stringify({ requireHumanForHighRisk: true, lowConfidenceThreshold: 0.72, requireCitation: true }), createdByUserId: userId, approvedByUserId: userId });
       await db.insert(auditLogs).values({ id: "A-BOOTSTRAP", organizationId: ORG_ID, actorUserId: userId, actorType: "user", action: "workspace.bootstrap", resourceType: "organization", resourceId: ORG_ID, result: "allowed", risk: "low", metadataJson: JSON.stringify({ source: "initial_demo_seed" }) });
@@ -45,6 +42,30 @@ export async function POST(request: Request) {
         await db.insert(users).values({ id: userId, email: actor.email, displayName: actor.displayName });
         await db.insert(memberships).values({ id: `membership-${userId}`, organizationId: ORG_ID, userId, role: "product_admin" });
       }
+    }
+    for (const document of knowledgeSeed.documents) {
+      const values = {
+        id: document.id,
+        organizationId: ORG_ID,
+        title: document.title,
+        version: document.version,
+        ownerTeam: document.ownerTeam,
+        content: document.content,
+        category: document.category as "refund" | "damage" | "address" | "invoice",
+        keywordsJson: JSON.stringify(document.keywords),
+        risk: document.risk as "low" | "medium" | "high",
+        handoff: document.handoff,
+        sourceType: document.sourceType as "official" | "internal_demo",
+        sourceTitle: document.sourceTitle,
+        sourceUrl: document.sourceUrl,
+        state: document.state as "draft" | "review" | "active" | "archived",
+        coverage: document.coverage,
+        updatedAt: new Date().toISOString(),
+      };
+      await db.insert(knowledgeDocuments).values(values).onConflictDoUpdate({
+        target: knowledgeDocuments.id,
+        set: values,
+      });
     }
     const [conversationCount] = await db.select({ value: count() }).from(conversations).where(eq(conversations.organizationId, ORG_ID));
     const [ticketCount] = await db.select({ value: count() }).from(tickets).where(eq(tickets.organizationId, ORG_ID));

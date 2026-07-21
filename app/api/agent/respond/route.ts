@@ -1,7 +1,7 @@
 import { env } from "cloudflare:workers";
 import { and, eq, gt } from "drizzle-orm";
 import { getDb } from "../../../../db";
-import { agentConversationStates } from "../../../../db/schema";
+import { agentConversationStates, knowledgeDocuments } from "../../../../db/schema";
 import { lookupRefund } from "../../../../lib/order-tool";
 import { continueIntent, routeIntent, shouldHandoff, type BusinessIntent, type ConversationTurn } from "../../../../lib/intent-router";
 
@@ -13,14 +13,52 @@ const businessIntents: BusinessIntent[] = ["refund", "damage", "address", "invoi
 type KnowledgeRule = {
   id: string; title: string; version: string; terms: string[]; answer: string;
   confidence: number; risk: "low" | "medium" | "high"; handoff: boolean;
+  sourceTitle?: string | null; sourceUrl?: string | null;
 };
 
-const rules: KnowledgeRule[] = [
+const fallbackRules: KnowledgeRule[] = [
   { id: "KB-114", title: "退款与到账时效规则", version: "v3.4", terms: ["退款", "到账", "退回", "审核"], confidence: 0.96, risk: "medium", handoff: false, answer: "退款审核通过后，通常会在 1–3 个工作日内原路退回，实际时间取决于支付渠道。系统不能承诺具体到账日期；如果已经超过 3 个工作日，我会为您转人工核查。" },
   { id: "KB-208", title: "生鲜商品破损赔付标准", version: "v2.8", terms: ["破损", "生鲜", "赔付", "理赔", "坏了"], confidence: 0.9, risk: "high", handoff: true, answer: "鲜活易腐商品不适用七天无理由退货；如果存在破损或质量问题，请保留商品、外包装和清晰照片。赔付金额需要人工依据证据与订单情况确认，我已建议转接售后专员。" },
   { id: "KB-301", title: "物流地址修改操作指引", version: "v1.9", terms: ["地址", "改址", "收货", "物流"], confidence: 0.92, risk: "medium", handoff: false, answer: "订单尚未出库时可以尝试修改收货地址；已出库订单需要联系承运商确认，系统不会直接修改。为保护账户安全，修改前需要核验订单与收件人信息。" },
   { id: "KB-401", title: "电子发票常见问题", version: "v4.1", terms: ["发票", "抬头", "税号", "开票"], confidence: 0.94, risk: "low", handoff: false, answer: "订单完成后可在订单详情申请电子发票。发票已开具后如需修改抬头或税号，需要先作废原发票并由人工复核后重新开具。" },
 ];
+
+async function retrieveKnowledge(intent: BusinessIntent, query: string, defaultKnowledgeId: string): Promise<KnowledgeRule | null> {
+  try {
+    const db = getDb();
+    const documents = await db.select().from(knowledgeDocuments).where(and(
+      eq(knowledgeDocuments.organizationId, ORG_ID),
+      eq(knowledgeDocuments.category, intent),
+      eq(knowledgeDocuments.state, "active"),
+    ));
+    if (!documents.length) throw new Error("No active knowledge documents");
+    const normalized = query.toLowerCase().replace(/\s+/g, "");
+    const scored = documents.map((document) => {
+      let keywords: string[] = [];
+      try { keywords = JSON.parse(document.keywordsJson) as string[]; } catch { /* invalid keywords do not block retrieval */ }
+      const keywordHits = keywords.filter((keyword) => normalized.includes(keyword.toLowerCase().replace(/\s+/g, "")));
+      const score = keywordHits.reduce((total, keyword) => total + Math.min(keyword.length, 6), 0) + (document.id === defaultKnowledgeId ? 2 : 0);
+      return { document, keywords, score };
+    }).sort((left, right) => right.score - left.score || Number(right.document.id === defaultKnowledgeId) - Number(left.document.id === defaultKnowledgeId));
+    const selected = scored[0];
+    const defaultDocument = scored.find((item) => item.document.id === defaultKnowledgeId);
+    const result = selected.score > 2 ? selected : defaultDocument ?? selected;
+    return {
+      id: result.document.id,
+      title: result.document.title,
+      version: result.document.version,
+      terms: result.keywords,
+      answer: result.document.content,
+      confidence: result.document.coverage,
+      risk: result.document.risk,
+      handoff: result.document.handoff,
+      sourceTitle: result.document.sourceTitle,
+      sourceUrl: result.document.sourceUrl,
+    };
+  } catch {
+    return fallbackRules.find((item) => item.id === defaultKnowledgeId) ?? null;
+  }
+}
 
 function authenticated(request: Request) {
   const host = new URL(request.url).hostname;
@@ -92,7 +130,7 @@ export async function POST(request: Request) {
   let memory: ConversationState | null = null;
   if (conversationId) { try { memory = await loadConversationState(conversationId); } catch { memory = null; } }
   const routing = routeIntent(query, history) ?? continueIntent(asBusinessIntent(memory?.activeIntent), query);
-  const rule = routing ? rules.find((item) => item.id === routing.knowledgeId) ?? null : null;
+  const rule = routing ? await retrieveKnowledge(routing.intent, query, routing.knowledgeId) : null;
   if (!rule || !routing) {
     let savedMemory = memory;
     if (conversationId) { try { savedMemory = await saveConversationState(conversationId, memory, asBusinessIntent(memory?.activeIntent), query); } catch { /* memory is non-blocking */ } }
@@ -105,7 +143,7 @@ export async function POST(request: Request) {
   const config = env as unknown as RuntimeConfig;
   const orderId = query.toUpperCase().match(/OR-\d{6}/)?.[0];
   const policyHandoff = shouldHandoff(routing.intent, query);
-  const toolResult = rule.id === "KB-114" && orderId ? lookupRefund(orderId) : null;
+  const toolResult = routing.intent === "refund" && orderId ? lookupRefund(orderId) : null;
   const toolContext = toolResult?.ok ? JSON.stringify(toolResult.record) : undefined;
   let generated: string | null = null;
   try { generated = orderId && !toolResult?.ok ? null : await generateWithGateway(query, history, rule, config, toolContext, memory?.summary); } catch { generated = null; }
@@ -113,7 +151,7 @@ export async function POST(request: Request) {
   const failedToolAnswer = orderId && !toolResult?.ok ? `暂时无法核验订单 ${orderId} 的退款状态。为避免根据不完整信息推测，我已建议转接人工客服继续核查。` : null;
   let savedMemory: ConversationState | null = memory;
   if (conversationId) { try { savedMemory = await saveConversationState(conversationId, memory, routing.intent, query); } catch { /* memory is non-blocking */ } }
-  return Response.json({ answer: generated ?? toolAnswer ?? failedToolAnswer ?? rule.answer, source: { id: rule.id, title: rule.title, version: rule.version }, tool: toolResult?.ok ? { name: "order.refund.get", status: "success", data: toolResult.record, readOnly: true } : orderId ? { name: "order.refund.get", status: "failed", code: toolResult?.code } : null, routing, memory: savedMemory ? { conversationId, activeIntent: savedMemory.activeIntent, turnCount: savedMemory.turnCount, expiresAt: savedMemory.expiresAt, source: routing.contextSource } : null, confidence: orderId && !toolResult?.ok ? 0.5 : Math.min(rule.confidence, routing.confidence), risk: rule.risk, handoff: policyHandoff || Boolean(orderId && !toolResult?.ok), mode: generated ? "model-grounded" : orderId && !toolResult?.ok ? "safe-fallback" : "deterministic-safe", trace: [
+  return Response.json({ answer: generated ?? toolAnswer ?? failedToolAnswer ?? rule.answer, source: { id: rule.id, title: rule.title, version: rule.version, sourceTitle: rule.sourceTitle, sourceUrl: rule.sourceUrl }, tool: toolResult?.ok ? { name: "order.refund.get", status: "success", data: toolResult.record, readOnly: true } : orderId ? { name: "order.refund.get", status: "failed", code: toolResult?.code } : null, routing, memory: savedMemory ? { conversationId, activeIntent: savedMemory.activeIntent, turnCount: savedMemory.turnCount, expiresAt: savedMemory.expiresAt, source: routing.contextSource } : null, confidence: orderId && !toolResult?.ok ? 0.5 : Math.min(rule.confidence, routing.confidence), risk: rule.risk, handoff: rule.handoff || policyHandoff || Boolean(orderId && !toolResult?.ok), mode: generated ? "model-grounded" : orderId && !toolResult?.ok ? "safe-fallback" : "deterministic-safe", trace: [
     { type: "intent", label: `识别 ${routing.intent} 意图，置信度 ${routing.confidence}`, durationMs: 36, status: "passed" },
     ...(routing.contextSource === "memory" ? [{ type: "memory", label: `继承会话状态 ${routing.intent} · 第 ${(savedMemory?.turnCount ?? 1)} 轮`, durationMs: 12, status: "passed" }] : []),
     { type: "retrieval", label: `混合检索命中 ${rule.id} ${rule.version} · ${routing.matchedSignals.join(" / ")}`, durationMs: 22, status: "passed" },
