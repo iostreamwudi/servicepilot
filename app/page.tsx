@@ -48,6 +48,15 @@ const screenTitles: Record<NavKey, { title: string; desc: string }> = {
   audit: { title: "安全审计", desc: "追踪敏感操作、权限变化和合规风险" },
 };
 
+function createDemoConversationId() {
+  const secureUuid = globalThis.crypto?.randomUUID?.();
+  if (secureUuid) return `C-DEMO-${secureUuid}`;
+  const randomParts = new Uint32Array(4);
+  if (globalThis.crypto?.getRandomValues) globalThis.crypto.getRandomValues(randomParts);
+  else for (let index = 0; index < randomParts.length; index += 1) randomParts[index] = Math.floor(Math.random() * 0xffffffff);
+  return `C-DEMO-${Date.now().toString(36)}-${Array.from(randomParts, (value) => value.toString(36)).join("-")}`;
+}
+
 function MetricCard({ label, value, change, tone = "blue", helper }: { label: string; value: string; change: string; tone?: string; helper: string }) {
   return (
     <article className="metric-card">
@@ -296,7 +305,7 @@ function CustomerDemo({ onClose }: { onClose: () => void }) {
     if (!value || loading) return;
     setSubmitted(value); setQuery(value); setLoading(true); setError(""); setResult(null);
     try {
-      const activeConversationId = conversationId || `C-DEMO-${crypto.randomUUID()}`;
+      const activeConversationId = conversationId || createDemoConversationId();
       if (!conversationId) setConversationId(activeConversationId);
       const response = await fetch("/api/agent/respond", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ query: value, history: history.slice(-6), conversationId: activeConversationId }) });
       const body = await response.json() as AgentResult & { error?: string };

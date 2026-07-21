@@ -116,6 +116,9 @@ test("runs guarded model evaluations and exposes the quality dashboard", async (
   assert.match(page, /行为可接受/);
   assert.match(page, /30 分钟会话记忆/);
   assert.doesNotMatch(page, /useEffect\(load,/);
+  assert.match(page, /createDemoConversationId/);
+  assert.match(page, /getRandomValues/);
+  assert.doesNotMatch(page, /crypto\.randomUUID\(\)/);
   assert.match(reviews, /Reviewer role required/);
   assert.match(reviews, /evaluation\.review/);
   assert.match(reviews, /onConflictDoUpdate/);
