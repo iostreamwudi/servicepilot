@@ -1,9 +1,13 @@
 {
   "version": "2026.07-real-data-1",
-  "generatedAt": "2026-07-21T12:05:55.847Z",
+  "generatedAt": "2026-07-22T03:32:56.686Z",
   "policy": "公开真实匿名语料仅用于私有研究评测；官方规则原文仅进入待复核区；内部演示流程不得被表述为真实企业业务数据。",
   "totals": {
     "upstreamDialogues": 10701,
+    "upstreamTurns": 277399,
+    "annotatedQuestions": 21126,
+    "upstreamIntents": 210,
+    "fullCoverageEvaluationCases": 21126,
     "evaluationCases": 4196,
     "uniqueEvaluationQueries": 4196,
     "contextRequiredCases": 891,
@@ -232,7 +236,12 @@
     "duplicateEvaluationQueries": 0,
     "directIdentifiersFound": 0,
     "traceableEvaluationCases": 4196,
-    "traceableOfficialChunks": 1008
+    "traceableOfficialChunks": 1008,
+    "fullCoveragePassRate": 0.7575,
+    "supportedRoutePassRate": 0.8117,
+    "unsupportedSafeFallbackRate": 0.744,
+    "unsupportedFalsePositiveRoutes": 4324,
+    "completeDatasetFingerprint": "697dcc9c0211dd09931bcacad6d14d229b7190f5fcd002a25c982ceca0e325dc"
   },
-  "manifestSha256": "769d8997d01dd808bb424aafc17e21b036c3df2afcc23c63686ed1dc3cd9a17b"
+  "manifestSha256": "5c9efc70edaf4a22679d06e759892842730d7f080721cd142278590e17472ffc"
 }

@@ -9,6 +9,7 @@ const evalFiles = [
 const evaluationSets = await Promise.all(evalFiles.map(async (path) => ({ path, data: JSON.parse(await readFile(path, "utf8")) })));
 const corpus = JSON.parse(await readFile("data/knowledge-official-corpus.json", "utf8"));
 const curated = JSON.parse(await readFile("data/knowledge-seed.json", "utf8"));
+const completeEvaluation = JSON.parse(await readFile("data/routing-csds-complete-baseline.json", "utf8"));
 const allCases = evaluationSets.flatMap(({ data }) => data.cases);
 const uniqueQueries = new Set(allCases.map((item) => item.query));
 const splitStats = Object.fromEntries(evaluationSets.map(({ path, data }) => [data.source.rawSplitSize === 9101 ? "train" : path.includes("-val") ? "val" : "test", {
@@ -26,7 +27,11 @@ const manifest = {
   generatedAt: new Date().toISOString(),
   policy: "公开真实匿名语料仅用于私有研究评测；官方规则原文仅进入待复核区；内部演示流程不得被表述为真实企业业务数据。",
   totals: {
-    upstreamDialogues: Object.values(splitStats).reduce((sum, item) => sum + item.rawDialogues, 0),
+    upstreamDialogues: completeEvaluation.raw.dialogues,
+    upstreamTurns: completeEvaluation.raw.turns,
+    annotatedQuestions: completeEvaluation.raw.annotatedQuestions,
+    upstreamIntents: completeEvaluation.raw.upstreamIntents,
+    fullCoverageEvaluationCases: completeEvaluation.overall.total,
     evaluationCases: allCases.length,
     uniqueEvaluationQueries: uniqueQueries.size,
     contextRequiredCases: allCases.filter((item) => item.contextRequired).length,
@@ -70,6 +75,11 @@ const manifest = {
     directIdentifiersFound: evaluationSets.reduce((sum, item) => sum + item.data.privacy.directIdentifiersFound, 0),
     traceableEvaluationCases: allCases.filter((item) => item.source?.dataset === "CSDS" && item.source?.dialogueId !== undefined).length,
     traceableOfficialChunks: corpus.documents.filter((item) => item.sourceUrl && item.sourceArticle && /^[a-f0-9]{64}$/.test(item.contentSha256)).length,
+    fullCoveragePassRate: completeEvaluation.overall.passRate,
+    supportedRoutePassRate: completeEvaluation.supported.passRate,
+    unsupportedSafeFallbackRate: completeEvaluation.unsupported.safeFallbackRate,
+    unsupportedFalsePositiveRoutes: completeEvaluation.unsupported.falsePositiveRoutes,
+    completeDatasetFingerprint: completeEvaluation.datasetFingerprint,
   },
 };
 manifest.manifestSha256 = createHash("sha256").update(JSON.stringify({ totals: manifest.totals, sources: manifest.sources, quality: manifest.quality })).digest("hex");

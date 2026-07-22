@@ -68,31 +68,41 @@ test("ships a traceable database-backed knowledge library", async () => {
   assert.doesNotMatch(page, /知识条目<\/span><b>1,284/);
 });
 
-test("ships a four-thousand-case reproducible routing evaluation", async () => {
-  const [trainText, valText, testText, reportText, manifestText, api, page] = await Promise.all([
+test("ships complete CSDS coverage plus a reproducible focused routing evaluation", async () => {
+  const [trainText, valText, testText, reportText, completeText, manifestText, api, page] = await Promise.all([
     source("data/eval-csds-full-train.json"),
     source("data/eval-csds-full-val.json"),
     source("data/eval-csds-full-test.json"),
     source("data/routing-full-baseline.json"),
+    source("data/routing-csds-complete-baseline.json"),
     source("data/real-data-manifest.json"),
     source("app/api/evaluations/scale/route.ts"),
     source("app/page.tsx"),
   ]);
   const datasets = [JSON.parse(trainText), JSON.parse(valText), JSON.parse(testText)];
   const report = JSON.parse(reportText);
+  const complete = JSON.parse(completeText);
   const manifest = JSON.parse(manifestText);
   assert.equal(datasets.reduce((sum, item) => sum + item.cases.length, 0), 4196);
   assert.equal(report.overall.total, 4196);
+  assert.equal(complete.raw.dialogues, 10701);
+  assert.equal(complete.raw.turns, 277399);
+  assert.equal(complete.raw.annotatedQuestions, 21126);
+  assert.equal(complete.overall.total, 21126);
+  assert.equal(complete.privacy.directIdentifiersFound, 0);
+  assert.match(complete.datasetFingerprint, /^[a-f0-9]{64}$/);
   assert.equal(manifest.totals.upstreamDialogues, 10701);
+  assert.equal(manifest.totals.fullCoverageEvaluationCases, 21126);
   assert.equal(manifest.quality.duplicateEvaluationQueries, 0);
   assert.equal(manifest.quality.directIdentifiersFound, 0);
   assert.ok(datasets.every((item) => /^[a-f0-9]{64}$/.test(item.freeze.casesSha256)));
   assert.ok(datasets.every((item) => item.privacy.directIdentifiersFound === 0));
   assert.match(api, /trainSet/);
   assert.match(api, /manifest/);
-  assert.match(page, /4,196 条公开真实匿名客服场景/);
-  assert.match(page, /真实场景数据浏览器/);
-  assert.match(page, /规模评测边界/);
+  assert.match(api, /completeBaseline/);
+  assert.match(page, /21,126 个标注问题全部逐条测试/);
+  assert.match(page, /四类专项场景浏览器/);
+  assert.match(page, /全量评测口径/);
 });
 
 test("ships a representative offline evaluation seed", async () => {
@@ -170,8 +180,8 @@ test("runs guarded model evaluations and exposes the quality dashboard", async (
   assert.match(schema, /context_required/);
   assert.match(schema, /routing_intent/);
   assert.match(schema, /routing_signals_json/);
-  assert.match(page, /规模路由评测 \+ qwen-plus 端到端回归/);
-  assert.match(page, /训练 \/ 验证 \/ 独立测试三切分/);
+  assert.match(page, /CSDS 全量覆盖 \+ 四类专项 \+ qwen-plus 端到端回归/);
+  assert.match(page, /未支持意图安全兜底/);
   assert.match(page, /确认系统失败/);
   assert.match(page, /标记标签问题/);
   assert.match(page, /行为可接受/);

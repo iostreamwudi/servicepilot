@@ -2,6 +2,7 @@ import trainSet from "../../../../data/eval-csds-full-train.json";
 import valSet from "../../../../data/eval-csds-full-val.json";
 import testSet from "../../../../data/eval-csds-full-test.json";
 import baseline from "../../../../data/routing-full-baseline.json";
+import completeBaseline from "../../../../data/routing-csds-complete-baseline.json";
 import manifest from "../../../../data/real-data-manifest.json";
 
 function authenticated(request: Request) {
@@ -32,6 +33,7 @@ export async function GET(request: Request) {
     offset,
     limit,
     summary: baseline,
+    completeSummary: completeBaseline,
     manifest,
     datasets: Object.fromEntries(selected.map(([name, dataset]) => [name, { version: dataset.version, fingerprint: dataset.freeze.casesSha256, total: dataset.cases.length, privacy: dataset.privacy }])),
     cases: filtered.slice(offset, offset + limit).map((item) => ({ id: item.id, category: item.category, query: item.query, history: item.history, contextRequired: item.contextRequired, expectedSource: item.expectedSource, expectedHandoff: item.expectedHandoff, source: item.source, sourceSplit: item.sourceSplit, transformations: item.transformations })),
