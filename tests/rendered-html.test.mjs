@@ -180,7 +180,7 @@ test("runs guarded model evaluations and exposes the quality dashboard", async (
   assert.match(schema, /context_required/);
   assert.match(schema, /routing_intent/);
   assert.match(schema, /routing_signals_json/);
-  assert.match(page, /CSDS 全量覆盖 \+ 四类专项 \+ qwen-plus 端到端回归/);
+  assert.match(page, /CSDS 全量覆盖 \+ 混合意图路由 \+ qwen-plus 端到端回归/);
   assert.match(page, /未支持意图安全兜底/);
   assert.match(page, /确认系统失败/);
   assert.match(page, /标记标签问题/);

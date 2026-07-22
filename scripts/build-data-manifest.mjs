@@ -23,7 +23,7 @@ const officialCurated = curated.documents.filter((item) => item.sourceType === "
 const internalDemo = curated.documents.filter((item) => item.sourceType === "internal_demo").length;
 
 const manifest = {
-  version: "2026.07-real-data-1",
+  version: "2026.07-hybrid-routing-2",
   generatedAt: new Date().toISOString(),
   policy: "公开真实匿名语料仅用于私有研究评测；官方规则原文仅进入待复核区；内部演示流程不得被表述为真实企业业务数据。",
   totals: {

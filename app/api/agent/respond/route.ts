@@ -19,6 +19,12 @@ type KnowledgeRule = {
 const fallbackRules: KnowledgeRule[] = [
   { id: "KB-114", title: "退款与到账时效规则", version: "v3.4", terms: ["退款", "到账", "退回", "审核"], confidence: 0.96, risk: "medium", handoff: false, answer: "退款审核通过后，通常会在 1–3 个工作日内原路退回，实际时间取决于支付渠道。系统不能承诺具体到账日期；如果已经超过 3 个工作日，我会为您转人工核查。" },
   { id: "KB-208", title: "生鲜商品破损赔付标准", version: "v2.8", terms: ["破损", "生鲜", "赔付", "理赔", "坏了"], confidence: 0.9, risk: "high", handoff: true, answer: "鲜活易腐商品不适用七天无理由退货；如果存在破损或质量问题，请保留商品、外包装和清晰照片。赔付金额需要人工依据证据与订单情况确认，我已建议转接售后专员。" },
+  { id: "KB-209", title: "商品质量问题补救方式", version: "v1.0", terms: ["质量", "故障", "不能用", "异响"], confidence: 0.86, risk: "high", handoff: true, answer: "商品出现质量或功能故障时，需要结合订单、商品和故障证据核验退货、更换或修理方案。我已建议转接售后专员，系统不会直接承诺赔付。" },
+  { id: "KB-212", title: "商品或配件短少处理", version: "v1.0", terms: ["少件", "缺件", "漏发", "配件"], confidence: 0.84, risk: "high", handoff: true, answer: "收到商品数量不足或配件缺失时，请保留外包装、面单及开箱证据，并核对订单明细和包裹数量。我已建议发起仓储与承运联合核查。" },
+  { id: "KB-213", title: "快件丢失与责任核查", version: "v1.0", terms: ["丢件", "丢失", "遗失", "找不到"], confidence: 0.86, risk: "high", handoff: true, answer: "快件疑似丢失时，需要核对投递位置、签收人和承运轨迹后发起调查。责任和赔偿需结合保价与核查结果确认，我已建议转接人工。" },
+  { id: "KB-214", title: "商品维修与返修流程", version: "v1.0", terms: ["维修", "返修", "修理", "维修点"], confidence: 0.82, risk: "high", handoff: true, answer: "维修或返修前需要核验订单、故障描述、购买日期和厂商政策，再确定寄修、上门或网点方案。数据设备请先备份并清除个人数据。" },
+  { id: "KB-215", title: "保修期与质保凭证核验", version: "v1.0", terms: ["保修", "质保", "联保", "凭证"], confidence: 0.83, risk: "medium", handoff: true, answer: "是否在保修期内，需要核验商品类别、购买与交付时间、有效凭证及厂商政策；缺少订单和商品信息时不能直接承诺免费维修。" },
+  { id: "KB-216", title: "三包退换修责任规则", version: "v1.0", terms: ["三包", "包修", "包换", "包退"], confidence: 0.85, risk: "high", handoff: true, answer: "三包责任需要结合商品目录、故障情形、购买日期和修理记录判断。不同品类期限可能不同，系统不会把统一天数套用于所有商品。" },
   { id: "KB-301", title: "物流地址修改操作指引", version: "v1.9", terms: ["地址", "改址", "收货", "物流"], confidence: 0.92, risk: "medium", handoff: false, answer: "订单尚未出库时可以尝试修改收货地址；已出库订单需要联系承运商确认，系统不会直接修改。为保护账户安全，修改前需要核验订单与收件人信息。" },
   { id: "KB-401", title: "电子发票常见问题", version: "v4.1", terms: ["发票", "抬头", "税号", "开票"], confidence: 0.94, risk: "low", handoff: false, answer: "订单完成后可在订单详情申请电子发票。发票已开具后如需修改抬头或税号，需要先作废原发票并由人工复核后重新开具。" },
 ];
@@ -136,7 +142,7 @@ export async function POST(request: Request) {
   let memory: ConversationState | null = null;
   if (conversationId) { try { memory = await loadConversationState(conversationId); } catch { memory = null; } }
   const routing = routeIntent(query, history) ?? continueIntent(asBusinessIntent(memory?.activeIntent), query);
-  const rule = routing ? await retrieveKnowledge(routing.intent, query, routing.knowledgeId) : null;
+  const rule = routing ? await retrieveKnowledge(routing.intent, query, routing.retrievalKnowledgeId) : null;
   if (!rule || !routing) {
     let savedMemory = memory;
     if (conversationId) { try { savedMemory = await saveConversationState(conversationId, memory, asBusinessIntent(memory?.activeIntent), query); } catch { /* memory is non-blocking */ } }
@@ -158,9 +164,9 @@ export async function POST(request: Request) {
   let savedMemory: ConversationState | null = memory;
   if (conversationId) { try { savedMemory = await saveConversationState(conversationId, memory, routing.intent, query); } catch { /* memory is non-blocking */ } }
   return Response.json({ answer: generated ?? toolAnswer ?? failedToolAnswer ?? rule.answer, source: { id: rule.id, title: rule.title, version: rule.version, sourceTitle: rule.sourceTitle, sourceUrl: rule.sourceUrl }, tool: toolResult?.ok ? { name: "order.refund.get", status: "success", data: toolResult.record, readOnly: true } : orderId ? { name: "order.refund.get", status: "failed", code: toolResult?.code } : null, routing, memory: savedMemory ? { conversationId, activeIntent: savedMemory.activeIntent, turnCount: savedMemory.turnCount, expiresAt: savedMemory.expiresAt, source: routing.contextSource } : null, confidence: orderId && !toolResult?.ok ? 0.5 : Math.min(rule.confidence, routing.confidence), risk: rule.risk, handoff: rule.handoff || policyHandoff || Boolean(orderId && !toolResult?.ok), mode: generated ? "model-grounded" : orderId && !toolResult?.ok ? "safe-fallback" : "deterministic-safe", trace: [
-    { type: "intent", label: `识别 ${routing.intent} 意图，置信度 ${routing.confidence}`, durationMs: 36, status: "passed" },
+    { type: "intent", label: `识别 ${routing.intent}${routing.subIntent ? ` / ${routing.subIntent}` : ""} 意图，置信度 ${routing.confidence}`, durationMs: 36, status: "passed" },
     ...(routing.contextSource === "memory" ? [{ type: "memory", label: `继承会话状态 ${routing.intent} · 第 ${(savedMemory?.turnCount ?? 1)} 轮`, durationMs: 12, status: "passed" }] : []),
-    { type: "retrieval", label: `混合检索命中 ${rule.id} ${rule.version} · ${routing.matchedSignals.join(" / ")}`, durationMs: 22, status: "passed" },
+    { type: "retrieval", label: `向量召回 + 概率 Rerank + 规则融合命中 ${rule.id} ${rule.version} · ${routing.matchedSignals.join(" / ")}`, durationMs: 22, status: "passed" },
     ...(orderId ? [{ type: "tool", label: toolResult?.ok ? `只读查询 ${orderId} 成功，敏感字段已脱敏` : `订单工具未返回结果，禁止模型猜测`, durationMs: 41, status: toolResult?.ok ? "passed" : "warning" }] : []),
     { type: "guardrail", label: orderId && !toolResult?.ok ? "已阻止基于失败工具的状态推测" : policyHandoff ? "策略命中并转人工" : "输出规则校验通过", durationMs: 8, status: "passed" },
   ], latencyMs: Date.now() - started });

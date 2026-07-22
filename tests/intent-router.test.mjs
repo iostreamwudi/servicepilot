@@ -8,10 +8,19 @@ test("routes paraphrased service intents with explainable signals", () => {
   assert.equal(routeIntent("收件信息填错了")?.knowledgeId, "KB-301");
   assert.equal(routeIntent("公司名称错了要重新开")?.knowledgeId, "KB-401");
   assert.ok((routeIntent("外包装压烂了")?.matchedSignals.length ?? 0) > 0);
+  assert.ok((routeIntent("外包装压烂了")?.vectorEvidence.length ?? 0) > 0);
+});
+
+test("splits after-sales issues into actionable second-level intents", () => {
+  assert.equal(routeIntent("包裹里少了一个配件")?.subIntent, "missing_item");
+  assert.equal(routeIntent("快递确认丢件了")?.subIntent, "lost_parcel");
+  assert.equal(routeIntent("手机开不了机想维修")?.subIntent, "repair");
+  assert.equal(routeIntent("这个还在保修期吗")?.subIntent, "warranty");
+  assert.equal(routeIntent("三包政策怎么处理")?.subIntent, "three_guarantees");
 });
 
 test("uses sanitized history for elliptical follow-up questions", () => {
-  const result = routeIntent("好的，几个工作日", [{ role: "user", content: "退款审核通过了" }]);
+  const result = routeIntent("那退款要几个工作日", [{ role: "user", content: "退款审核通过了" }]);
   assert.equal(result?.knowledgeId, "KB-114");
 });
 

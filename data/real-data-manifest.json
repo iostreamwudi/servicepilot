@@ -1,6 +1,6 @@
 {
-  "version": "2026.07-real-data-1",
-  "generatedAt": "2026-07-22T03:32:56.686Z",
+  "version": "2026.07-hybrid-routing-2",
+  "generatedAt": "2026-07-22T05:24:48.502Z",
   "policy": "公开真实匿名语料仅用于私有研究评测；官方规则原文仅进入待复核区；内部演示流程不得被表述为真实企业业务数据。",
   "totals": {
     "upstreamDialogues": 10701,
@@ -13,9 +13,9 @@
     "contextRequiredCases": 891,
     "officialKnowledgeSources": 21,
     "officialKnowledgeChunks": 1008,
-    "curatedKnowledgeDocuments": 20,
-    "totalKnowledgeDocuments": 1028,
-    "activeOfficialSummaries": 17,
+    "curatedKnowledgeDocuments": 25,
+    "totalKnowledgeDocuments": 1033,
+    "activeOfficialSummaries": 22,
     "internalDemoRules": 3
   },
   "sources": [
@@ -237,11 +237,11 @@
     "directIdentifiersFound": 0,
     "traceableEvaluationCases": 4196,
     "traceableOfficialChunks": 1008,
-    "fullCoveragePassRate": 0.7575,
-    "supportedRoutePassRate": 0.8117,
-    "unsupportedSafeFallbackRate": 0.744,
-    "unsupportedFalsePositiveRoutes": 4324,
+    "fullCoveragePassRate": 0.9406,
+    "supportedRoutePassRate": 0.9033,
+    "unsupportedSafeFallbackRate": 0.9518,
+    "unsupportedFalsePositiveRoutes": 785,
     "completeDatasetFingerprint": "697dcc9c0211dd09931bcacad6d14d229b7190f5fcd002a25c982ceca0e325dc"
   },
-  "manifestSha256": "5c9efc70edaf4a22679d06e759892842730d7f080721cd142278590e17472ffc"
+  "manifestSha256": "c126ba06f342831e0876401cf62c5be5f2220f44ece6c5e3d579bcbaa66766c8"
 }

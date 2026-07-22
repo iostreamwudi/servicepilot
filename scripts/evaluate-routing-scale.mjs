@@ -35,7 +35,7 @@ function metrics(items) {
 }
 
 const report = {
-  version: "router-v2.0-scale-2",
+  version: "router-v3.0-hybrid-scale-1",
   generatedAt: new Date().toISOString(),
   sourceFiles: inputs,
   datasetFingerprint: createHash("sha256").update(JSON.stringify(cases.map((item) => item.id))).digest("hex"),
