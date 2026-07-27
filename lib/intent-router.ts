@@ -134,9 +134,9 @@ export function routeIntent(query: string, history: ConversationTurn[] = []) {
 
   const vector = classifyIntentVector(query, history);
   const vectorScore = (intent: BusinessIntent) => vector.candidates.find((item) => item.label === intent)?.probability ?? 0;
-  ranked = ranked.map((item) => ({ ...item, rerankScore: item.score + vectorScore(item.intent) * 3.2 }))
+  let reranked = ranked.map((item) => ({ ...item, rerankScore: item.score + vectorScore(item.intent) * 3.2 }))
     .sort((left, right) => right.rerankScore - left.rerankScore);
-  let best = ranked[0];
+  let best = reranked[0];
   const topVectorProfile = vector.top.label === "unsupported" ? null : profiles.find((profile) => profile.intent === vector.top.label) ?? null;
   if (!explicit.length) {
     const corroborated = best && vector.top.label === best.intent && vector.top.probability >= 0.45;
@@ -145,12 +145,12 @@ export function routeIntent(query: string, history: ConversationTurn[] = []) {
     else if (highConfidenceRecall) {
       best = { ...topVectorProfile, score: 3.1, rerankScore: 3.1 + vector.top.probability * 3.2, matches: [`向量召回:${vector.top.label}`] };
       contextSource = history.length ? "history" : "current";
-      ranked = [best];
+      reranked = [best];
     } else return null;
   }
   if (!best) return null;
-  const margin = best.score - (ranked[1]?.score ?? 0);
-  if (ranked[1] && margin < 0.5) return null;
+  const margin = best.score - (reranked[1]?.score ?? 0);
+  if (reranked[1] && margin < 0.5) return null;
   const subIntent = best.intent === "damage" ? detectDamageSubIntent(query, history) : null;
   return {
     intent: best.intent,

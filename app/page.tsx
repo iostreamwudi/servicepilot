@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import ResourceAccess from "./resource-access";
 
-type NavKey = "overview" | "conversations" | "tickets" | "knowledge" | "quality" | "strategy" | "analytics" | "audit";
+type NavKey = "overview" | "conversations" | "tickets" | "knowledge" | "quality" | "strategy" | "analytics" | "resources" | "audit";
 
 const navItems: Array<{ key: NavKey; label: string; short: string }> = [
   { key: "overview", label: "运营总览", short: "总" },
@@ -12,6 +13,7 @@ const navItems: Array<{ key: NavKey; label: string; short: string }> = [
   { key: "quality", label: "质检中心", short: "检" },
   { key: "strategy", label: "策略中心", short: "策" },
   { key: "analytics", label: "数据分析", short: "数" },
+  { key: "resources", label: "资源权限", short: "权" },
   { key: "audit", label: "安全审计", short: "安" },
 ];
 
@@ -38,6 +40,7 @@ const screenTitles: Record<NavKey, { title: string; desc: string }> = {
   quality: { title: "质检中心", desc: "自动质检、人工复核与失败案例回流" },
   strategy: { title: "策略中心", desc: "配置路由、兜底、风险和模型策略" },
   analytics: { title: "数据分析", desc: "联动业务指标、AI 指标、成本与体验" },
+  resources: { title: "资源权限", desc: "按任务、接口和指标管理具体人员的数据访问边界" },
   audit: { title: "安全审计", desc: "追踪敏感操作、权限变化和合规风险" },
 };
 
@@ -126,7 +129,7 @@ function Conversations() {
   return (
     <section className="conversation-layout">
       <article className="panel conversation-list">
-        <div className="list-toolbar"><div className="search-box">⌕ <input aria-label="搜索会话" placeholder="搜索会话、用户或订单" /></div><button className="filter-button">筛选</button></div>
+        <div className="list-toolbar"><div className="search-box">⌕ <input name="conversation-search" autoComplete="off" aria-label="搜索会话" placeholder="搜索会话、用户或订单…" /></div><button className="filter-button">筛选</button></div>
         <div className="list-tabs"><button className="active">待处理 <b>12</b></button><button>处理中 <b>8</b></button><button>已结束</button></div>
         <div className="conversation-items">
           {conversations.map((item) => <button key={item.id} className={selected.id === item.id ? "conversation-item active" : "conversation-item"} onClick={() => { setSelected(item); setClaimed(false); }}>
@@ -184,7 +187,7 @@ function Knowledge() {
   }, [query, offset]);
   const stateLabel: Record<string, string> = { active: "生效中", review: "待复核", draft: "草稿", archived: "已归档" };
   return <section className="knowledge-layout">
-    <article className="panel knowledge-main"><div className="table-toolbar"><div className="search-box wide">⌕ <input value={query} onChange={(e) => { setQuery(e.target.value); setOffset(0); }} placeholder="搜索知识、规则或负责人" /></div><button className="ghost-button">批量导入</button><button className="primary-button">＋ 新建知识</button></div>
+    <article className="panel knowledge-main"><div className="table-toolbar"><div className="search-box wide">⌕ <input name="knowledge-search" autoComplete="off" aria-label="搜索知识、规则或负责人" value={query} onChange={(e) => { setQuery(e.target.value); setOffset(0); }} placeholder="搜索知识、规则或负责人…" /></div><button className="ghost-button">批量导入</button><button className="primary-button">＋ 新建知识</button></div>
       <div className="knowledge-summary"><div><span>知识条目</span><b>{stats.total || "—"}</b></div><div><span>已审核生效</span><b>{stats.active || "—"}</b></div><div><span>待人工复核</span><b className="warning-text">{stats.review}</b></div><div><span>官方来源</span><b>{stats.official || "—"}</b></div></div>
       {error && <div className="evaluation-error">{error}</div>}
       <table><thead><tr><th>知识文档</th><th>版本</th><th>责任团队</th><th>问题覆盖率</th><th>来源</th><th>状态</th></tr></thead><tbody>{docs.map((doc) => <tr key={doc.id}><td><b>{doc.title}</b><small>{doc.id} · {doc.category}</small></td><td>{doc.version}</td><td>{doc.ownerTeam}</td><td>{doc.state === "active" ? <div className="coverage"><i style={{ width: `${doc.coverage * 100}%` }} /><span>{(doc.coverage * 100).toFixed(0)}%</span></div> : <span>待评测</span>}</td><td>{doc.sourceUrl ? <a href={doc.sourceUrl} target="_blank" rel="noreferrer">{doc.sourceType === "official" ? "官方依据 ↗" : "演示规则"}</a> : <span>{doc.sourceType === "official" ? "官方依据" : "演示规则"}</span>}<small>{doc.sourceTitle}</small></td><td><Status kind={doc.state === "active" ? "success" : doc.state === "review" ? "warning" : "neutral"}>{stateLabel[doc.state] ?? doc.state}</Status></td></tr>)}</tbody></table>
@@ -218,7 +221,7 @@ function RealScenarioBrowser() {
   const authenticityLabel: Record<string, string> = { public_real_anonymized: "公开真实匿名语料", official_public_rule: "官方公开规则", synthetic_internal_demo: "内部模拟流程" };
   const manifest = payload?.manifest;
   return <div className="scenario-browser">
-    <div className="evaluation-subhead"><div><b>四类专项场景浏览器</b><span>逐条保留上游对话 ID、数据切分、处理方式和预期路由</span></div><div className="scenario-controls"><select value={split} onChange={(event) => { setSplit(event.target.value); setOffset(0); }}><option value="test">测试集</option><option value="val">验证集</option><option value="train">训练集</option><option value="all">全部</option></select><select value={category} onChange={(event) => { setCategory(event.target.value); setOffset(0); }}><option value="">全部场景</option><option value="real-refund">退款</option><option value="real-invoice">发票</option><option value="real-address">改址</option><option value="real-damage">破损</option></select><input value={query} onChange={(event) => { setQuery(event.target.value); setOffset(0); }} placeholder="搜索真实用户问法" /></div></div>
+    <div className="evaluation-subhead"><div><b>四类专项场景浏览器</b><span>逐条保留上游对话 ID、数据切分、处理方式和预期路由</span></div><div className="scenario-controls"><select name="evaluation-split" aria-label="数据集切分" value={split} onChange={(event) => { setSplit(event.target.value); setOffset(0); }}><option value="test">测试集</option><option value="val">验证集</option><option value="train">训练集</option><option value="all">全部</option></select><select name="evaluation-category" aria-label="评测场景" value={category} onChange={(event) => { setCategory(event.target.value); setOffset(0); }}><option value="">全部场景</option><option value="real-refund">退款</option><option value="real-invoice">发票</option><option value="real-address">改址</option><option value="real-damage">破损</option></select><input name="evaluation-query" autoComplete="off" aria-label="搜索真实用户问法" value={query} onChange={(event) => { setQuery(event.target.value); setOffset(0); }} placeholder="搜索真实用户问法…" /></div></div>
     {manifest && <div className="provenance-strip"><div><b>{manifest.totals.upstreamDialogues.toLocaleString()}</b><span>全量对话</span></div><div><b>{manifest.totals.upstreamTurns.toLocaleString()}</b><span>全量对话轮次</span></div><div><b>{manifest.totals.annotatedQuestions.toLocaleString()}</b><span>全量标注问题</span></div><div><b>{manifest.totals.evaluationCases.toLocaleString()}</b><span>四类去重专项</span></div><div><b>{manifest.quality.directIdentifiersFound}</b><span>二次扫描直标识符</span></div></div>}
     <div className="truth-legend">{manifest?.sources.filter((source, index) => index === 0 || source.authenticity === "synthetic_internal_demo").map((source) => <span key={source.id} className={`truth-badge ${source.authenticity}`}>{authenticityLabel[source.authenticity] ?? source.authenticity}</span>)}<em>CSDS 未声明明确数据许可，仅限私有研究评测；内部模拟流程不冒充真实企业数据。</em></div>
     {error && <div className="evaluation-error">{error}</div>}
@@ -300,7 +303,7 @@ function EvaluationReviewWorkbench({ refreshKey }: { refreshKey: number }) {
     <section className="quality-grid"><article className="panel table-panel"><div className="table-toolbar"><div className="segmented"><button className={mode === "pending" ? "active" : ""} onClick={() => setMode("pending")}>待复核 {pending}</button><button className={mode === "reviewed" ? "active" : ""} onClick={() => setMode("reviewed")}>已复核 {reviewed}</button></div><span className="muted">双人复核前不自动修改金标</span></div>
       {error && <div className="evaluation-error">{error}</div>}
       {selected ? <div className="review-card"><div className="review-head"><div><Status kind={selected.review ? "success" : "warning"}>{selected.review ? "已复核" : `待复核 · ${selected.routingConfidence?.toFixed(2) ?? "低置信度"}`}</Status><b>{selected.failures.join("；")}</b></div><span>{selected.caseId} · {selected.category}</span></div><div className="review-question"><small>真实用户问题</small><p>{selected.query}</p></div><div className="review-answer"><small>AI 回答</small><p>{selected.answer}</p><div className="evidence"><b>自动判定</b><span>知识 {selected.expectedSource ?? "无"} → {selected.actualSource ?? "未命中"} · 转人工 {selected.expectedHandoff ? "是" : "否"} → {selected.actualHandoff ? "是" : "否"}</span></div><div className="review-routing"><b>路由解释</b><span>{selected.routingIntent ?? "未识别"} · {(selected.routingSignals ?? []).join(" / ") || "无匹配信号"}</span></div></div>
-        {selected.review ? <div className="reviewed-note"><b>{selected.review.decision === "confirmed_failure" ? "确认系统失败" : selected.review.decision === "label_issue" ? "标记标签问题" : "确认行为可接受"}</b><span>{selected.review.note || `复核人：${selected.review.reviewerEmail}`}</span></div> : <><textarea className="review-note" value={note} onChange={(event) => setNote(event.target.value)} maxLength={500} placeholder="复核说明；标记标签问题时必填" /><div className="review-actions"><button disabled={saving} className="danger-button" onClick={() => submit("confirmed_failure")}>确认系统失败</button><button disabled={saving || note.trim().length < 4} className="ghost-button" onClick={() => submit("label_issue")}>标记标签问题</button><button disabled={saving} className="primary-button" onClick={() => submit("accepted_behavior")}>行为可接受</button></div></>}</div> : <div className="review-empty">{items.length ? "当前筛选下没有案例" : "暂无需要人工复核的失败案例"}</div>}
+        {selected.review ? <div className="reviewed-note"><b>{selected.review.decision === "confirmed_failure" ? "确认系统失败" : selected.review.decision === "label_issue" ? "标记标签问题" : "确认行为可接受"}</b><span>{selected.review.note || `复核人：${selected.review.reviewerEmail}`}</span></div> : <><textarea name="review-note" aria-label="复核说明" className="review-note" value={note} onChange={(event) => setNote(event.target.value)} maxLength={500} placeholder="复核说明；标记标签问题时必填…" /><div className="review-actions"><button disabled={saving} className="danger-button" onClick={() => submit("confirmed_failure")}>确认系统失败</button><button disabled={saving || note.trim().length < 4} className="ghost-button" onClick={() => submit("label_issue")}>标记标签问题</button><button disabled={saving} className="primary-button" onClick={() => submit("accepted_behavior")}>行为可接受</button></div></>}</div> : <div className="review-empty">{items.length ? "当前筛选下没有案例" : "暂无需要人工复核的失败案例"}</div>}
       {visible.slice(1, 4).map((item) => <div className="review-card compact" key={item.id}><div><Status kind="neutral">{item.category}</Status><b>{item.query}</b><small>{item.failures.join("；")}</small></div><span className="text-button">队列中</span></div>)}</article>
       <aside className="panel quality-aside"><h3>复核规范</h3><div className="review-guideline"><b>确认系统失败</b><span>金标正确，检索、策略或回答需要修复。</span></div><div className="review-guideline"><b>标记标签问题</b><span>原期望与业务规则不一致，填写原因后进入双人复核。</span></div><div className="review-guideline"><b>行为可接受</b><span>虽未完全匹配自动规则，但不会误导用户或越权执行。</span></div><div className="aside-callout blue"><b>数据治理原则</b><span>人工结论不会直接覆盖原始样本；保留原标签、修订建议、复核人和时间，审批后生成新数据集版本。</span></div></aside></section></>;
 }
@@ -327,7 +330,7 @@ function Analytics() {
 }
 
 function Audit() {
-  return <section className="audit-layout"><article className="panel table-panel"><div className="table-toolbar"><div className="search-box wide">⌕ <input placeholder="搜索操作人、资源或审计编号" /></div><button className="filter-button">风险等级</button><button className="filter-button">导出记录</button></div><table><thead><tr><th>时间</th><th>操作者</th><th>操作</th><th>对象</th><th>结果</th><th>风险</th></tr></thead><tbody>
+  return <section className="audit-layout"><article className="panel table-panel"><div className="table-toolbar"><div className="search-box wide">⌕ <input name="audit-search" autoComplete="off" aria-label="搜索操作人、资源或审计编号" placeholder="搜索操作人、资源或审计编号…" /></div><button className="filter-button">风险等级</button><button className="filter-button">导出记录</button></div><table><thead><tr><th>时间</th><th>操作者</th><th>操作</th><th>对象</th><th>结果</th><th>风险</th></tr></thead><tbody>
     <tr><td>10:42:18</td><td>王可</td><td>查看脱敏订单</td><td>OR-773928</td><td><Status kind="success">允许</Status></td><td>低</td></tr><tr><td>10:31:06</td><td>客服 Agent</td><td>尝试执行退款</td><td>OR-773114</td><td><Status kind="danger">已拦截</Status></td><td className="urgent">高</td></tr><tr><td>09:42:27</td><td>周敏</td><td>发布知识版本</td><td>KB-114 v3.4</td><td><Status kind="success">成功</Status></td><td>中</td></tr><tr><td>08:30:11</td><td>系统管理员</td><td>发布策略版本</td><td>POLICY v2.7</td><td><Status kind="success">成功</Status></td><td>中</td></tr>
     </tbody></table></article><aside className="panel security-card"><div className="shield">✓</div><h3>安全基线正常</h3><p>最近 24 小时未发现越权访问或敏感信息泄露。</p><dl><div><dt>PII 脱敏覆盖</dt><dd>100%</dd></div><div><dt>高风险操作拦截</dt><dd>7 次</dd></div><div><dt>权限复核到期</dt><dd>3 人</dd></div></dl><button className="ghost-button full">查看权限矩阵</button></aside></section>;
 }
@@ -358,24 +361,31 @@ function CustomerDemo({ onClose }: { onClose: () => void }) {
   }
   const quick = ["订单 OR-773928 的退款什么时候到账？", "那周末算工作日吗？", "收到的生鲜破损了怎么办？", "订单还没发货怎么改地址？"];
   const resetConversation = () => { setConversationId(""); setHistory([]); setSubmitted(""); setResult(null); setError(""); };
-  return <div className="modal-backdrop" onClick={onClose}><div className="customer-demo" onClick={(e) => e.stopPropagation()}><div className="demo-head"><div className="brand-mark small">S</div><div><b>商城智能客服</b><span>Agent API 已连接 · 30 分钟会话记忆 · 随时可转人工</span></div><button aria-label="新会话" onClick={resetConversation}>↻</button><button aria-label="关闭" onClick={onClose}>×</button></div><div className="demo-body"><div className="demo-welcome"><b>您好，我是商城智能客服</b><span>先询问退款，再追问“那周末算工作日吗”，体验多轮意图继承。</span></div><div className="quick-questions">{quick.map((item) => <button key={item} onClick={() => send(item)}>{item.replace("？", "")}</button>)}</div>{submitted && <div className="demo-user">{submitted}</div>}{loading && <div className="demo-ai loading"><b>正在执行 Agent 工作流</b><span>会话状态 → 意图识别 → 知识检索 → 风险校验</span></div>}{error && <div className="demo-ai error"><b>请求失败</b><span>{error}</span></div>}{result && <div className="demo-ai"><b>{result.handoff ? "已生成安全答复并建议转人工" : "已基于可信知识回答"}</b><span>{result.answer}</span>{result.source && <a>依据：{result.source.title} {result.source.version} · {result.source.id}</a>}<small>置信度 {(result.confidence * 100).toFixed(0)}% · {result.mode === "model-grounded" ? "大模型生成（有依据约束）" : result.mode === "safe-fallback" ? "低置信度安全兜底" : "确定性安全模式"}</small>{result.memory && <small>会话记忆：{result.memory.activeIntent ?? "未识别"} · 第 {result.memory.turnCount} 轮 · {result.memory.source === "memory" ? "状态继承" : result.memory.source === "history" ? "历史上下文" : "当前问题"}</small>}<div className="demo-trace">{result.trace.map((step, index) => <i key={step.label}>{index + 1}. {step.label}</i>)}</div>{result.handoff && <button className="handoff-button">转接人工客服</button>}</div>}</div><div className="demo-input"><input value={query} maxLength={500} onChange={(e) => setQuery(e.target.value)} placeholder="请输入您的问题" onKeyDown={(e) => e.key === 'Enter' && send()} /><button disabled={loading} onClick={() => send()}>{loading ? "处理中" : "发送"}</button></div><div className="demo-footer">AI生成内容仅供参考 · 会话记忆 30 分钟后自动失效 · 涉及资金、赔付和账户操作需人工确认</div></div></div>;
+  return <div className="modal-backdrop" onClick={onClose}><div className="customer-demo" role="dialog" aria-modal="true" aria-label="商城智能客服体验" onClick={(e) => e.stopPropagation()}><div className="demo-head"><div className="brand-mark small">S</div><div><b>商城智能客服</b><span>Agent API 已连接 · 30 分钟会话记忆 · 随时可转人工</span></div><button aria-label="新会话" onClick={resetConversation}>↻</button><button aria-label="关闭" onClick={onClose}>×</button></div><div className="demo-body"><div className="demo-welcome"><b>您好，我是商城智能客服</b><span>先询问退款，再追问“那周末算工作日吗”，体验多轮意图继承。</span></div><div className="quick-questions">{quick.map((item) => <button key={item} onClick={() => send(item)}>{item.replace("？", "")}</button>)}</div>{submitted && <div className="demo-user">{submitted}</div>}{loading && <div className="demo-ai loading"><b>正在执行 Agent 工作流…</b><span>会话状态 → 意图识别 → 知识检索 → 风险校验</span></div>}{error && <div className="demo-ai error"><b>请求失败</b><span>{error}</span></div>}{result && <div className="demo-ai"><b>{result.handoff ? "已生成安全答复并建议转人工" : "已基于可信知识回答"}</b><span>{result.answer}</span>{result.source && <span className="demo-source">依据：{result.source.title} {result.source.version} · {result.source.id}</span>}<small>置信度 {(result.confidence * 100).toFixed(0)}% · {result.mode === "model-grounded" ? "大模型生成（有依据约束）" : result.mode === "safe-fallback" ? "低置信度安全兜底" : "确定性安全模式"}</small>{result.memory && <small>会话记忆：{result.memory.activeIntent ?? "未识别"} · 第 {result.memory.turnCount} 轮 · {result.memory.source === "memory" ? "状态继承" : result.memory.source === "history" ? "历史上下文" : "当前问题"}</small>}<div className="demo-trace">{result.trace.map((step, index) => <i key={step.label}>{index + 1}. {step.label}</i>)}</div>{result.handoff && <button className="handoff-button">转接人工客服</button>}</div>}</div><div className="demo-input"><input name="demo-query" autoComplete="off" aria-label="输入客服问题" value={query} maxLength={500} onChange={(e) => setQuery(e.target.value)} placeholder="请输入您的问题…" onKeyDown={(e) => e.key === 'Enter' && send()} /><button disabled={loading} onClick={() => send()}>{loading ? "处理中…" : "发送"}</button></div><div className="demo-footer">AI生成内容仅供参考 · 会话记忆 30 分钟后自动失效 · 涉及资金、赔付和账户操作需人工确认</div></div></div>;
 }
 
 export default function Home() {
   const [active, setActive] = useState<NavKey>("overview");
   const [demoOpen, setDemoOpen] = useState(false);
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [dataMode, setDataMode] = useState<"connecting" | "persistent" | "preview">("connecting");
-  const title = useMemo(() => screenTitles[active], [active]);
+  const title = screenTitles[active];
   useEffect(() => {
     fetch("/api/bootstrap", { method: "POST" })
       .then((response) => response.ok ? response.json() : Promise.reject(new Error("bootstrap failed")))
       .then(() => setDataMode("persistent"))
       .catch(() => setDataMode("preview"));
   }, []);
-  return <div className="app-shell">
+  useEffect(() => {
+    document.documentElement.style.colorScheme = theme;
+    const themeMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+    if (themeMeta) themeMeta.content = theme === "dark" ? "#07111f" : "#eef3f8";
+  }, [theme]);
+  return <div className={`app-shell theme-${theme}`}>
+    <a className="skip-link" href="#main-content">跳到主要内容</a>
     <aside className="sidebar"><div className="brand"><div className="brand-mark">S</div><div><b>ServicePilot</b><span>企业智能服务平台</span></div></div><div className="workspace"><span>当前空间</span><button><i>云</i><b>青屿商城</b><em>⌄</em></button></div><nav>{navItems.map((item) => <button key={item.key} className={active === item.key ? "active" : ""} onClick={() => setActive(item.key)}><i>{item.short}</i><span>{item.label}</span>{item.key === "conversations" && <em>12</em>}</button>)}</nav><div className="sidebar-bottom"><div className="system-health"><span><i />系统运行正常</span><small>所有服务可用</small></div><button className="profile"><span>王</span><p><b>王瑞峰</b><small>产品管理员</small></p><em>···</em></button></div></aside>
-    <main><header className="topbar"><div><h1>{title.title}</h1><p>{title.desc}</p></div><div className="top-actions"><span className={`data-mode ${dataMode}`}>{dataMode === "persistent" ? "持久数据已连接" : dataMode === "preview" ? "安全预览模式" : "正在连接数据"}</span><button className="demo-button" onClick={() => setDemoOpen(true)}>体验用户端</button><button className="icon-button" aria-label="帮助">?</button><button className="icon-button notification" aria-label="通知">○<i /></button></div></header><div className="content">
-      {active === "overview" && <Overview onNavigate={setActive} />}{active === "conversations" && <Conversations />}{active === "tickets" && <Tickets />}{active === "knowledge" && <Knowledge />}{active === "quality" && <Quality />}{active === "strategy" && <Strategy />}{active === "analytics" && <Analytics />}{active === "audit" && <Audit />}
+    <main id="main-content" tabIndex={-1}><header className="topbar"><div><h1>{title.title}</h1><p>{title.desc}</p></div><div className="top-actions"><span className={`data-mode ${dataMode}`}>{dataMode === "persistent" ? "持久数据已连接" : dataMode === "preview" ? "安全预览模式" : "正在连接数据…"}</span><button className="theme-button" onClick={() => setTheme((current) => current === "dark" ? "light" : "dark")} aria-label={`切换为${theme === "dark" ? "浅色" : "深色"}主题`}>{theme === "dark" ? "深色主题" : "浅色主题"}</button><button className="demo-button" onClick={() => setDemoOpen(true)}>体验用户端</button><button className="icon-button" aria-label="帮助">?</button><button className="icon-button notification" aria-label="通知">○<i /></button></div></header><div className={active === "resources" ? "content content-wide" : "content"}>
+      {active === "overview" && <Overview onNavigate={setActive} />}{active === "conversations" && <Conversations />}{active === "tickets" && <Tickets />}{active === "knowledge" && <Knowledge />}{active === "quality" && <Quality />}{active === "strategy" && <Strategy />}{active === "analytics" && <Analytics />}{active === "resources" && <ResourceAccess />}{active === "audit" && <Audit />}
     </div></main>{demoOpen && <CustomerDemo onClose={() => setDemoOpen(false)} />}
   </div>;
 }

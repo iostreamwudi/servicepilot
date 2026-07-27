@@ -12,6 +12,8 @@ function authenticated(request: Request) {
 
 const datasets = { train: trainSet, val: valSet, test: testSet } as const;
 type Split = keyof typeof datasets;
+type Dataset = (typeof datasets)[Split];
+type DatasetEntry = [Split, Dataset];
 
 export async function GET(request: Request) {
   if (!authenticated(request)) return Response.json({ error: "Authentication required" }, { status: 401 });
@@ -23,7 +25,9 @@ export async function GET(request: Request) {
   const category = url.searchParams.get("category");
   const limit = Math.min(Math.max(Number(url.searchParams.get("limit") ?? 50) || 50, 1), 100);
   const offset = Math.max(Number(url.searchParams.get("offset") ?? 0) || 0, 0);
-  const selected = split === "all" ? Object.entries(datasets) : [[split, datasets[split]]];
+  const selected: DatasetEntry[] = split === "all"
+    ? Object.entries(datasets) as DatasetEntry[]
+    : [[split, datasets[split]]];
   const source = selected.flatMap(([sourceSplit, dataset]) => dataset.cases.map((item) => ({ ...item, sourceSplit })));
   const filtered = source.filter((item) => (!category || item.category === category) && (!query || item.query.toLowerCase().includes(query)));
   return Response.json({

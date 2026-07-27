@@ -7,13 +7,25 @@ const source = (path) => readFile(new URL(path, root), "utf8");
 
 test("contains the complete enterprise product surface", async () => {
   const page = await source("app/page.tsx");
-  for (const label of ["运营总览", "会话中心", "工单管理", "知识库", "质检中心", "策略中心", "数据分析", "安全审计"]) {
+  for (const label of ["运营总览", "会话中心", "工单管理", "知识库", "质检中心", "策略中心", "数据分析", "资源权限", "安全审计"]) {
     assert.match(page, new RegExp(label));
   }
   assert.match(page, /\/api\/bootstrap/);
   assert.match(page, /\/api\/agent\/respond/);
   assert.match(page, /置信度/);
   assert.match(page, /转接人工客服/);
+});
+
+test("ships person-level task-interface-metric access control", async () => {
+  const access = await source("app/resource-access.tsx");
+  assert.match(access, /任务 → 接口 → 指标/);
+  assert.match(access, /直接配置/);
+  assert.match(access, /父级继承/);
+  assert.match(access, /查看权限/);
+  assert.match(access, /修改权限/);
+  assert.match(access, /保存权限/);
+  assert.match(access, /prefers-reduced-motion|resource-access/);
+  assert.doesNotMatch(access, /角色|部门|用户组/);
 });
 
 test("enforces grounded answers and safe fallback in the Agent route", async () => {
