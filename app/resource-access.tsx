@@ -1,6 +1,7 @@
 "use client";
 
-import { useDeferredValue, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
+import type { KeyboardEvent } from "react";
 
 type Metric = {
   id: string;
@@ -39,6 +40,8 @@ type PersonPermission = {
   source: string;
   conflict?: string;
 };
+
+const RESOURCE_TABS = ["basic", "permissions"] as const;
 
 const RESOURCE_TASKS: ResourceTask[] = [
   {
@@ -233,6 +236,15 @@ export default function ResourceAccess() {
     [permissions, savedPermissions],
   );
 
+  useEffect(() => {
+    if (!hasChanges) return;
+    const warnAboutUnsavedChanges = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+    };
+    window.addEventListener("beforeunload", warnAboutUnsavedChanges);
+    return () => window.removeEventListener("beforeunload", warnAboutUnsavedChanges);
+  }, [hasChanges]);
+
   const directCount = permissions.filter((person) => person.mode === "direct").length;
   const conflictCount = permissions.filter((person) => person.conflict).length;
 
@@ -292,6 +304,22 @@ export default function ResourceAccess() {
     if (syncState === "syncing") return;
     setSyncState("syncing");
     window.setTimeout(() => setSyncState("synced"), 780);
+  }
+
+  function handleTabKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const currentIndex = RESOURCE_TABS.indexOf(activeTab);
+    const nextIndex = event.key === "Home"
+      ? 0
+      : event.key === "End"
+        ? RESOURCE_TABS.length - 1
+        : (currentIndex + (event.key === "ArrowRight" ? 1 : -1) + RESOURCE_TABS.length) % RESOURCE_TABS.length;
+    const nextTab = RESOURCE_TABS[nextIndex];
+    setActiveTab(nextTab);
+    event.currentTarget.parentElement
+      ?.querySelector<HTMLButtonElement>(`#resource-tab-${nextTab}`)
+      ?.focus();
   }
 
   const currentValue = selectedMetric.id === "metric-resolution" ? "68.42%" : selectedMetric.id === "metric-handoff" ? "22.61%" : selectedMetric.quality;
@@ -369,11 +397,11 @@ export default function ResourceAccess() {
             <div className="metric-head-actions"><button className="ghost-button" type="button">查看血缘</button><button className="ghost-button" type="button">更多</button></div>
           </header>
           <nav className="resource-tabs" aria-label="指标信息" role="tablist">
-            <button type="button" role="tab" aria-selected={activeTab === "basic"} className={activeTab === "basic" ? "active" : ""} onClick={() => setActiveTab("basic")}>基本信息</button>
-            <button type="button" role="tab" aria-selected={activeTab === "permissions"} className={activeTab === "permissions" ? "active" : ""} onClick={() => setActiveTab("permissions")}>权限配置 <span>{permissions.length}</span></button>
+            <button id="resource-tab-basic" type="button" role="tab" aria-controls="resource-panel-basic" aria-selected={activeTab === "basic"} tabIndex={activeTab === "basic" ? 0 : -1} className={activeTab === "basic" ? "active" : ""} onKeyDown={handleTabKeyDown} onClick={() => setActiveTab("basic")}>基本信息</button>
+            <button id="resource-tab-permissions" type="button" role="tab" aria-controls="resource-panel-permissions" aria-selected={activeTab === "permissions"} tabIndex={activeTab === "permissions" ? 0 : -1} className={activeTab === "permissions" ? "active" : ""} onKeyDown={handleTabKeyDown} onClick={() => setActiveTab("permissions")}>权限配置 <span>{permissions.length}</span></button>
           </nav>
 
-          {activeTab === "basic" ? <div className="metric-basic" role="tabpanel">
+          {activeTab === "basic" ? <div id="resource-panel-basic" className="metric-basic" role="tabpanel" aria-labelledby="resource-tab-basic" tabIndex={0}>
             <section className="metric-overview-strip">
               <div><span>当前观测值</span><strong>{currentValue}</strong><small>较 7 日基线 +2.38%</small></div>
               <div><span>质量得分</span><strong>{selectedMetric.quality}</strong><small>校验规则全部通过</small></div>
@@ -399,7 +427,7 @@ export default function ResourceAccess() {
               </dl>
             </section>
             <div className="metric-audit-note"><span aria-hidden="true">i</span><p><strong>权限继承路径</strong>任务“商城客服数据资产” → 接口“订单售后 API” → 当前指标。直接配置优先于父级继承。</p></div>
-          </div> : <div className="permission-workspace" role="tabpanel">
+          </div> : <div id="resource-panel-permissions" className="permission-workspace" role="tabpanel" aria-labelledby="resource-tab-permissions" tabIndex={0}>
             <div className="permission-toolbar">
               <div><h4>已授权人员</h4><p>权限仅面向具体人员，所有变更均记录来源。</p></div>
               <label className="resource-search person-search">
