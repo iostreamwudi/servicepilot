@@ -1,7 +1,6 @@
 "use client";
 
 import { useDeferredValue, useMemo, useState } from "react";
-import type { CSSProperties } from "react";
 
 type Metric = {
   id: string;
@@ -181,6 +180,7 @@ export default function ResourceAccess() {
   const [expandedTasks, setExpandedTasks] = useState(() => new Set(RESOURCE_TASKS.map((task) => task.id)));
   const [expandedInterfaces, setExpandedInterfaces] = useState(() => new Set(RESOURCE_TASKS.flatMap((task) => task.interfaces.map((item) => item.id))));
   const [resourceQuery, setResourceQuery] = useState("");
+  const [resourceFilter, setResourceFilter] = useState<"all" | "checking">("all");
   const [personQuery, setPersonQuery] = useState("");
   const deferredResourceQuery = useDeferredValue(resourceQuery);
   const deferredPersonQuery = useDeferredValue(personQuery);
@@ -188,6 +188,7 @@ export default function ResourceAccess() {
   const [savedPermissions, setSavedPermissions] = useState(INITIAL_PERMISSIONS);
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
   const [syncState, setSyncState] = useState<"idle" | "syncing" | "synced">("idle");
+  const [activeTab, setActiveTab] = useState<"basic" | "permissions">("basic");
 
   const selectedMetric = useMemo(
     () => ALL_METRICS.find((metric) => metric.id === selectedMetricId) ?? ALL_METRICS[0],
@@ -196,19 +197,21 @@ export default function ResourceAccess() {
 
   const filteredTasks = useMemo(() => {
     const query = deferredResourceQuery.trim().toLocaleLowerCase();
-    if (!query) return RESOURCE_TASKS;
+    if (!query && resourceFilter === "all") return RESOURCE_TASKS;
     return RESOURCE_TASKS.flatMap((task) => {
       const interfaces = task.interfaces.flatMap((resourceInterface) => {
-        const metrics = resourceInterface.metrics.filter((metric) =>
-          `${metric.name} ${metric.code}`.toLocaleLowerCase().includes(query),
-        );
-        if (resourceInterface.name.toLocaleLowerCase().includes(query)) return resourceInterface;
+        const metrics = resourceInterface.metrics.filter((metric) => {
+          const matchesQuery = !query || `${metric.name} ${metric.code}`.toLocaleLowerCase().includes(query);
+          const matchesFilter = resourceFilter === "all" || metric.status === "校验中";
+          return matchesQuery && matchesFilter;
+        });
+        if (resourceFilter === "all" && resourceInterface.name.toLocaleLowerCase().includes(query)) return resourceInterface;
         return metrics.length ? [{ ...resourceInterface, metrics }] : [];
       });
-      if (task.name.toLocaleLowerCase().includes(query)) return task;
+      if (resourceFilter === "all" && task.name.toLocaleLowerCase().includes(query)) return task;
       return interfaces.length ? [{ ...task, interfaces }] : [];
     });
-  }, [deferredResourceQuery]);
+  }, [deferredResourceQuery, resourceFilter]);
 
   const directoryMatches = useMemo(() => {
     const query = deferredPersonQuery.trim().toLocaleLowerCase();
@@ -291,178 +294,143 @@ export default function ResourceAccess() {
     window.setTimeout(() => setSyncState("synced"), 780);
   }
 
+  const currentValue = selectedMetric.id === "metric-resolution" ? "68.42%" : selectedMetric.id === "metric-handoff" ? "22.61%" : selectedMetric.quality;
+
   return (
     <section className="resource-access" aria-labelledby="resource-page-title">
-      <header className="resource-command">
-        <div className="resource-grid-pattern" aria-hidden="true" />
-        <div className="resource-heading">
-          <div className="resource-kicker"><span aria-hidden="true" />RESOURCE CONTROL · D1</div>
+      <header className="resource-toolbar">
+        <div>
           <h2 id="resource-page-title">数据资源与人员权限</h2>
           <p>按任务、接口、指标逐级管理访问边界，所有修改均进入安全审计。</p>
         </div>
-        <div className="resource-source-rail" aria-label="数据源与同步状态">
-          <div><span>数据来源</span><strong>ServicePilot Production</strong></div>
-          <div><span>最近同步</span><strong>{syncState === "synced" ? "刚刚" : "2026-07-27 09:42"}</strong></div>
-          <div><span>同步状态</span><strong className={syncState === "syncing" ? "sync-status is-syncing" : "sync-status"}>{syncState === "syncing" ? "同步中…" : "运行正常"}</strong></div>
-        </div>
-        <button className="resource-primary-action" type="button" disabled={syncState === "syncing"} onClick={syncResources}>
-          <span aria-hidden="true" />
+        <dl className="resource-summary">
+          <div><dt>数据来源</dt><dd>ServicePilot Production</dd></div>
+          <div><dt>最近同步</dt><dd>{syncState === "synced" ? "刚刚" : "2026-07-27 09:42"}</dd></div>
+          <div><dt>资源规模</dt><dd>2 个任务 · 3 个接口 · 5 个指标</dd></div>
+        </dl>
+        <button className="primary-button" type="button" disabled={syncState === "syncing"} onClick={syncResources}>
           {syncState === "syncing" ? "正在同步…" : "同步资源"}
         </button>
-        <div className="resource-metrics" aria-label="资源概览">
-          <div><span>任务</span><strong>02</strong><small>全部在线</small></div>
-          <div><span>接口</span><strong>03</strong><small>1 个校验中</small></div>
-          <div><span>指标</span><strong>05</strong><small>5 个可授权</small></div>
-          <div><span>已授权人员</span><strong>{String(permissions.length).padStart(2, "0")}</strong><small>{directCount} 个直接配置</small></div>
-        </div>
       </header>
 
       <div className="resource-workbench">
-        <aside className="resource-panel resource-tree-panel" aria-label="资源树">
+        <aside className="resource-tree-panel" aria-label="资源树">
           <div className="resource-panel-head">
-            <div><span>资源目录</span><strong>任务 → 接口 → 指标</strong></div>
+            <div><strong>资源目录</strong><span>任务 → 接口 → 指标</span></div>
             <button type="button" title="折叠全部资源" aria-label="折叠全部资源" onClick={() => { setExpandedTasks(new Set()); setExpandedInterfaces(new Set()); }}>收起</button>
           </div>
           <label className="resource-search">
             <span aria-hidden="true" />
             <span className="sr-only">搜索任务、接口或指标</span>
-            <input name="resource-search" autoComplete="off" value={resourceQuery} onChange={(event) => setResourceQuery(event.target.value)} placeholder="搜索任务、接口或指标…" />
-            <kbd>⌘ K</kbd>
+            <input name="resource-search" autoComplete="off" value={resourceQuery} onChange={(event) => setResourceQuery(event.target.value)} placeholder="搜索资源…" />
           </label>
+          <div className="resource-filter-row"><span>状态</span><button className={resourceFilter === "all" ? "active" : ""} type="button" onClick={() => setResourceFilter("all")}>全部</button><button className={resourceFilter === "checking" ? "active" : ""} type="button" onClick={() => setResourceFilter("checking")}>校验中</button></div>
           <div className="resource-tree" aria-live="polite">
             {filteredTasks.length ? filteredTasks.map((task) => {
               const taskExpanded = expandedTasks.has(task.id) || Boolean(resourceQuery);
-              return (
-                <div className="tree-task" key={task.id}>
-                  <button className="tree-row tree-task-row" type="button" aria-expanded={taskExpanded} onClick={() => toggleTask(task.id)} title={task.name}>
-                    <span className={taskExpanded ? "tree-caret is-open" : "tree-caret"} aria-hidden="true" />
-                    <span className="tree-code">T</span>
-                    <span className="tree-copy"><strong>{highlightText(task.name, resourceQuery)}</strong><small>{task.interfaces.length} 个接口</small></span>
-                  </button>
-                  {taskExpanded && <div className="tree-branch">{task.interfaces.map((resourceInterface) => {
-                    const interfaceExpanded = expandedInterfaces.has(resourceInterface.id) || Boolean(resourceQuery);
-                    return (
-                      <div className="tree-interface" key={resourceInterface.id}>
-                        <button className="tree-row tree-interface-row" type="button" aria-expanded={interfaceExpanded} onClick={() => toggleInterface(resourceInterface.id)} title={resourceInterface.name}>
-                          <span className={interfaceExpanded ? "tree-caret is-open" : "tree-caret"} aria-hidden="true" />
-                          <span className="tree-code api">API</span>
-                          <span className="tree-copy"><strong>{highlightText(resourceInterface.name, resourceQuery)}</strong><small>{resourceInterface.method} · {resourceInterface.metrics.length} 个指标</small></span>
-                        </button>
-                        {interfaceExpanded && <div className="tree-metrics">{resourceInterface.metrics.map((metric) => (
-                          <button
-                            type="button"
-                            key={metric.id}
-                            className={metric.id === selectedMetric.id ? "tree-row tree-metric-row is-selected" : "tree-row tree-metric-row"}
-                            aria-current={metric.id === selectedMetric.id ? "true" : undefined}
-                            onClick={() => setSelectedMetricId(metric.id)}
-                            title={`${metric.name} · ${metric.code}`}
-                          >
-                            <span className="tree-metric-dot" aria-hidden="true" />
-                            <span className="tree-copy"><strong>{highlightText(metric.name, resourceQuery)}</strong><small>{metric.code}</small></span>
-                            <span className={metric.status === "在线" ? "tree-health" : "tree-health is-checking"}>{metric.status}</span>
-                          </button>
-                        ))}</div>}
-                      </div>
-                    );
-                  })}</div>}
-                </div>
-              );
-            }) : (
-              <div className="resource-empty">
-                <span aria-hidden="true">0</span>
-                <strong>未找到匹配资源</strong>
-                <p>检查关键词，或清除搜索后查看全部层级。</p>
-                <button type="button" onClick={() => setResourceQuery("")}>清除搜索</button>
-              </div>
-            )}
+              return <div className="tree-task" key={task.id}>
+                <button className="tree-row tree-task-row" type="button" aria-expanded={taskExpanded} onClick={() => toggleTask(task.id)} title={task.name}>
+                  <span className={taskExpanded ? "tree-caret is-open" : "tree-caret"} aria-hidden="true" />
+                  <span className="tree-code">T</span>
+                  <span className="tree-copy"><strong>{highlightText(task.name, resourceQuery)}</strong><small>{task.interfaces.length} 个接口</small></span>
+                </button>
+                {taskExpanded ? <div className="tree-branch">{task.interfaces.map((resourceInterface) => {
+                  const interfaceExpanded = expandedInterfaces.has(resourceInterface.id) || Boolean(resourceQuery);
+                  return <div className="tree-interface" key={resourceInterface.id}>
+                    <button className="tree-row tree-interface-row" type="button" aria-expanded={interfaceExpanded} onClick={() => toggleInterface(resourceInterface.id)} title={resourceInterface.name}>
+                      <span className={interfaceExpanded ? "tree-caret is-open" : "tree-caret"} aria-hidden="true" />
+                      <span className="tree-code api">API</span>
+                      <span className="tree-copy"><strong>{highlightText(resourceInterface.name, resourceQuery)}</strong><small>{resourceInterface.method} · {resourceInterface.metrics.length} 个指标</small></span>
+                    </button>
+                    {interfaceExpanded ? <div className="tree-metrics">{resourceInterface.metrics.map((metric) => <button
+                      type="button"
+                      key={metric.id}
+                      className={metric.id === selectedMetric.id ? "tree-row tree-metric-row is-selected" : "tree-row tree-metric-row"}
+                      aria-current={metric.id === selectedMetric.id ? "true" : undefined}
+                      onClick={() => setSelectedMetricId(metric.id)}
+                      title={`${metric.name} · ${metric.code}`}
+                    >
+                      <span className="tree-metric-dot" aria-hidden="true" />
+                      <span className="tree-copy"><strong>{highlightText(metric.name, resourceQuery)}</strong><small>{metric.code}</small></span>
+                    </button>)}</div> : null}
+                  </div>;
+                })}</div> : null}
+              </div>;
+            }) : <div className="resource-empty"><strong>未找到匹配资源</strong><p>检查关键词，或清除搜索后查看全部层级。</p><button type="button" onClick={() => setResourceQuery("")}>清除搜索</button></div>}
           </div>
-          <div className="resource-panel-foot"><span className="health-pulse" aria-hidden="true" />资源树已通过完整性校验</div>
         </aside>
 
-        <article className="resource-panel metric-detail-panel" key={selectedMetric.id}>
-          <div className="metric-detail-head">
+        <article className="resource-main-panel">
+          <header className="metric-page-head">
             <div>
-              <span className="metric-code">{selectedMetric.code}</span>
-              <h3>{selectedMetric.name}</h3>
-              <p>{selectedMetric.definition}</p>
+              <div className="metric-title-line"><h3>{selectedMetric.name}</h3><span className={selectedMetric.status === "在线" ? "metric-state" : "metric-state is-checking"}>{selectedMetric.status}</span></div>
+              <p><code>{selectedMetric.code}</code><span>责任人：{selectedMetric.owner}</span><span>更新于 {selectedMetric.updatedAt}</span></p>
             </div>
-            <span className={selectedMetric.status === "在线" ? "metric-state" : "metric-state is-checking"}><i aria-hidden="true" />{selectedMetric.status}</span>
-          </div>
-          <div className="metric-signal">
-            <div className="metric-signal-copy"><span>当前观测值</span><strong>{selectedMetric.id === "metric-resolution" ? "68.42%" : selectedMetric.id === "metric-handoff" ? "22.61%" : selectedMetric.quality}</strong><small>相较 7 日基线 <b>+2.38%</b></small></div>
-            <div className="signal-chart" role="img" aria-label={`${selectedMetric.name}最近七日趋势`}>
-              {[34, 46, 42, 59, 54, 72, 81, 76, 88, 92].map((height, index) => <i key={index} style={{ "--signal-height": `${height}%` } as CSSProperties} />)}
-            </div>
-          </div>
-          <section className="metric-section">
-            <div className="metric-section-title"><h4>指标口径</h4><span>版本 v3.4</span></div>
-            <dl className="metric-definition-list">
-              <div><dt>计算公式</dt><dd><code>{selectedMetric.formula}</code></dd></div>
-              <div><dt>数据来源</dt><dd>{selectedMetric.source}</dd></div>
-              <div><dt>刷新频率</dt><dd>每 5 分钟增量同步</dd></div>
-              <div><dt>统计粒度</dt><dd>会话 / 自然日 / UTC+8</dd></div>
-            </dl>
-          </section>
-          <section className="metric-section">
-            <div className="metric-section-title"><h4>治理信息</h4><button type="button">查看血缘</button></div>
-            <div className="governance-grid">
-              <div><span>责任人</span><strong>{selectedMetric.owner}</strong></div>
-              <div><span>质量得分</span><strong>{selectedMetric.quality}</strong></div>
-              <div><span>最近更新</span><strong>{selectedMetric.updatedAt}</strong></div>
-              <div><span>敏感级别</span><strong>L2 · 内部</strong></div>
-            </div>
-          </section>
-          <div className="metric-audit-note">
-            <span aria-hidden="true">i</span>
-            <p><strong>权限继承路径</strong>任务“商城客服数据资产” → 接口“订单售后 API” → 当前指标。直接配置优先于父级继承。</p>
-          </div>
-        </article>
+            <div className="metric-head-actions"><button className="ghost-button" type="button">查看血缘</button><button className="ghost-button" type="button">更多</button></div>
+          </header>
+          <nav className="resource-tabs" aria-label="指标信息" role="tablist">
+            <button type="button" role="tab" aria-selected={activeTab === "basic"} className={activeTab === "basic" ? "active" : ""} onClick={() => setActiveTab("basic")}>基本信息</button>
+            <button type="button" role="tab" aria-selected={activeTab === "permissions"} className={activeTab === "permissions" ? "active" : ""} onClick={() => setActiveTab("permissions")}>权限配置 <span>{permissions.length}</span></button>
+          </nav>
 
-        <aside className="resource-panel permission-panel" aria-label="人员权限配置">
-          <div className="permission-head">
-            <div><span>人员权限</span><strong>{permissions.length} 人已授权</strong></div>
-            <span className={conflictCount ? "conflict-indicator" : "conflict-indicator is-clear"}>{conflictCount ? `${conflictCount} 个覆盖项` : "无冲突"}</span>
-          </div>
-          <label className="resource-search person-search">
-            <span aria-hidden="true" />
-            <span className="sr-only">搜索姓名或邮箱</span>
-            <input name="person-search" autoComplete="off" spellCheck={false} value={personQuery} onChange={(event) => setPersonQuery(event.target.value)} placeholder="搜索姓名或邮箱…" />
-          </label>
-          {directoryMatches.length > 0 && (
-            <div className="directory-results" aria-label="可添加人员">
-              {directoryMatches.map((person) => <button type="button" key={person.id} onClick={() => addPerson(person)}><span>{person.initials}</span><p><strong>{person.name}</strong><small>{person.email}</small></p><b>添加</b></button>)}
+          {activeTab === "basic" ? <div className="metric-basic" role="tabpanel">
+            <section className="metric-overview-strip">
+              <div><span>当前观测值</span><strong>{currentValue}</strong><small>较 7 日基线 +2.38%</small></div>
+              <div><span>质量得分</span><strong>{selectedMetric.quality}</strong><small>校验规则全部通过</small></div>
+              <div><span>敏感级别</span><strong>L2 · 内部</strong><small>仅限已授权人员</small></div>
+              <div><span>刷新频率</span><strong>5 分钟</strong><small>增量同步</small></div>
+            </section>
+            <section className="metric-info-section">
+              <h4>业务信息</h4>
+              <dl className="description-grid">
+                <div><dt>指标说明</dt><dd>{selectedMetric.definition}</dd></div>
+                <div><dt>计算公式</dt><dd><code>{selectedMetric.formula}</code></dd></div>
+                <div><dt>统计粒度</dt><dd>会话 / 自然日 / UTC+8</dd></div>
+                <div><dt>指标版本</dt><dd>v3.4</dd></div>
+              </dl>
+            </section>
+            <section className="metric-info-section">
+              <h4>数据信息</h4>
+              <dl className="description-grid">
+                <div><dt>数据来源</dt><dd>{selectedMetric.source}</dd></div>
+                <div><dt>最近更新</dt><dd>{selectedMetric.updatedAt}</dd></div>
+                <div><dt>责任人</dt><dd>{selectedMetric.owner}</dd></div>
+                <div><dt>运行状态</dt><dd>{selectedMetric.status}</dd></div>
+              </dl>
+            </section>
+            <div className="metric-audit-note"><span aria-hidden="true">i</span><p><strong>权限继承路径</strong>任务“商城客服数据资产” → 接口“订单售后 API” → 当前指标。直接配置优先于父级继承。</p></div>
+          </div> : <div className="permission-workspace" role="tabpanel">
+            <div className="permission-toolbar">
+              <div><h4>已授权人员</h4><p>权限仅面向具体人员，所有变更均记录来源。</p></div>
+              <label className="resource-search person-search">
+                <span aria-hidden="true" /><span className="sr-only">搜索姓名或邮箱</span>
+                <input name="person-search" autoComplete="off" spellCheck={false} value={personQuery} onChange={(event) => setPersonQuery(event.target.value)} placeholder="搜索姓名或邮箱…" />
+              </label>
             </div>
-          )}
-          <div className="permission-columns" aria-hidden="true"><span>人员与来源</span><span>查看</span><span>修改</span></div>
-          <div className="permission-list">
-            {visiblePermissions.length ? visiblePermissions.map((person) => (
-              <article className={person.conflict ? "permission-row has-conflict" : "permission-row"} key={person.id}>
-                <div className="permission-person">
-                  <span className="permission-avatar">{person.initials}</span>
-                  <p><strong>{person.name}</strong><small>{person.email}</small></p>
-                </div>
-                <div className="permission-controls">
-                  <PermissionToggle checked={person.view} disabled={person.mode === "inherited" || saveState === "saving"} label={`${person.name}查看权限`} onChange={() => updatePermission(person.id, "view")} />
-                  <PermissionToggle checked={person.edit} disabled={person.mode === "inherited" || saveState === "saving"} label={`${person.name}修改权限`} onChange={() => updatePermission(person.id, "edit")} />
-                </div>
-                <div className="permission-source">
-                  <span className={person.mode === "direct" ? "source-label is-direct" : "source-label"}>{person.mode === "direct" ? "直接配置" : "父级继承"}</span>
-                  <span title={person.source}>{person.source}</span>
-                  {person.mode === "inherited" && <button type="button" onClick={() => convertToDirect(person.id)}>转为直接配置</button>}
-                  {person.conflict && <p><b>覆盖提示</b>{person.conflict}</p>}
-                </div>
-              </article>
-            )) : (
-              <div className="permission-empty"><strong>没有匹配的已授权人员</strong><p>可从上方搜索结果添加人员，权限只面向具体个人。</p></div>
-            )}
-          </div>
-          <div className="permission-legend"><span><i className="legend-direct" />直接配置</span><span><i className="legend-inherited" />父级继承</span><p>修改权限会自动包含查看权限。</p></div>
-          <div className="permission-actions">
-            <div aria-live="polite">{saveState === "saved" ? <span className="save-success">已保存并写入审计日志</span> : hasChanges ? <span>有未保存的修改</span> : <span>权限配置已是最新</span>}</div>
-            <button type="button" className="permission-undo" disabled={!hasChanges || saveState === "saving"} onClick={() => { setPermissions(savedPermissions); setSaveState("idle"); }}>撤销</button>
-            <button type="button" className="permission-save" disabled={!hasChanges || saveState === "saving"} onClick={savePermissions}>{saveState === "saving" ? "保存中…" : "保存权限"}</button>
-          </div>
-        </aside>
+            {directoryMatches.length > 0 ? <div className="directory-results" aria-label="可添加人员">
+              {directoryMatches.map((person) => <button type="button" key={person.id} onClick={() => addPerson(person)}><span>{person.initials}</span><p><strong>{person.name}</strong><small>{person.email}</small></p><b>添加</b></button>)}
+            </div> : null}
+            <div className="permission-table-wrap">
+              <table className="permission-table">
+                <thead><tr><th>人员</th><th>权限来源</th><th>查看</th><th>修改</th><th>说明</th><th>操作</th></tr></thead>
+                <tbody>{visiblePermissions.length ? visiblePermissions.map((person) => <tr className={person.conflict ? "has-conflict" : ""} key={person.id}>
+                  <td><div className="permission-person"><span className="permission-avatar">{person.initials}</span><p><strong>{person.name}</strong><small>{person.email}</small></p></div></td>
+                  <td><span className={person.mode === "direct" ? "source-label is-direct" : "source-label"}>{person.mode === "direct" ? "直接配置" : "父级继承"}</span></td>
+                  <td><PermissionToggle checked={person.view} disabled={person.mode === "inherited" || saveState === "saving"} label={`${person.name}查看权限`} onChange={() => updatePermission(person.id, "view")} /></td>
+                  <td><PermissionToggle checked={person.edit} disabled={person.mode === "inherited" || saveState === "saving"} label={`${person.name}修改权限`} onChange={() => updatePermission(person.id, "edit")} /></td>
+                  <td><span className="permission-source-text" title={person.conflict ?? person.source}>{person.conflict ?? person.source}</span></td>
+                  <td>{person.mode === "inherited" ? <button className="text-button" type="button" onClick={() => convertToDirect(person.id)}>转为直接配置</button> : <span className="muted">—</span>}</td>
+                </tr>) : <tr><td colSpan={6}><div className="permission-empty"><strong>没有匹配的已授权人员</strong><p>可从上方搜索结果添加人员。</p></div></td></tr>}</tbody>
+              </table>
+            </div>
+            <div className="permission-note"><span>直接配置 {directCount} 人</span><span>父级继承 {permissions.length - directCount} 人</span><span>{conflictCount ? `${conflictCount} 个覆盖项需关注` : "无权限冲突"}</span></div>
+            <div className="permission-actions">
+              <div aria-live="polite">{saveState === "saved" ? <span className="save-success">已保存并写入审计日志</span> : hasChanges ? <span>有未保存的修改</span> : <span>权限配置已是最新</span>}</div>
+              <button type="button" className="ghost-button" disabled={!hasChanges || saveState === "saving"} onClick={() => { setPermissions(savedPermissions); setSaveState("idle"); }}>撤销</button>
+              <button type="button" className="primary-button" disabled={!hasChanges || saveState === "saving"} onClick={savePermissions}>{saveState === "saving" ? "保存中…" : "保存权限"}</button>
+            </div>
+          </div>}
+        </article>
       </div>
     </section>
   );

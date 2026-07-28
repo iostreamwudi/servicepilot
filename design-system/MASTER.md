@@ -1,48 +1,39 @@
-# ServicePilot — Dark Data Intelligence
+# ServicePilot — Light Cloud Console
 
 ## Direction
 
-Enterprise data intelligence console for high-density resource and permission operations. The interface uses graphite navy surfaces, cold cyan-blue accents, precise borders, restrained ambient light, and tabular data typography.
+ServicePilot uses a restrained, professional and information-dense enterprise cloud-console language. The system borrows interaction density and visual order from mature cloud products while retaining ServicePilot’s own identity, copy, icons and workflows.
 
-## Semantic tokens
+## Foundations
 
-- Canvas: `#07111f`
-- Surface 1: `#0b1727`
-- Surface 2: `#101e31`
-- Elevated: `#14253a`
-- Primary text: `#e7eef8`
-- Secondary text: `#91a2b8`
-- Border: `rgba(133, 168, 206, 0.16)`
-- Border strong: `rgba(92, 184, 255, 0.32)`
-- Brand: `#4db8ff`
-- Brand strong: `#25d1e9`
-- Success: `#4cd6a0`
-- Warning: `#e9b66b`
-- Danger: `#ff7f8e`
+- Application background: `#f7f8fb`
+- Secondary navigation: `#f5f6fa`
+- Primary surface: `#ffffff`
+- Subtle surface: `#fafafe`
+- Primary text: `#1f2329`
+- Secondary text: `#4e5969`
+- Tertiary text: `#86909c`
+- Default border: `#e7e9ef`
+- Strong border: `#d9dce5`
+- Primary: `#665ce5`
+- Primary hover: `#574dd8`
+- Selected surface: `#f0efff`
+- Success: `#00a870`
+- Warning: `#ff7d00`
+- Danger: `#f53f3f`
 
-Light mode maps the same semantic roles to cool white and slate surfaces; component code must never hardcode theme-specific colors.
+## Typography
 
-## Type and density
+Use legal local system fonts only: `PingFang SC`, `Microsoft YaHei`, Apple and Segoe UI fallbacks. Body and table text use 13px/20px at weight 400. Page titles use 16px/24px at weight 600. Section titles use 14px/22px at weight 600. Numeric data uses tabular figures.
 
-- UI: Geist, PingFang SC, Microsoft YaHei.
-- Data/code: Geist Mono with tabular figures.
-- Body text: 13–14px; labels: 11–12px; page titles: 24–28px.
-- Spacing follows a 4/8px rhythm. Dense workbench panels use 12–20px internal padding.
+## Density and geometry
 
-## Surfaces
+Spacing follows a strict 4px base scale: 4, 8, 12, 16, 20, 24 and 32px. Default controls are 32px high. The global header is 48px. Secondary navigation is 160px wide. Buttons and inputs use 4px radius; containers use 4–6px radius. Cards do not cast shadows; hierarchy comes from borders and surface contrast.
 
-Primary workbench panels use a 1px cold border, subtle inner highlight, and one tinted shadow. Avoid stacked card shadows. The selected critical metric may use the only continuous border accent on screen.
+## Interaction
 
-## Motion
-
-- Micro feedback: 160ms
-- State changes: 220ms
-- Panels/content: 320ms
-- Decorative loop: 10s minimum
-- Hover translation: at most 2px
-- Entry translation: at most 10px
-- Animate only transform and opacity. Disable decorative and blur motion under `prefers-reduced-motion`.
+Primary actions use a solid purple fill. Selected rows and menu items use a pale purple surface. Hover changes only color, background or border. State transitions last 100–180ms. No gradients, ambient glow, blur, decorative motion, scale or vertical hover movement. `prefers-reduced-motion` disables all non-essential transitions.
 
 ## Permission semantics
 
-Permissions apply only to named individuals. View and modify are distinct. Modify implies view. Direct configuration overrides inherited permissions. Inherited controls remain read-only until explicitly converted to direct configuration. Conflicts require a textual explanation; color alone is insufficient.
+Permissions apply only to named individuals. View and modify are distinct, and modify implies view. Direct configuration overrides inherited permissions. Inherited permissions remain read-only until explicitly converted to direct configuration. Conflicts always include text; color alone is never the only signal.

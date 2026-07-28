@@ -365,9 +365,8 @@ function CustomerDemo({ onClose }: { onClose: () => void }) {
 }
 
 export default function Home() {
-  const [active, setActive] = useState<NavKey>("overview");
+  const [active, setActive] = useState<NavKey>("resources");
   const [demoOpen, setDemoOpen] = useState(false);
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [dataMode, setDataMode] = useState<"connecting" | "persistent" | "preview">("connecting");
   const title = screenTitles[active];
   useEffect(() => {
@@ -376,16 +375,35 @@ export default function Home() {
       .then(() => setDataMode("persistent"))
       .catch(() => setDataMode("preview"));
   }, []);
-  useEffect(() => {
-    document.documentElement.style.colorScheme = theme;
-    const themeMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-    if (themeMeta) themeMeta.content = theme === "dark" ? "#07111f" : "#eef3f8";
-  }, [theme]);
-  return <div className={`app-shell theme-${theme}`}>
+  return <div className="app-shell">
     <a className="skip-link" href="#main-content">跳到主要内容</a>
-    <aside className="sidebar"><div className="brand"><div className="brand-mark">S</div><div><b>ServicePilot</b><span>企业智能服务平台</span></div></div><div className="workspace"><span>当前空间</span><button><i>云</i><b>青屿商城</b><em>⌄</em></button></div><nav aria-label="主导航">{navItems.map((item) => <button key={item.key} aria-label={item.label} className={active === item.key ? "active" : ""} onClick={() => setActive(item.key)}><i aria-hidden="true">{item.short}</i><span>{item.label}</span>{item.key === "conversations" && <em aria-hidden="true">12</em>}</button>)}</nav><div className="sidebar-bottom"><div className="system-health"><span><i />系统运行正常</span><small>所有服务可用</small></div><button className="profile"><span>王</span><p><b>王瑞峰</b><small>产品管理员</small></p><em>···</em></button></div></aside>
-    <main id="main-content" tabIndex={-1}><header className="topbar"><div><h1>{title.title}</h1><p>{title.desc}</p></div><div className="top-actions"><span className={`data-mode ${dataMode}`}>{dataMode === "persistent" ? "持久数据已连接" : dataMode === "preview" ? "安全预览模式" : "正在连接数据…"}</span><button className="theme-button" onClick={() => setTheme((current) => current === "dark" ? "light" : "dark")} aria-label={`切换为${theme === "dark" ? "浅色" : "深色"}主题`}>{theme === "dark" ? "深色主题" : "浅色主题"}</button><button className="demo-button" onClick={() => setDemoOpen(true)}>体验用户端</button><button className="icon-button" aria-label="帮助">?</button><button className="icon-button notification" aria-label="通知">○<i /></button></div></header><div className={active === "resources" ? "content content-wide" : "content"}>
-      {active === "overview" && <Overview onNavigate={setActive} />}{active === "conversations" && <Conversations />}{active === "tickets" && <Tickets />}{active === "knowledge" && <Knowledge />}{active === "quality" && <Quality />}{active === "strategy" && <Strategy />}{active === "analytics" && <Analytics />}{active === "resources" && <ResourceAccess />}{active === "audit" && <Audit />}
-    </div></main>{demoOpen && <CustomerDemo onClose={() => setDemoOpen(false)} />}
+    <header className="global-header">
+      <div className="global-brand"><div className="brand-mark">S</div><b>ServicePilot</b><span>企业智能服务平台</span></div>
+      <nav className="global-nav" aria-label="一级业务导航">
+        {navItems.slice(0, 4).concat(navItems[7]).map((item) => <button key={item.key} className={active === item.key ? "active" : ""} onClick={() => setActive(item.key)}>{item.label}</button>)}
+      </nav>
+      <div className="global-tools">
+        <span className={`data-mode ${dataMode}`}>{dataMode === "persistent" ? "数据已连接" : dataMode === "preview" ? "安全预览" : "连接中…"}</span>
+        <button className="text-tool" onClick={() => setDemoOpen(true)}>体验用户端</button>
+        <button className="icon-button" aria-label="帮助">?</button>
+        <button className="icon-button notification" aria-label="通知">○<i /></button>
+        <button className="global-profile" aria-label="账号设置"><span>王</span><b>王瑞峰</b><em>⌄</em></button>
+      </div>
+    </header>
+    <div className="app-body">
+      <aside className="sidebar">
+        <div className="workspace"><span>当前空间</span><button><i>云</i><b>青屿商城</b><em>⌄</em></button></div>
+        <div className="nav-group-label">产品功能</div>
+        <nav aria-label="产品功能导航">{navItems.map((item) => <button key={item.key} aria-label={item.label} className={active === item.key ? "active" : ""} onClick={() => setActive(item.key)}><i aria-hidden="true">{item.short}</i><span>{item.label}</span>{item.key === "conversations" && <em aria-hidden="true">12</em>}</button>)}</nav>
+        <div className="sidebar-bottom"><div className="system-health"><span><i />系统运行正常</span><small>所有服务可用</small></div></div>
+      </aside>
+      <main id="main-content" tabIndex={-1}>
+        <header className="topbar"><div><h1>{title.title}</h1><p>{title.desc}</p></div><div className="top-actions"><button className="icon-button" aria-label="刷新当前页面">↻</button><button className="ghost-button">操作记录</button></div></header>
+        <div className={active === "resources" ? "content content-wide" : "content"}>
+          {active === "overview" && <Overview onNavigate={setActive} />}{active === "conversations" && <Conversations />}{active === "tickets" && <Tickets />}{active === "knowledge" && <Knowledge />}{active === "quality" && <Quality />}{active === "strategy" && <Strategy />}{active === "analytics" && <Analytics />}{active === "resources" && <ResourceAccess />}{active === "audit" && <Audit />}
+        </div>
+      </main>
+    </div>
+    {demoOpen && <CustomerDemo onClose={() => setDemoOpen(false)} />}
   </div>;
 }
