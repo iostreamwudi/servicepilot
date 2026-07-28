@@ -17,6 +17,12 @@ const navItems: Array<{ key: NavKey; label: string; short: string }> = [
   { key: "audit", label: "安全审计", short: "安" },
 ];
 
+const productDomains: Array<{ key: string; label: string; home: NavKey; items: NavKey[] }> = [
+  { key: "service", label: "客服工作台", home: "overview", items: ["overview", "conversations", "tickets"] },
+  { key: "ai-operations", label: "AI 运营", home: "knowledge", items: ["knowledge", "quality", "strategy"] },
+  { key: "data-governance", label: "数据治理", home: "analytics", items: ["analytics", "resources", "audit"] },
+];
+
 const conversations = [
   { id: "C-28471", name: "林女士", topic: "退款进度查询", channel: "商城 App", status: "需人工", risk: "中", time: "2分钟前", score: 72, sentiment: "焦虑" },
   { id: "C-28469", name: "周先生", topic: "物流改址", channel: "微信小程序", status: "AI处理中", risk: "低", time: "5分钟前", score: 94, sentiment: "中性" },
@@ -369,6 +375,7 @@ export default function Home() {
   const [demoOpen, setDemoOpen] = useState(false);
   const [dataMode, setDataMode] = useState<"connecting" | "persistent" | "preview">("connecting");
   const title = screenTitles[active];
+  const activeDomain = productDomains.find((domain) => domain.items.includes(active))?.key;
   useEffect(() => {
     fetch("/api/bootstrap", { method: "POST" })
       .then((response) => response.ok ? response.json() : Promise.reject(new Error("bootstrap failed")))
@@ -379,8 +386,8 @@ export default function Home() {
     <a className="skip-link" href="#main-content">跳到主要内容</a>
     <header className="global-header">
       <div className="global-brand"><div className="brand-mark">S</div><b>ServicePilot</b><span>企业智能服务平台</span></div>
-      <nav className="global-nav" aria-label="一级业务导航">
-        {navItems.slice(0, 4).concat(navItems[7]).map((item) => <button key={item.key} className={active === item.key ? "active" : ""} onClick={() => setActive(item.key)}>{item.label}</button>)}
+      <nav className="global-nav" aria-label="业务域导航">
+        {productDomains.map((domain) => <button key={domain.key} aria-current={activeDomain === domain.key ? "page" : undefined} className={activeDomain === domain.key ? "active" : ""} onClick={() => setActive(domain.home)}>{domain.label}</button>)}
       </nav>
       <div className="global-tools">
         <span className={`data-mode ${dataMode}`}>{dataMode === "persistent" ? "数据已连接" : dataMode === "preview" ? "安全预览" : "连接中…"}</span>

@@ -10,6 +10,10 @@ test("contains the complete enterprise product surface", async () => {
   for (const label of ["运营总览", "会话中心", "工单管理", "知识库", "质检中心", "策略中心", "数据分析", "资源权限", "安全审计"]) {
     assert.match(page, new RegExp(label));
   }
+  for (const domain of ["客服工作台", "AI 运营", "数据治理"]) {
+    assert.match(page, new RegExp(domain));
+  }
+  assert.match(page, /aria-label="业务域导航"/);
   assert.match(page, /\/api\/bootstrap/);
   assert.match(page, /\/api\/agent\/respond/);
   assert.match(page, /置信度/);
