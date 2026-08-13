@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import ResourceAccess from "./resource-access";
 
-type NavKey = "overview" | "conversations" | "tickets" | "knowledge" | "quality" | "strategy" | "analytics" | "resources" | "audit";
+type NavKey = "workbench" | "overview" | "conversations" | "tickets" | "knowledge" | "quality" | "strategy" | "analytics" | "resources" | "audit";
+type RoleKey = "supervisor" | "agent" | "ai-operator" | "administrator";
 
 const navItems: Array<{ key: NavKey; label: string; short: string }> = [
+  { key: "workbench", label: "我的工作台", short: "台" },
   { key: "overview", label: "运营总览", short: "总" },
   { key: "conversations", label: "会话中心", short: "话" },
   { key: "tickets", label: "工单管理", short: "单" },
@@ -17,11 +19,12 @@ const navItems: Array<{ key: NavKey; label: string; short: string }> = [
   { key: "audit", label: "安全审计", short: "安" },
 ];
 
-const productDomains: Array<{ key: string; label: string; home: NavKey; items: NavKey[] }> = [
-  { key: "service", label: "客服工作台", home: "overview", items: ["overview", "conversations", "tickets"] },
-  { key: "ai-operations", label: "AI 运营", home: "knowledge", items: ["knowledge", "quality", "strategy"] },
-  { key: "data-governance", label: "数据治理", home: "analytics", items: ["analytics", "resources", "audit"] },
-];
+const roles: Record<RoleKey, { label: string; title: string; greeting: string; focus: string; nav: NavKey[] }> = {
+  supervisor: { label: "服务主管", title: "服务主管工作台", greeting: "上午好，王瑞峰", focus: "先处理高风险服务与即将超时事项", nav: ["workbench", "overview", "conversations", "tickets", "analytics"] },
+  agent: { label: "一线客服", title: "客服工作台", greeting: "上午好，王可", focus: "从需要人工判断的会话开始", nav: ["workbench", "conversations", "tickets", "knowledge"] },
+  "ai-operator": { label: "AI 运营", title: "AI 运营工作台", greeting: "上午好，周敏", focus: "先修复影响范围最大的 AI 失败", nav: ["workbench", "quality", "knowledge", "strategy", "analytics"] },
+  administrator: { label: "系统管理员", title: "治理工作台", greeting: "上午好，系统管理员", focus: "关注权限冲突、策略发布与高风险操作", nav: ["workbench", "resources", "audit", "strategy", "analytics"] },
+};
 
 const conversations = [
   { id: "C-28471", name: "林女士", topic: "退款进度查询", channel: "商城 App", status: "需人工", risk: "中", time: "2分钟前", score: 72, sentiment: "焦虑" },
@@ -39,6 +42,7 @@ const tickets = [
 ];
 
 const screenTitles: Record<NavKey, { title: string; desc: string }> = {
+  workbench: { title: "我的工作台", desc: "围绕当前角色的目标、待办和异常组织工作" },
   overview: { title: "运营总览", desc: "从业务结果到模型质量，定位今日服务风险" },
   conversations: { title: "会话中心", desc: "处理 AI 会话、人工接管与上下文协同" },
   tickets: { title: "工单管理", desc: "跨团队流转、SLA 管理和异常升级" },
@@ -74,6 +78,68 @@ function MetricCard({ label, value, change, tone = "blue", helper }: { label: st
 
 function Status({ children, kind = "neutral" }: { children: React.ReactNode; kind?: string }) {
   return <span className={`status ${kind}`}>{children}</span>;
+}
+
+const roleWorkbench: Record<RoleKey, {
+  stats: Array<[string, string, string]>;
+  tasks: Array<{ level: string; title: string; meta: string; action: string; target: NavKey }>;
+  brief: Array<[string, string, string]>;
+}> = {
+  supervisor: {
+    stats: [["今日待处理", "17", "3 项高风险"], ["P1 即将超时", "2", "最近 18 分钟"], ["人工接管率", "22.6%", "较上周下降 3.1%"], ["今日满意度", "4.63", "1,286 份评价"]],
+    tasks: [
+      { level: "高风险", title: "破损赔付知识命中率下降", meta: "影响 37 次会话 · 需要知识运营协同", action: "查看影响会话", target: "knowledge" },
+      { level: "P1", title: "生鲜破损理赔即将超时", meta: "T-9034 · 王可处理中 · 剩余 18 分钟", action: "进入工单", target: "tickets" },
+      { level: "待分配", title: "退款到账异常无人领取", meta: "T-9032 · 用户情绪焦虑 · 剩余 36 分钟", action: "分配处理人", target: "tickets" },
+    ],
+    brief: [["服务量", "3,842", "+12.4%"], ["AI 独立解决", "2,347", "61.1%"], ["需人工确认", "12", "待处理"]],
+  },
+  agent: {
+    stats: [["我的待处理", "8", "2 项高风险"], ["今日已解决", "26", "一次解决 88.5%"], ["平均响应", "41秒", "优于团队 8 秒"], ["用户满意度", "4.78", "本周 126 份评价"]],
+    tasks: [
+      { level: "需人工", title: "林女士询问退款今日能否到账", meta: "AI 无法承诺到账时间 · 已生成完整摘要", action: "接管会话", target: "conversations" },
+      { level: "高风险", title: "陈女士商品破损理赔", meta: "用户不满 · 已关联工单 T-9034", action: "继续处理", target: "conversations" },
+      { level: "待跟进", title: "周先生等待地址修改结果", meta: "已等待 43 分钟 · 建议主动告知进度", action: "发送进展", target: "tickets" },
+    ],
+    brief: [["排队会话", "12", "3 个紧急"], ["我的工单", "6", "2 个 P1"], ["建议采纳率", "81.4%", "+4.6%"]],
+  },
+  "ai-operator": {
+    stats: [["待复核案例", "14", "5 项高风险"], ["知识缺口", "7", "影响 96 次会话"], ["策略通过率", "90.8%", "上下文 75.1%"], ["待发布变更", "2", "1 项等待审批"]],
+    tasks: [
+      { level: "影响最大", title: "破损赔付知识命中率下降 9.6%", meta: "37 次会话 · KB-114 v3.4 发布后出现", action: "定位失败原因", target: "knowledge" },
+      { level: "待复核", title: "14 条低置信度质检结果", meta: "检索类 9 条 · 策略类 5 条", action: "开始复核", target: "quality" },
+      { level: "待审批", title: "混合路由策略 v3.1", meta: "预计减少 2.4% 误转人工 · 业务合规待审批", action: "查看发布检查", target: "strategy" },
+    ],
+    brief: [["可信回答率", "93.6%", "+1.8%"], ["安全兜底率", "95.2%", "24 条误路由"], ["单会话成本", "¥0.084", "预算内"]],
+  },
+  administrator: {
+    stats: [["权限待复核", "3", "本周到期"], ["权限冲突", "1", "需确认覆盖规则"], ["高风险拦截", "7", "最近 24 小时"], ["待审批策略", "1", "业务合规待处理"]],
+    tasks: [
+      { level: "权限冲突", title: "赵婧的指标权限覆盖父级配置", meta: "自助解决率 · 父级可修改，当前仅查看", action: "核对访问边界", target: "resources" },
+      { level: "高风险", title: "客服 Agent 尝试执行退款", meta: "已成功拦截 · 审计对象 OR-773114", action: "查看审计链路", target: "audit" },
+      { level: "待审批", title: "生产策略集 v3.1 等待合规审批", meta: "涉及低置信度转人工阈值调整", action: "进入策略审批", target: "strategy" },
+    ],
+    brief: [["服务可用性", "99.97%", "运行正常"], ["PII 脱敏", "100%", "全部覆盖"], ["最近同步", "09:42", "数据已连接"]],
+  },
+};
+
+function RoleWorkbench({ role, onNavigate }: { role: RoleKey; onNavigate: (key: NavKey) => void }) {
+  const profile = roles[role];
+  const data = roleWorkbench[role];
+  return <section className="role-workbench">
+    <header className="workbench-hero">
+      <div><span className="workbench-eyebrow">{profile.label} · 青屿商城</span><h2>{profile.greeting}</h2><p>{profile.focus}</p></div>
+      <div className="workbench-date"><span>今日</span><b>8月12日 · 周三</b><small>数据更新于 10:46</small></div>
+    </header>
+    <section className="workbench-stats" aria-label="角色工作概览">{data.stats.map(([label, value, helper]) => <article key={label}><span>{label}</span><b>{value}</b><small>{helper}</small></article>)}</section>
+    <div className="workbench-grid">
+      <article className="panel priority-panel"><div className="workbench-section-head"><div><h3>优先处理</h3><p>按业务影响、风险和剩余时间排序</p></div><button className="text-button">查看全部 17 项 →</button></div>
+        <div className="priority-list">{data.tasks.map((task, index) => <button key={task.title} onClick={() => onNavigate(task.target)}><span className={`priority-rank rank-${index + 1}`}>{index + 1}</span><span className="priority-copy"><em>{task.level}</em><b>{task.title}</b><small>{task.meta}</small></span><strong>{task.action} →</strong></button>)}</div>
+      </article>
+      <aside className="panel role-brief"><div className="workbench-section-head"><div><h3>今日简报</h3><p>与你当前角色相关的关键结果</p></div></div>{data.brief.map(([label, value, helper]) => <div className="brief-row" key={label}><span>{label}</span><b>{value}</b><small>{helper}</small></div>)}<button className="brief-link" onClick={() => onNavigate("analytics")}>查看完整业务分析 →</button></aside>
+    </div>
+    <section className="panel role-shortcuts"><div><h3>常用工作</h3><p>只保留当前角色高频使用的入口</p></div><div>{profile.nav.filter((item) => item !== "workbench").slice(0, 4).map((key) => { const item = navItems.find((nav) => nav.key === key)!; return <button key={key} onClick={() => onNavigate(key)}><i>{item.short}</i><span><b>{item.label}</b><small>进入{item.label}</small></span><em>→</em></button>; })}</div></section>
+  </section>;
 }
 
 function Overview({ onNavigate }: { onNavigate: (key: NavKey) => void }) {
@@ -371,11 +437,18 @@ function CustomerDemo({ onClose }: { onClose: () => void }) {
 }
 
 export default function Home() {
-  const [active, setActive] = useState<NavKey>("resources");
+  const [active, setActive] = useState<NavKey>("workbench");
+  const [role, setRole] = useState<RoleKey>("supervisor");
+  const [roleMenuOpen, setRoleMenuOpen] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
   const [dataMode, setDataMode] = useState<"connecting" | "persistent" | "preview">("connecting");
-  const title = screenTitles[active];
-  const activeDomain = productDomains.find((domain) => domain.items.includes(active))?.key;
+  const title = active === "workbench" ? { title: roles[role].title, desc: screenTitles.workbench.desc } : screenTitles[active];
+  const visibleNav = navItems.filter((item) => roles[role].nav.includes(item.key));
+  function selectRole(nextRole: RoleKey) {
+    setRole(nextRole);
+    setActive("workbench");
+    setRoleMenuOpen(false);
+  }
   useEffect(() => {
     fetch("/api/bootstrap", { method: "POST" })
       .then((response) => response.ok ? response.json() : Promise.reject(new Error("bootstrap failed")))
@@ -386,11 +459,10 @@ export default function Home() {
     <a className="skip-link" href="#main-content">跳到主要内容</a>
     <header className="global-header">
       <div className="global-brand"><div className="brand-mark">S</div><b>ServicePilot</b><span>企业智能服务平台</span></div>
-      <nav className="global-nav" aria-label="业务域导航">
-        {productDomains.map((domain) => <button key={domain.key} aria-current={activeDomain === domain.key ? "page" : undefined} className={activeDomain === domain.key ? "active" : ""} onClick={() => setActive(domain.home)}>{domain.label}</button>)}
-      </nav>
+      <div className="global-search"><span>⌕</span><input aria-label="全局搜索" placeholder="搜索会话、工单、用户或知识…" /><kbd>⌘ K</kbd></div>
       <div className="global-tools">
-        <span className={`data-mode ${dataMode}`}>{dataMode === "persistent" ? "数据已连接" : dataMode === "preview" ? "安全预览" : "连接中…"}</span>
+        <button className="header-signal"><i className="signal-dot warning" /><span>我的待办</span><b>17</b></button>
+        <button className="header-signal"><i className={`signal-dot ${dataMode}`} /><span>{dataMode === "persistent" ? "AI 运行正常" : dataMode === "preview" ? "安全预览" : "AI 连接中"}</span></button>
         <button className="text-tool" onClick={() => setDemoOpen(true)}>体验用户端</button>
         <button className="icon-button" aria-label="帮助">?</button>
         <button className="icon-button notification" aria-label="通知">○<i /></button>
@@ -400,14 +472,16 @@ export default function Home() {
     <div className="app-body">
       <aside className="sidebar">
         <div className="workspace"><span>当前空间</span><button><i>云</i><b>青屿商城</b><em>⌄</em></button></div>
-        <div className="nav-group-label">产品功能</div>
-        <nav aria-label="产品功能导航">{navItems.map((item) => <button key={item.key} aria-label={item.label} className={active === item.key ? "active" : ""} onClick={() => setActive(item.key)}><i aria-hidden="true">{item.short}</i><span>{item.label}</span>{item.key === "conversations" && <em aria-hidden="true">12</em>}</button>)}</nav>
+        <div className="role-picker"><span>当前角色</span><button aria-expanded={roleMenuOpen} onClick={() => setRoleMenuOpen(!roleMenuOpen)}><i>{roles[role].label[0]}</i><span><b>{roles[role].label}</b><small>切换工作视角</small></span><em>⌄</em></button>{roleMenuOpen && <div className="role-menu">{(Object.keys(roles) as RoleKey[]).map((key) => <button key={key} className={role === key ? "active" : ""} onClick={() => selectRole(key)}><i>{roles[key].label[0]}</i><span><b>{roles[key].label}</b><small>{roles[key].focus}</small></span>{role === key && <em>✓</em>}</button>)}</div>}</div>
+        <div className="nav-group-label">我的工作</div>
+        <nav aria-label={`${roles[role].label}导航`}>{visibleNav.map((item) => <button key={item.key} aria-label={item.label} className={active === item.key ? "active" : ""} onClick={() => setActive(item.key)}><i aria-hidden="true">{item.short}</i><span>{item.label}</span>{item.key === "conversations" && <em aria-hidden="true">12</em>}</button>)}</nav>
+        <button className="all-functions" onClick={() => selectRole("administrator")}><span>全部管理功能</span><em>→</em></button>
         <div className="sidebar-bottom"><div className="system-health"><span><i />系统运行正常</span><small>所有服务可用</small></div></div>
       </aside>
       <main id="main-content" tabIndex={-1}>
         <header className="topbar"><div><h1>{title.title}</h1><p>{title.desc}</p></div><div className="top-actions"><button className="icon-button" aria-label="刷新当前页面">↻</button><button className="ghost-button">操作记录</button></div></header>
         <div className={active === "resources" ? "content content-wide" : "content"}>
-          {active === "overview" && <Overview onNavigate={setActive} />}{active === "conversations" && <Conversations />}{active === "tickets" && <Tickets />}{active === "knowledge" && <Knowledge />}{active === "quality" && <Quality />}{active === "strategy" && <Strategy />}{active === "analytics" && <Analytics />}{active === "resources" && <ResourceAccess />}{active === "audit" && <Audit />}
+          {active === "workbench" && <RoleWorkbench role={role} onNavigate={setActive} />}{active === "overview" && <Overview onNavigate={setActive} />}{active === "conversations" && <Conversations />}{active === "tickets" && <Tickets />}{active === "knowledge" && <Knowledge />}{active === "quality" && <Quality />}{active === "strategy" && <Strategy />}{active === "analytics" && <Analytics />}{active === "resources" && <ResourceAccess />}{active === "audit" && <Audit />}
         </div>
       </main>
     </div>

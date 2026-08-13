@@ -5,15 +5,18 @@ import test from "node:test";
 const root = new URL("../", import.meta.url);
 const source = (path) => readFile(new URL(path, root), "utf8");
 
-test("contains the complete enterprise product surface", async () => {
+test("contains a role-based enterprise product surface", async () => {
   const page = await source("app/page.tsx");
   for (const label of ["运营总览", "会话中心", "工单管理", "知识库", "质检中心", "策略中心", "数据分析", "资源权限", "安全审计"]) {
     assert.match(page, new RegExp(label));
   }
-  for (const domain of ["客服工作台", "AI 运营", "数据治理"]) {
-    assert.match(page, new RegExp(domain));
+  for (const role of ["服务主管", "一线客服", "AI 运营", "系统管理员"]) {
+    assert.match(page, new RegExp(role));
   }
-  assert.match(page, /aria-label="业务域导航"/);
+  assert.match(page, /我的工作台/);
+  assert.match(page, /全局搜索/);
+  assert.match(page, /当前角色/);
+  assert.doesNotMatch(page, /aria-label="业务域导航"/);
   assert.match(page, /\/api\/bootstrap/);
   assert.match(page, /\/api\/agent\/respond/);
   assert.match(page, /置信度/);
