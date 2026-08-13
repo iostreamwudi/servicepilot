@@ -4,7 +4,10 @@ import { useEffect, useState } from "react";
 import ResourceAccess from "./resource-access";
 
 type NavKey = "workbench" | "overview" | "conversations" | "tickets" | "knowledge" | "quality" | "strategy" | "analytics" | "resources" | "audit";
-type RoleKey = "supervisor" | "agent" | "ai-operator" | "administrator";
+type RoleKey = "supervisor" | "agent" | "knowledge-operator" | "ai-operator" | "administrator";
+type EntryStage = "login" | "workspace" | "workbench" | "app";
+type WorkspaceKey = "qingyu" | "servicepilot-sandbox";
+const DEFAULT_DEMO_EMAIL = "wang.ruifeng@qingyu.cn";
 
 const navItems: Array<{ key: NavKey; label: string; short: string }> = [
   { key: "workbench", label: "我的工作台", short: "台" },
@@ -22,8 +25,14 @@ const navItems: Array<{ key: NavKey; label: string; short: string }> = [
 const roles: Record<RoleKey, { label: string; title: string; greeting: string; focus: string; nav: NavKey[] }> = {
   supervisor: { label: "服务主管", title: "服务主管工作台", greeting: "上午好，王瑞峰", focus: "先处理高风险服务与即将超时事项", nav: ["workbench", "overview", "conversations", "tickets", "analytics"] },
   agent: { label: "一线客服", title: "客服工作台", greeting: "上午好，王可", focus: "从需要人工判断的会话开始", nav: ["workbench", "conversations", "tickets", "knowledge"] },
+  "knowledge-operator": { label: "知识运营", title: "知识运营工作台", greeting: "上午好，陈悠", focus: "优先修复影响真实会话的知识缺口与冲突", nav: ["workbench", "knowledge", "quality", "analytics"] },
   "ai-operator": { label: "AI 运营", title: "AI 运营工作台", greeting: "上午好，周敏", focus: "先修复影响范围最大的 AI 失败", nav: ["workbench", "quality", "knowledge", "strategy", "analytics"] },
   administrator: { label: "系统管理员", title: "治理工作台", greeting: "上午好，系统管理员", focus: "关注权限冲突、策略发布与高风险操作", nav: ["workbench", "resources", "audit", "strategy", "analytics"] },
+};
+
+const workspaces: Record<WorkspaceKey, { name: string; organization: string; environment: string; initials: string; roles: RoleKey[]; pending: number; lastUsed: string }> = {
+  qingyu: { name: "青屿商城", organization: "青屿零售科技有限公司", environment: "生产环境", initials: "青", roles: ["supervisor", "agent", "knowledge-operator", "ai-operator"], pending: 17, lastUsed: "今天 10:46" },
+  "servicepilot-sandbox": { name: "ServicePilot 沙箱", organization: "产品验证与培训空间", environment: "沙箱环境", initials: "S", roles: ["ai-operator", "administrator"], pending: 3, lastUsed: "昨天 18:42" },
 };
 
 const conversations = [
@@ -42,7 +51,7 @@ const tickets = [
 ];
 
 const screenTitles: Record<NavKey, { title: string; desc: string }> = {
-  workbench: { title: "我的工作台", desc: "围绕当前角色的目标、待办和异常组织工作" },
+  workbench: { title: "我的工作台", desc: "围绕当前岗位职责的目标、待办和异常组织工作" },
   overview: { title: "运营总览", desc: "从业务结果到模型质量，定位今日服务风险" },
   conversations: { title: "会话中心", desc: "处理 AI 会话、人工接管与上下文协同" },
   tickets: { title: "工单管理", desc: "跨团队流转、SLA 管理和异常升级" },
@@ -103,6 +112,15 @@ const roleWorkbench: Record<RoleKey, {
     ],
     brief: [["排队会话", "12", "3 个紧急"], ["我的工单", "6", "2 个 P1"], ["建议采纳率", "81.4%", "+4.6%"]],
   },
+  "knowledge-operator": {
+    stats: [["待复核知识", "12", "3 项即将过期"], ["知识冲突", "3", "影响 37 次会话"], ["未命中问题", "7", "较昨日增加 2 项"], ["灰度中版本", "2", "流量覆盖 10%"]],
+    tasks: [
+      { level: "影响最大", title: "破损赔付知识命中率下降 9.6%", meta: "KB-114 v3.4 · 影响 37 次真实会话", action: "查看知识缺口", target: "knowledge" },
+      { level: "知识冲突", title: "生鲜赔付标准与旧版客服 SOP 不一致", meta: "3 处口径差异 · 自动回答已暂停", action: "处理冲突", target: "knowledge" },
+      { level: "待复核", title: "退款到账规则即将到期", meta: "有效期剩余 3 天 · 需要业务与合规双人确认", action: "开始复核", target: "knowledge" },
+    ],
+    brief: [["有效知识", "1,024", "12 项待复核"], ["可信引用率", "93.6%", "+1.8%"], ["问题覆盖率", "88.4%", "7 个缺口"]],
+  },
   "ai-operator": {
     stats: [["待复核案例", "14", "5 项高风险"], ["知识缺口", "7", "影响 96 次会话"], ["策略通过率", "90.8%", "上下文 75.1%"], ["待发布变更", "2", "1 项等待审批"]],
     tasks: [
@@ -123,23 +141,43 @@ const roleWorkbench: Record<RoleKey, {
   },
 };
 
-function RoleWorkbench({ role, onNavigate }: { role: RoleKey; onNavigate: (key: NavKey) => void }) {
+function RoleWorkbench({ role, workspaceName, onNavigate }: { role: RoleKey; workspaceName: string; onNavigate: (key: NavKey) => void }) {
   const profile = roles[role];
   const data = roleWorkbench[role];
   return <section className="role-workbench">
     <header className="workbench-hero">
-      <div><span className="workbench-eyebrow">{profile.label} · 青屿商城</span><h2>{profile.greeting}</h2><p>{profile.focus}</p></div>
-      <div className="workbench-date"><span>今日</span><b>8月12日 · 周三</b><small>数据更新于 10:46</small></div>
+      <div><span className="workbench-eyebrow">{profile.label} · {workspaceName}</span><h2>{profile.greeting}</h2><p>{profile.focus}</p></div>
+      <div className="workbench-date"><span>今日</span><b>8月13日 · 周四</b><small>数据更新于 10:46</small></div>
     </header>
-    <section className="workbench-stats" aria-label="角色工作概览">{data.stats.map(([label, value, helper]) => <article key={label}><span>{label}</span><b>{value}</b><small>{helper}</small></article>)}</section>
+    <section className="workbench-stats" aria-label="工作台概览">{data.stats.map(([label, value, helper]) => <article key={label}><span>{label}</span><b>{value}</b><small>{helper}</small></article>)}</section>
     <div className="workbench-grid">
       <article className="panel priority-panel"><div className="workbench-section-head"><div><h3>优先处理</h3><p>按业务影响、风险和剩余时间排序</p></div><button className="text-button">查看全部 17 项 →</button></div>
         <div className="priority-list">{data.tasks.map((task, index) => <button key={task.title} onClick={() => onNavigate(task.target)}><span className={`priority-rank rank-${index + 1}`}>{index + 1}</span><span className="priority-copy"><em>{task.level}</em><b>{task.title}</b><small>{task.meta}</small></span><strong>{task.action} →</strong></button>)}</div>
       </article>
-      <aside className="panel role-brief"><div className="workbench-section-head"><div><h3>今日简报</h3><p>与你当前角色相关的关键结果</p></div></div>{data.brief.map(([label, value, helper]) => <div className="brief-row" key={label}><span>{label}</span><b>{value}</b><small>{helper}</small></div>)}<button className="brief-link" onClick={() => onNavigate("analytics")}>查看完整业务分析 →</button></aside>
+      <aside className="panel role-brief"><div className="workbench-section-head"><div><h3>今日简报</h3><p>与你当前工作台相关的关键结果</p></div></div>{data.brief.map(([label, value, helper]) => <div className="brief-row" key={label}><span>{label}</span><b>{value}</b><small>{helper}</small></div>)}<button className="brief-link" onClick={() => onNavigate("analytics")}>查看完整业务分析 →</button></aside>
     </div>
-    <section className="panel role-shortcuts"><div><h3>常用工作</h3><p>只保留当前角色高频使用的入口</p></div><div>{profile.nav.filter((item) => item !== "workbench").slice(0, 4).map((key) => { const item = navItems.find((nav) => nav.key === key)!; return <button key={key} onClick={() => onNavigate(key)}><i>{item.short}</i><span><b>{item.label}</b><small>进入{item.label}</small></span><em>→</em></button>; })}</div></section>
+    <section className="panel role-shortcuts"><div><h3>常用工作</h3><p>只保留本工作台高频使用的入口</p></div><div>{profile.nav.filter((item) => item !== "workbench").slice(0, 4).map((key) => { const item = navItems.find((nav) => nav.key === key)!; return <button key={key} onClick={() => onNavigate(key)}><i>{item.short}</i><span><b>{item.label}</b><small>进入{item.label}</small></span><em>→</em></button>; })}</div></section>
   </section>;
+}
+
+function EntryBrand() {
+  return <div className="entry-brand"><div className="brand-mark">S</div><div><b>ServicePilot</b><span>企业智能服务平台</span></div></div>;
+}
+
+function LoginScreen({ email, error, onEmailChange, onLogin }: { email: string; error: string; onEmailChange: (value: string) => void; onLogin: () => void }) {
+  return <div className="entry-shell login-screen"><header><EntryBrand /><span>可信 Agent · 知识治理 · 安全审计</span></header><main className="login-main">
+    <section className="login-story"><span className="entry-eyebrow">企业 AI 服务运营平台</span><h1>让每一次 AI 服务<br />都有依据、边界和改进闭环</h1><p>连接现有客服渠道、业务系统与企业知识，让常规问题安全自动解决，让高风险问题携带完整上下文交给正确的人。</p><div className="login-proof"><div><b>21,126</b><span>条标注问题全量评测</span></div><div><b>1,028</b><span>条可追溯知识</span></div><div><b>100%</b><span>高风险操作人工确认</span></div></div></section>
+    <section className="login-card" aria-labelledby="login-title"><div className="login-card-head"><span className="secure-mark">企</span><div><h2 id="login-title">登录企业工作空间</h2><p>系统将根据企业身份读取你的空间和授权工作台</p></div></div><button className="sso-button" onClick={onLogin}><span>SSO</span>使用企业身份登录</button><div className="login-divider"><span>或使用企业邮箱</span></div><label>企业邮箱<input type="email" autoComplete="email" value={email} onChange={(event) => onEmailChange(event.target.value)} placeholder="name@company.com" onKeyDown={(event) => event.key === "Enter" && onLogin()} /></label>{error && <div className="login-error" role="alert">{error}</div>}<button className="login-submit" onClick={onLogin}>继续</button><p className="login-policy">继续即表示你同意 <button>服务条款</button> 和 <button>隐私政策</button></p><div className="login-help"><span>登录遇到问题？</span><button>联系企业管理员</button></div></section>
+  </main><footer><span>© 2026 ServicePilot</span><span>沪ICP备演示编号 · 数据安全说明</span></footer></div>;
+}
+
+function WorkspaceScreen({ email, onSelect, onLogout }: { email: string; onSelect: (key: WorkspaceKey) => void; onLogout: () => void }) {
+  return <div className="entry-shell selection-screen"><header><EntryBrand /><div className="entry-account"><span>王</span><div><b>王瑞峰</b><small>{email}</small></div><button onClick={onLogout}>退出</button></div></header><main className="selection-main"><div className="selection-heading"><span className="entry-step">1 / 2</span><h1>选择工作空间</h1><p>你在多个企业空间中拥有访问权限。不同空间的数据和授权相互隔离。</p></div><div className="workspace-cards">{(Object.keys(workspaces) as WorkspaceKey[]).map((key) => { const item = workspaces[key]; return <button key={key} onClick={() => onSelect(key)}><span className="workspace-logo">{item.initials}</span><span className="workspace-copy"><span><b>{item.name}</b><em className={item.environment === "生产环境" ? "production" : "sandbox"}>{item.environment}</em></span><small>{item.organization}</small><small>{item.roles.length} 个授权工作台 · {item.pending} 项待办</small></span><span className="workspace-last"><small>最近访问</small><b>{item.lastUsed}</b><em>→</em></span></button>; })}</div><div className="selection-note"><span>i</span><p><b>找不到企业空间？</b>你的身份已经验证，但访问权限由企业管理员统一授予。<button>申请访问</button></p></div></main><footer><button>帮助中心</button><button>隐私与安全</button><span>当前登录：{email}</span></footer></div>;
+}
+
+function WorkbenchScreen({ workspace, onSelect, onBack, remember, onRemember }: { workspace: WorkspaceKey; onSelect: (role: RoleKey) => void; onBack: () => void; remember: boolean; onRemember: (value: boolean) => void }) {
+  const current = workspaces[workspace];
+  return <div className="entry-shell selection-screen"><header><EntryBrand /><div className="selected-space"><span>{current.initials}</span><div><b>{current.name}</b><small>{current.environment}</small></div></div></header><main className="selection-main"><button className="selection-back" onClick={onBack}>← 返回选择空间</button><div className="selection-heading"><span className="entry-step">2 / 2</span><h1>选择本次工作台</h1><p>这里只显示管理员已授权给你的工作台。选择会改变首页与导航，不会新增权限。</p></div><div className="workbench-cards">{current.roles.map((key) => { const item = roles[key]; const pending = roleWorkbench[key].tasks.length; return <button key={key} onClick={() => onSelect(key)}><span className="workbench-card-icon">{item.label[0]}</span><span className="workbench-card-copy"><span><b>{item.title}</b>{key === "supervisor" && <em>最近使用</em>}</span><p>{item.focus}</p><small>{pending} 类优先任务 · {item.nav.length - 1} 个常用功能</small></span><span className="workbench-enter">进入 →</span></button>; })}</div><label className="remember-workbench"><input type="checkbox" checked={remember} onChange={(event) => onRemember(event.target.checked)} /><span><b>记住本次选择</b><small>下次登录后直接进入该空间和工作台，可在账号菜单中修改</small></span></label></main><footer><span>工作台权限由青屿商城企业管理员维护</span><button>查看我的权限</button></footer></div>;
 }
 
 function Overview({ onNavigate }: { onNavigate: (key: NavKey) => void }) {
@@ -437,51 +475,93 @@ function CustomerDemo({ onClose }: { onClose: () => void }) {
 }
 
 export default function Home() {
+  const [entryStage, setEntryStage] = useState<EntryStage>("login");
+  const [email, setEmail] = useState(DEFAULT_DEMO_EMAIL);
+  const [loginError, setLoginError] = useState("");
+  const [workspace, setWorkspace] = useState<WorkspaceKey>("qingyu");
   const [active, setActive] = useState<NavKey>("workbench");
   const [role, setRole] = useState<RoleKey>("supervisor");
-  const [roleMenuOpen, setRoleMenuOpen] = useState(false);
+  const [rememberWorkbench, setRememberWorkbench] = useState(true);
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
   const [dataMode, setDataMode] = useState<"connecting" | "persistent" | "preview">("connecting");
   const title = active === "workbench" ? { title: roles[role].title, desc: screenTitles.workbench.desc } : screenTitles[active];
   const visibleNav = navItems.filter((item) => roles[role].nav.includes(item.key));
-  function selectRole(nextRole: RoleKey) {
+  function enterWorkbench(nextRole: RoleKey) {
+    if (!workspaces[workspace].roles.includes(nextRole)) return;
     setRole(nextRole);
     setActive("workbench");
-    setRoleMenuOpen(false);
+    setAccountMenuOpen(false);
+    setEntryStage("app");
+    if (rememberWorkbench) window.localStorage.setItem("servicepilot-entry-v1", JSON.stringify({ version: 1, workspace, role: nextRole, email }));
+    else window.localStorage.removeItem("servicepilot-entry-v1");
+  }
+  function login() {
+    const value = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) { setLoginError("请输入有效的企业邮箱"); return; }
+    setEmail(value); setLoginError(""); setEntryStage("workspace");
+  }
+  function selectWorkspace(nextWorkspace: WorkspaceKey) {
+    setWorkspace(nextWorkspace);
+    const authorized = workspaces[nextWorkspace].roles;
+    if (authorized.length === 1) {
+      setRole(authorized[0]); setActive("workbench"); setEntryStage("app");
+      if (rememberWorkbench) window.localStorage.setItem("servicepilot-entry-v1", JSON.stringify({ version: 1, workspace: nextWorkspace, role: authorized[0], email }));
+    } else setEntryStage("workbench");
+  }
+  function logout() {
+    window.localStorage.removeItem("servicepilot-entry-v1");
+    setAccountMenuOpen(false); setActive("workbench"); setEntryStage("login");
   }
   useEffect(() => {
+    const saved = window.localStorage.getItem("servicepilot-entry-v1");
+    let restoreTimer: number | undefined;
+    if (saved) try {
+      const value = JSON.parse(saved) as { version?: number; workspace?: WorkspaceKey; role?: RoleKey; email?: string };
+      if (value.version === 1 && value.workspace && value.role && workspaces[value.workspace]?.roles.includes(value.role)) {
+        restoreTimer = window.setTimeout(() => {
+          setWorkspace(value.workspace!); setRole(value.role!); setEmail(value.email ?? DEFAULT_DEMO_EMAIL); setEntryStage("app");
+        }, 0);
+      }
+    } catch { window.localStorage.removeItem("servicepilot-entry-v1"); }
+    return () => { if (restoreTimer !== undefined) window.clearTimeout(restoreTimer); };
+  }, []);
+  useEffect(() => {
+    if (entryStage !== "app") return;
     fetch("/api/bootstrap", { method: "POST" })
       .then((response) => response.ok ? response.json() : Promise.reject(new Error("bootstrap failed")))
       .then(() => setDataMode("persistent"))
       .catch(() => setDataMode("preview"));
-  }, []);
+  }, [entryStage]);
+  if (entryStage === "login") return <LoginScreen email={email} error={loginError} onEmailChange={setEmail} onLogin={login} />;
+  if (entryStage === "workspace") return <WorkspaceScreen email={email} onSelect={selectWorkspace} onLogout={logout} />;
+  if (entryStage === "workbench") return <WorkbenchScreen workspace={workspace} onSelect={enterWorkbench} onBack={() => setEntryStage("workspace")} remember={rememberWorkbench} onRemember={setRememberWorkbench} />;
   return <div className="app-shell">
     <a className="skip-link" href="#main-content">跳到主要内容</a>
     <header className="global-header">
       <div className="global-brand"><div className="brand-mark">S</div><b>ServicePilot</b><span>企业智能服务平台</span></div>
       <div className="global-search"><span>⌕</span><input aria-label="全局搜索" placeholder="搜索会话、工单、用户或知识…" /><kbd>⌘ K</kbd></div>
       <div className="global-tools">
-        <button className="header-signal"><i className="signal-dot warning" /><span>我的待办</span><b>17</b></button>
+        <button className="header-signal"><i className="signal-dot warning" /><span>我的待办</span><b>{workspaces[workspace].pending}</b></button>
         <button className="header-signal"><i className={`signal-dot ${dataMode}`} /><span>{dataMode === "persistent" ? "AI 运行正常" : dataMode === "preview" ? "安全预览" : "AI 连接中"}</span></button>
         <button className="text-tool" onClick={() => setDemoOpen(true)}>体验用户端</button>
         <button className="icon-button" aria-label="帮助">?</button>
         <button className="icon-button notification" aria-label="通知">○<i /></button>
-        <button className="global-profile" aria-label="账号设置"><span>王</span><b>王瑞峰</b><em>⌄</em></button>
+        <div className="account-menu-wrap"><button className="global-profile" aria-label="账号与工作台" aria-expanded={accountMenuOpen} onClick={() => setAccountMenuOpen(!accountMenuOpen)}><span>王</span><b>王瑞峰</b><em>⌄</em></button>{accountMenuOpen && <div className="account-menu"><div className="account-identity"><span>王</span><div><b>王瑞峰</b><small>{email}</small></div></div><div className="account-context"><small>当前空间</small><b>{workspaces[workspace].name}<em>{workspaces[workspace].environment}</em></b><small>当前工作台</small><strong>{roles[role].title}</strong></div>{workspaces[workspace].roles.length > 1 && <div className="account-workbenches"><small>切换授权工作台</small>{workspaces[workspace].roles.map((key) => <button key={key} className={role === key ? "active" : ""} onClick={() => enterWorkbench(key)}><span>{roles[key].label[0]}</span><b>{roles[key].title}</b>{role === key && <em>当前</em>}</button>)}</div>}<div className="account-actions"><button onClick={() => { setAccountMenuOpen(false); setEntryStage("workspace"); }}>切换企业空间</button><button>账号与安全</button><button className="logout-action" onClick={logout}>退出登录</button></div></div>}</div>
       </div>
     </header>
     <div className="app-body">
       <aside className="sidebar">
-        <div className="workspace"><span>当前空间</span><button><i>云</i><b>青屿商城</b><em>⌄</em></button></div>
-        <div className="role-picker"><span>当前角色</span><button aria-expanded={roleMenuOpen} onClick={() => setRoleMenuOpen(!roleMenuOpen)}><i>{roles[role].label[0]}</i><span><b>{roles[role].label}</b><small>切换工作视角</small></span><em>⌄</em></button>{roleMenuOpen && <div className="role-menu">{(Object.keys(roles) as RoleKey[]).map((key) => <button key={key} className={role === key ? "active" : ""} onClick={() => selectRole(key)}><i>{roles[key].label[0]}</i><span><b>{roles[key].label}</b><small>{roles[key].focus}</small></span>{role === key && <em>✓</em>}</button>)}</div>}</div>
+        <div className="workspace"><span>当前空间</span><button onClick={() => setEntryStage("workspace")}><i>{workspaces[workspace].initials}</i><b>{workspaces[workspace].name}</b><em>⌄</em></button></div>
+        <div className="sidebar-workbench"><span>当前工作台</span><b>{roles[role].title}</b></div>
         <div className="nav-group-label">我的工作</div>
         <nav aria-label={`${roles[role].label}导航`}>{visibleNav.map((item) => <button key={item.key} aria-label={item.label} className={active === item.key ? "active" : ""} onClick={() => setActive(item.key)}><i aria-hidden="true">{item.short}</i><span>{item.label}</span>{item.key === "conversations" && <em aria-hidden="true">12</em>}</button>)}</nav>
-        <button className="all-functions" onClick={() => selectRole("administrator")}><span>全部管理功能</span><em>→</em></button>
         <div className="sidebar-bottom"><div className="system-health"><span><i />系统运行正常</span><small>所有服务可用</small></div></div>
       </aside>
       <main id="main-content" tabIndex={-1}>
         <header className="topbar"><div><h1>{title.title}</h1><p>{title.desc}</p></div><div className="top-actions"><button className="icon-button" aria-label="刷新当前页面">↻</button><button className="ghost-button">操作记录</button></div></header>
         <div className={active === "resources" ? "content content-wide" : "content"}>
-          {active === "workbench" && <RoleWorkbench role={role} onNavigate={setActive} />}{active === "overview" && <Overview onNavigate={setActive} />}{active === "conversations" && <Conversations />}{active === "tickets" && <Tickets />}{active === "knowledge" && <Knowledge />}{active === "quality" && <Quality />}{active === "strategy" && <Strategy />}{active === "analytics" && <Analytics />}{active === "resources" && <ResourceAccess />}{active === "audit" && <Audit />}
+          {active === "workbench" && <RoleWorkbench role={role} workspaceName={workspaces[workspace].name} onNavigate={setActive} />}{active === "overview" && <Overview onNavigate={setActive} />}{active === "conversations" && <Conversations />}{active === "tickets" && <Tickets />}{active === "knowledge" && <Knowledge />}{active === "quality" && <Quality />}{active === "strategy" && <Strategy />}{active === "analytics" && <Analytics />}{active === "resources" && <ResourceAccess />}{active === "audit" && <Audit />}
         </div>
       </main>
     </div>

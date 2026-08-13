@@ -5,17 +5,22 @@ import test from "node:test";
 const root = new URL("../", import.meta.url);
 const source = (path) => readFile(new URL(path, root), "utf8");
 
-test("contains a role-based enterprise product surface", async () => {
+test("contains an authorized workspace entry and role-based product surface", async () => {
   const page = await source("app/page.tsx");
   for (const label of ["运营总览", "会话中心", "工单管理", "知识库", "质检中心", "策略中心", "数据分析", "资源权限", "安全审计"]) {
     assert.match(page, new RegExp(label));
   }
-  for (const role of ["服务主管", "一线客服", "AI 运营", "系统管理员"]) {
+  for (const role of ["服务主管", "一线客服", "知识运营", "AI 运营", "系统管理员"]) {
     assert.match(page, new RegExp(role));
   }
   assert.match(page, /我的工作台/);
   assert.match(page, /全局搜索/);
-  assert.match(page, /当前角色/);
+  for (const entry of ["登录企业工作空间", "选择工作空间", "选择本次工作台", "切换授权工作台", "记住本次选择"]) {
+    assert.match(page, new RegExp(entry));
+  }
+  assert.match(page, /当前工作台/);
+  assert.doesNotMatch(page, /当前角色/);
+  assert.match(page, /workspaces\[workspace\]\.roles\.includes/);
   assert.doesNotMatch(page, /aria-label="业务域导航"/);
   assert.match(page, /\/api\/bootstrap/);
   assert.match(page, /\/api\/agent\/respond/);
