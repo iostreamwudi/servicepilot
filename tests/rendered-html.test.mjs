@@ -28,6 +28,25 @@ test("contains an authorized workspace entry and role-based product surface", as
   assert.match(page, /转接人工客服/);
 });
 
+test("ships a frontline agent resolution workspace instead of an AI monitoring screen", async () => {
+  const page = await source("app/page.tsx");
+  for (const capability of [
+    "人工接管原因",
+    "已核验事实",
+    "上下文已完整交接，无需用户重复描述",
+    "内部备注",
+    "结构化结案",
+    "用户已确认问题解决",
+    "72 小时内再次咨询将重新打开",
+    "退款、补偿、账户与地址变更需要身份核验或审批",
+  ]) assert.match(page, new RegExp(capability));
+  assert.match(page, /type ConversationState/);
+  assert.match(page, /setStates/);
+  assert.match(page, /setDrafts/);
+  assert.match(page, /customerConfirmed/);
+  assert.doesNotMatch(page, /AI置信度：/);
+});
+
 test("ships person-level task-interface-metric access control", async () => {
   const access = await source("app/resource-access.tsx");
   assert.match(access, /任务 → 接口 → 指标/);

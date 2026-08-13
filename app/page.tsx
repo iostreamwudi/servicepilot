@@ -24,7 +24,7 @@ const navItems: Array<{ key: NavKey; label: string; short: string }> = [
 
 const roles: Record<RoleKey, { label: string; title: string; greeting: string; focus: string; nav: NavKey[] }> = {
   supervisor: { label: "服务主管", title: "服务主管工作台", greeting: "上午好，王瑞峰", focus: "先处理高风险服务与即将超时事项", nav: ["workbench", "overview", "conversations", "tickets", "analytics"] },
-  agent: { label: "一线客服", title: "客服工作台", greeting: "上午好，王可", focus: "从需要人工判断的会话开始", nav: ["workbench", "conversations", "tickets", "knowledge"] },
+  agent: { label: "一线客服", title: "客服工作台", greeting: "上午好，王可", focus: "先接管即将超时的会话，让用户不必重复描述问题", nav: ["workbench", "conversations", "tickets", "knowledge"] },
   "knowledge-operator": { label: "知识运营", title: "知识运营工作台", greeting: "上午好，陈悠", focus: "优先修复影响真实会话的知识缺口与冲突", nav: ["workbench", "knowledge", "quality", "analytics"] },
   "ai-operator": { label: "AI 运营", title: "AI 运营工作台", greeting: "上午好，周敏", focus: "先修复影响范围最大的 AI 失败", nav: ["workbench", "quality", "knowledge", "strategy", "analytics"] },
   administrator: { label: "系统管理员", title: "治理工作台", greeting: "上午好，系统管理员", focus: "关注权限冲突、策略发布与高风险操作", nav: ["workbench", "resources", "audit", "strategy", "analytics"] },
@@ -35,12 +35,35 @@ const workspaces: Record<WorkspaceKey, { name: string; organization: string; env
   "servicepilot-sandbox": { name: "ServicePilot 沙箱", organization: "产品验证与培训空间", environment: "沙箱环境", initials: "S", roles: ["ai-operator", "administrator"], pending: 3, lastUsed: "昨天 18:42" },
 };
 
-const conversations = [
-  { id: "C-28471", name: "林女士", topic: "退款进度查询", channel: "商城 App", status: "需人工", risk: "中", time: "2分钟前", score: 72, sentiment: "焦虑" },
-  { id: "C-28469", name: "周先生", topic: "物流改址", channel: "微信小程序", status: "AI处理中", risk: "低", time: "5分钟前", score: 94, sentiment: "中性" },
-  { id: "C-28463", name: "陈女士", topic: "商品破损理赔", channel: "商城 App", status: "已转工单", risk: "高", time: "11分钟前", score: 61, sentiment: "不满" },
-  { id: "C-28458", name: "赵先生", topic: "发票抬头修改", channel: "网页端", status: "已解决", risk: "低", time: "18分钟前", score: 97, sentiment: "满意" },
-  { id: "C-28444", name: "吴女士", topic: "会员权益咨询", channel: "商城 App", status: "已解决", risk: "低", time: "26分钟前", score: 96, sentiment: "中性" },
+type ConversationState = "待接管" | "处理中" | "等待内部" | "已解决";
+type Conversation = {
+  id: string;
+  name: string;
+  topic: string;
+  channel: string;
+  status: ConversationState;
+  risk: "低" | "中" | "高";
+  time: string;
+  sla: string;
+  sentiment: string;
+  handoff: string;
+  customerMessage: string;
+  aiReply: string;
+  summary: string;
+  draft: string;
+  order: string;
+  member: string;
+  orderHistory: string;
+  facts: Array<{ label: string; value: string; source: string }>;
+  suggestedAction: string;
+};
+
+const conversations: Conversation[] = [
+  { id: "C-28471", name: "林女士", topic: "退款进度查询", channel: "商城 App", status: "待接管", risk: "中", time: "2分钟前", sla: "剩余 4 分 18 秒", sentiment: "焦虑", handoff: "用户要求承诺今日到账，超出 AI 可承诺范围", customerMessage: "我的退款怎么还没有到账？昨天显示审核通过了，能帮我查一下吗？我今天急用，能不能今天到账？", aiReply: "您的退款已审核通过，预计将在 1–3 个工作日内原路退回。具体到账时间可能受到支付渠道影响。", summary: "用户查询昨日审核通过的退款，希望今日到账。系统确认退款状态正常，但支付渠道尚未返回具体入账时间。", draft: "您好，我已核验退款状态：今天 10:26 已审核通过，预计 1–3 个工作日原路退回。目前无法承诺今天到账，我可以继续为您核对支付渠道并跟进进度。", order: "OR-773928", member: "金卡会员", orderHistory: "近 90 天 12 单 · ¥2,418", facts: [{ label: "退款状态", value: "审核通过", source: "订单系统 · 10:26" }, { label: "退款金额", value: "¥328.00", source: "支付系统" }, { label: "到账时效", value: "1–3 个工作日", source: "退款规则 v3.4" }], suggestedAction: "核对支付渠道" },
+  { id: "C-28469", name: "周先生", topic: "物流改址", channel: "微信小程序", status: "待接管", risk: "中", time: "5分钟前", sla: "剩余 7 分 42 秒", sentiment: "中性", handoff: "订单已出库，改址需要人工核验物流节点", customerMessage: "地址门牌号写错了，订单已经发货，还能帮我改一下吗？", aiReply: "订单发货后无法直接修改地址，我正在为您转接人工客服核验物流状态。", summary: "用户发现门牌号错误。订单已出库但尚未进入末端配送，需要联系承运商确认是否支持改址。", draft: "您好，我看到订单已经出库。我先为您核验当前物流节点和承运商改址能力，请不要在会话中发送完整身份证号。", order: "OR-773814", member: "普通会员", orderHistory: "近 90 天 3 单 · ¥526", facts: [{ label: "物流状态", value: "已出库", source: "物流系统 · 10:41" }, { label: "承运商", value: "顺路物流", source: "订单系统" }, { label: "敏感操作", value: "需要身份核验", source: "地址变更规范 v2.1" }], suggestedAction: "发起身份核验" },
+  { id: "C-28463", name: "陈女士", topic: "商品破损理赔", channel: "商城 App", status: "等待内部", risk: "高", time: "11分钟前", sla: "剩余 18 分钟", sentiment: "强烈不满", handoff: "高风险理赔，需要人工确认凭证并等待主管审批", customerMessage: "收到的生鲜全都压坏了，照片已经上传，今天必须给我处理。", aiReply: "很抱歉影响了您的体验。破损理赔需要人工核验凭证，我已保留您上传的照片并转交处理。", summary: "用户提交 4 张破损照片并要求当日赔付。工单 T-9034 已创建，正在等待值班主管审批 ¥186 补偿方案。", draft: "您好，您的 4 张凭证已经核验完成，补偿方案正在加急审批。我会在审批完成后第一时间在当前会话通知您。", order: "OR-773641", member: "银卡会员", orderHistory: "近 90 天 7 单 · ¥1,162", facts: [{ label: "凭证", value: "4 张图片已核验", source: "附件识别 + 人工确认" }, { label: "关联工单", value: "T-9034", source: "工单系统" }, { label: "审批状态", value: "等待主管审批", source: "理赔流程" }], suggestedAction: "催办审批" },
+  { id: "C-28458", name: "赵先生", topic: "发票抬头修改", channel: "网页端", status: "处理中", risk: "低", time: "18分钟前", sla: "已响应 · 12 分钟", sentiment: "中性", handoff: "用户已通过身份核验，等待客服确认新抬头", customerMessage: "发票还没开，抬头需要改成公司名称。", aiReply: "可以修改未开具发票的抬头，请准备企业名称与税号。", summary: "用户希望修改未开具发票抬头，身份核验已通过，等待确认企业名称和税号。", draft: "身份核验已经通过。请您确认企业名称和税号，发送时可对中间数字进行遮盖，我会在系统中完成核对。", order: "OR-773502", member: "普通会员", orderHistory: "近 90 天 2 单 · ¥899", facts: [{ label: "开票状态", value: "尚未开具", source: "发票系统" }, { label: "身份核验", value: "已通过", source: "账户安全服务" }, { label: "修改权限", value: "允许修改", source: "发票规则 v2.8" }], suggestedAction: "录入新抬头" },
+  { id: "C-28444", name: "吴女士", topic: "会员权益咨询", channel: "商城 App", status: "已解决", risk: "低", time: "26分钟前", sla: "已完成 · 4 分 36 秒", sentiment: "满意", handoff: "用户主动要求人工解释积分有效期", customerMessage: "我的积分年底会全部过期吗？", aiReply: "不同批次积分有效期不同，可以在会员中心查看每笔积分的到期时间。", summary: "已向用户解释积分按批次失效，并引导查看明细；用户确认问题已解决。", draft: "", order: "无关联订单", member: "金卡会员", orderHistory: "近 90 天 9 单 · ¥1,784", facts: [{ label: "当前积分", value: "2,860", source: "会员系统" }, { label: "最近到期", value: "680 分 · 12月31日", source: "会员系统" }, { label: "解决确认", value: "用户已确认", source: "会话记录" }], suggestedAction: "查看结案记录" },
 ];
 
 const tickets = [
@@ -53,7 +76,7 @@ const tickets = [
 const screenTitles: Record<NavKey, { title: string; desc: string }> = {
   workbench: { title: "我的工作台", desc: "围绕当前岗位职责的目标、待办和异常组织工作" },
   overview: { title: "运营总览", desc: "从业务结果到模型质量，定位今日服务风险" },
-  conversations: { title: "会话中心", desc: "处理 AI 会话、人工接管与上下文协同" },
+  conversations: { title: "会话处理台", desc: "接管 AI 无法安全完成的服务请求，核验事实并推动问题闭环" },
   tickets: { title: "工单管理", desc: "跨团队流转、SLA 管理和异常升级" },
   knowledge: { title: "知识库", desc: "管理可信知识、版本、权限与内容覆盖" },
   quality: { title: "质检中心", desc: "自动质检、人工复核与失败案例回流" },
@@ -104,13 +127,13 @@ const roleWorkbench: Record<RoleKey, {
     brief: [["服务量", "3,842", "+12.4%"], ["AI 独立解决", "2,347", "61.1%"], ["需人工确认", "12", "待处理"]],
   },
   agent: {
-    stats: [["我的待处理", "8", "2 项高风险"], ["今日已解决", "26", "一次解决 88.5%"], ["平均响应", "41秒", "优于团队 8 秒"], ["用户满意度", "4.78", "本周 126 份评价"]],
+    stats: [["待接管会话", "2", "最近超时 4 分 18 秒"], ["等待内部", "1", "理赔审批处理中"], ["今日已解决", "26", "72 小时未重开 88.5%"], ["平均人工响应", "41秒", "优于团队 8 秒"]],
     tasks: [
       { level: "需人工", title: "林女士询问退款今日能否到账", meta: "AI 无法承诺到账时间 · 已生成完整摘要", action: "接管会话", target: "conversations" },
       { level: "高风险", title: "陈女士商品破损理赔", meta: "用户不满 · 已关联工单 T-9034", action: "继续处理", target: "conversations" },
       { level: "待跟进", title: "周先生等待地址修改结果", meta: "已等待 43 分钟 · 建议主动告知进度", action: "发送进展", target: "tickets" },
     ],
-    brief: [["排队会话", "12", "3 个紧急"], ["我的工单", "6", "2 个 P1"], ["建议采纳率", "81.4%", "+4.6%"]],
+    brief: [["人工有效解决", "88.5%", "72 小时未重开"], ["无需重复描述", "94.2%", "交接上下文完整"], ["我的 P1 工单", "2", "最近剩余 18 分钟"]],
   },
   "knowledge-operator": {
     stats: [["待复核知识", "12", "3 项即将过期"], ["知识冲突", "3", "影响 37 次会话"], ["未命中问题", "7", "较昨日增加 2 项"], ["灰度中版本", "2", "流量覆盖 10%"]],
@@ -233,39 +256,108 @@ function Overview({ onNavigate }: { onNavigate: (key: NavKey) => void }) {
 }
 
 function Conversations() {
-  const [selected, setSelected] = useState(conversations[0]);
-  const [claimed, setClaimed] = useState(false);
-  const [draft, setDraft] = useState("您好，我已查询到退款申请于今天 10:26 审核通过，预计 1–3 个工作日原路退回。为避免信息误差，我可以为您继续核对支付渠道。 ");
+  type QueueFilter = "待接管" | "处理中" | "等待内部" | "已解决";
+  const [selectedId, setSelectedId] = useState(conversations[0].id);
+  const [queueFilter, setQueueFilter] = useState<QueueFilter>("待接管");
+  const [query, setQuery] = useState("");
+  const [states, setStates] = useState<Record<string, ConversationState>>(() => Object.fromEntries(conversations.map((item) => [item.id, item.status])));
+  const [drafts, setDrafts] = useState<Record<string, string>>(() => Object.fromEntries(conversations.map((item) => [item.id, item.draft])));
+  const [notice, setNotice] = useState("");
+  const [rightTab, setRightTab] = useState<"context" | "assist">("context");
+  const [showClose, setShowClose] = useState(false);
+  const [resolution, setResolution] = useState("已解释规则并完成业务核验");
+  const [customerConfirmed, setCustomerConfirmed] = useState(false);
+  const selected = conversations.find((item) => item.id === selectedId) ?? conversations[0];
+  const currentState = states[selected.id] ?? selected.status;
+  const draft = drafts[selected.id] ?? "";
+  const queueCounts = (state: QueueFilter) => conversations.filter((item) => (states[item.id] ?? item.status) === state).length;
+  const visibleConversations = conversations.filter((item) => {
+    const matchesState = (states[item.id] ?? item.status) === queueFilter;
+    const normalized = query.trim().toLocaleLowerCase();
+    return matchesState && (!normalized || `${item.name} ${item.id} ${item.topic} ${item.order}`.toLocaleLowerCase().includes(normalized));
+  });
+
+  function flash(message: string) {
+    setNotice(message);
+    window.setTimeout(() => setNotice(""), 2400);
+  }
+
+  function claimConversation() {
+    setStates((current) => ({ ...current, [selected.id]: "处理中" }));
+    setQueueFilter("处理中");
+    flash(`已接管 ${selected.id}，会话上下文和 SLA 已锁定给你`);
+  }
+
+  function insertText(value: string) {
+    setDrafts((current) => ({ ...current, [selected.id]: `${current[selected.id] ?? ""}${current[selected.id] ? "\n" : ""}${value}` }));
+  }
+
+  function sendReply() {
+    if (!draft.trim()) return;
+    setStates((current) => ({ ...current, [selected.id]: "处理中" }));
+    flash("回复已发送，当前会话已进入等待用户响应");
+  }
+
+  function closeConversation() {
+    if (!customerConfirmed) return;
+    setStates((current) => ({ ...current, [selected.id]: "已解决" }));
+    setShowClose(false);
+    setQueueFilter("已解决");
+    flash("会话已结构化结案，并进入 72 小时重新打开观察期");
+  }
+
   return (
-    <section className="conversation-layout">
-      <article className="panel conversation-list">
-        <div className="list-toolbar"><div className="search-box">⌕ <input name="conversation-search" autoComplete="off" aria-label="搜索会话" placeholder="搜索会话、用户或订单…" /></div><button className="filter-button">筛选</button></div>
-        <div className="list-tabs"><button className="active">待处理 <b>12</b></button><button>处理中 <b>8</b></button><button>已结束</button></div>
-        <div className="conversation-items">
-          {conversations.map((item) => <button key={item.id} className={selected.id === item.id ? "conversation-item active" : "conversation-item"} onClick={() => { setSelected(item); setClaimed(false); }}>
-            <span className="customer-avatar">{item.name[0]}</span><span className="conversation-main"><b>{item.name}<small>{item.time}</small></b><span>{item.topic}</span><em>{item.channel} · {item.id}</em></span><Status kind={item.risk === "高" ? "danger" : item.status === "需人工" ? "warning" : "info"}>{item.status}</Status>
-          </button>)}
-        </div>
-      </article>
+    <section className="agent-console" aria-label="一线客服会话处理台">
+      <header className="agent-shift-bar">
+        <div className="agent-presence"><span className="presence-dot" /><div><b>在线接待</b><small>王可 · 售后服务组</small></div></div>
+        <div className="shift-metrics"><span><b>{queueCounts("待接管")}</b> 待接管</span><span><b>2</b> 即将超时</span><span><b>41 秒</b> 平均响应</span></div>
+        <button className="ghost-button" onClick={() => flash("状态已切换为忙碌，系统暂停分配新会话")}>设为忙碌</button>
+      </header>
+      {notice && <div className="agent-toast" role="status">✓ {notice}</div>}
+      <div className="conversation-layout">
+        <article className="panel conversation-list">
+          <div className="queue-heading"><div><b>我的会话</b><small>按风险和剩余响应时间排序</small></div><button aria-label="刷新会话队列" onClick={() => flash("会话队列已刷新")}>↻</button></div>
+          <div className="list-toolbar"><div className="search-box">⌕ <input name="conversation-search" autoComplete="off" aria-label="搜索会话" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜索用户、订单…" /></div></div>
+          <div className="list-tabs" role="tablist">{(["待接管", "处理中", "等待内部", "已解决"] as QueueFilter[]).map((item) => <button key={item} role="tab" aria-selected={queueFilter === item} className={queueFilter === item ? "active" : ""} onClick={() => setQueueFilter(item)}>{item}<b>{queueCounts(item)}</b></button>)}</div>
+          <div className="conversation-items">
+            {visibleConversations.map((item) => <button key={item.id} className={selected.id === item.id ? "conversation-item active" : "conversation-item"} onClick={() => { setSelectedId(item.id); setShowClose(false); }}>
+              <span className="customer-avatar">{item.name[0]}</span><span className="conversation-main"><b>{item.name}<small>{item.time}</small></b><span>{item.topic}</span><em>{item.channel} · {item.id}</em><small className={item.risk === "高" ? "queue-sla urgent" : "queue-sla"}>{item.sla}</small></span><Status kind={item.risk === "高" ? "danger" : item.risk === "中" ? "warning" : "info"}>{item.risk}风险</Status>
+            </button>)}
+            {!visibleConversations.length && <div className="conversation-empty"><span>✓</span><b>当前队列已清空</b><small>{query ? "没有匹配的会话，试试其他关键词" : "新的会话会按风险和 SLA 自动排入"}</small></div>}
+          </div>
+        </article>
 
-      <article className="panel chat-panel">
-        <div className="chat-head"><div><b>{selected.name}</b><span>{selected.id} · {selected.channel}</span></div><div><Status kind={selected.risk === "高" ? "danger" : "warning"}>{selected.risk}风险</Status><button className="primary-button" onClick={() => setClaimed(true)}>{claimed ? "已由我接管" : "接管会话"}</button></div></div>
-        <div className="chat-context"><span>识别意图：<b>{selected.topic}</b></span><span>情绪：<b>{selected.sentiment}</b></span><span>AI置信度：<b>{selected.score}%</b></span></div>
-        <div className="messages">
-          <div className="message customer"><span className="customer-avatar">{selected.name[0]}</span><p>我的退款怎么还没有到账？昨天显示审核通过了，能帮我查一下吗？<small>10:28</small></p></div>
-          <div className="trace-card"><div><span className="trace-icon">1</span><p><b>意图识别</b><small>退款进度查询 · 置信度 0.96</small></p><em>124ms</em></div><div><span className="trace-icon">2</span><p><b>调用订单工具</b><small>order.refund.get · 已脱敏</small></p><em>386ms</em></div><div><span className="trace-icon">3</span><p><b>检索知识库</b><small>命中“退款与到账时效规则 v3.4”</small></p><em>212ms</em></div></div>
-          <div className="message agent"><span className="agent-avatar">AI</span><p>您的退款已审核通过，预计将在 1–3 个工作日内原路退回。具体到账时间可能受到支付渠道影响。<a>退款与到账时效规则 v3.4 ↗</a><small>10:28 · 自动回复</small></p></div>
-          <div className="message customer"><span className="customer-avatar">{selected.name[0]}</span><p>但我是急用，能不能今天到账？<small>10:29</small></p></div>
-          <div className="handoff-note"><b>触发人工接管</b><span>用户表达紧急诉求，AI无法承诺到账时间；已生成会话摘要并保留完整上下文。</span></div>
-        </div>
-        <div className="reply-box"><div className="reply-tools"><button>AI回复建议</button><button>知识引用</button><button>创建工单</button><span>发送前需人工确认</span></div><textarea aria-label="客服回复" value={draft} onChange={(e) => setDraft(e.target.value)} /><div className="reply-actions"><span>{draft.length}/500</span><button className="ghost-button">保存草稿</button><button className="primary-button">审核并发送</button></div></div>
-      </article>
+        <article className="panel chat-panel">
+          <div className="chat-head"><div><b>{selected.name}</b><span>{selected.id} · {selected.channel} · 关联订单 {selected.order}</span></div><div><Status kind={currentState === "已解决" ? "success" : selected.risk === "高" ? "danger" : "warning"}>{currentState}</Status>{currentState === "待接管" ? <button className="primary-button" onClick={claimConversation}>接管会话</button> : currentState !== "已解决" && <button className="ghost-button" onClick={() => flash("转交面板已打开，上下文将随会话一并转交")}>转交</button>}</div></div>
+          <div className="handoff-banner"><span>人工接管原因</span><b>{selected.handoff}</b><em>{selected.sla}</em></div>
+          <div className="chat-context"><span>服务意图 <b>{selected.topic}</b></span><span>用户情绪 <b>{selected.sentiment}</b></span><span>核验状态 <b>{selected.facts.length} 项事实已确认</b></span></div>
+          <div className="messages">
+            <div className="message customer"><span className="customer-avatar">{selected.name[0]}</span><p>{selected.customerMessage}<small>用户 · {selected.time}</small></p></div>
+            <details className="trace-card"><summary><span className="trace-icon">AI</span><p><b>查看 AI 处理记录</b><small>意图识别、业务查询和知识依据均可追溯</small></p><em>展开</em></summary><div><span className="trace-icon">1</span><p><b>识别服务意图</b><small>{selected.topic} · 已结合最近 4 轮上下文</small></p></div><div><span className="trace-icon">2</span><p><b>查询业务系统</b><small>{selected.facts[0].source} · 返回结果已脱敏</small></p></div><div><span className="trace-icon">3</span><p><b>检索生效知识</b><small>回答仅引用已发布版本，未执行敏感操作</small></p></div></details>
+            <div className="message agent"><span className="agent-avatar">AI</span><p>{selected.aiReply}<a>查看回答依据 ↗</a><small>AI Agent · 自动回复</small></p></div>
+            <div className="handoff-note"><b>上下文已完整交接，无需用户重复描述</b><span>{selected.summary}</span></div>
+          </div>
+          {currentState !== "已解决" ? <div className="reply-box">
+            <div className="reply-tools"><button onClick={() => setRightTab("assist")}>AI 回复建议</button><button onClick={() => insertText("依据《退款与到账时效规则 v3.4》，")}>引用知识</button><button onClick={() => flash(`已从 ${selected.order} 创建协同工单，用户与会话上下文已自动带入`)}>创建工单</button><button onClick={() => flash("已添加仅内部可见的协作备注")}>内部备注</button><span>草稿已自动保存</span></div>
+            <textarea aria-label="客服回复" maxLength={500} value={draft} onChange={(event) => setDrafts((current) => ({ ...current, [selected.id]: event.target.value }))} placeholder={currentState === "待接管" ? "接管会话后回复用户…" : "回复用户；涉及承诺、退款和补偿时将自动触发检查…"} disabled={currentState === "待接管"} />
+            <div className="reply-actions"><span>{draft.length}/500 · 发送前检查知识依据与敏感承诺</span><button className="ghost-button" onClick={() => setShowClose(true)} disabled={currentState === "待接管"}>解决并结案</button><button className="primary-button" onClick={sendReply} disabled={currentState === "待接管" || !draft.trim()}>审核并发送</button></div>
+          </div> : <div className="resolved-footer"><span>✓</span><div><b>会话已解决</b><small>用户已确认 · 72 小时内再次咨询将重新打开并保留上下文</small></div><button className="ghost-button" onClick={() => { setStates((current) => ({ ...current, [selected.id]: "处理中" })); setQueueFilter("处理中"); }}>重新打开</button></div>}
+        </article>
 
-      <aside className="panel insight-panel">
-        <div className="insight-section"><h3>用户上下文</h3><dl><div><dt>用户等级</dt><dd>金卡会员</dd></div><div><dt>近90天订单</dt><dd>12 单 / ¥2,418</dd></div><div><dt>历史投诉</dt><dd>0 次</dd></div><div><dt>关联订单</dt><dd><a>#OR-773928</a></dd></div></dl></div>
-        <div className="insight-section"><h3>AI会话摘要</h3><p>用户查询昨日审核通过的退款，希望今日到账。系统确认退款状态正常，但无法承诺支付渠道的具体到账时间。</p><Status kind="warning">建议：解释时效并持续跟进</Status></div>
-        <div className="insight-section"><h3>下一步建议</h3><button className="next-action"><b>核对支付渠道</b><span>预计 30 秒</span></button><button className="next-action"><b>创建加急跟踪工单</b><span>需主管审批</span></button></div>
-      </aside>
+        <aside className="panel insight-panel">
+          <div className="insight-tabs" role="tablist"><button role="tab" aria-selected={rightTab === "context"} className={rightTab === "context" ? "active" : ""} onClick={() => setRightTab("context")}>服务上下文</button><button role="tab" aria-selected={rightTab === "assist"} className={rightTab === "assist" ? "active" : ""} onClick={() => setRightTab("assist")}>AI 协助</button></div>
+          {rightTab === "context" ? <>
+            <div className="insight-section verified-facts"><div className="insight-title"><h3>已核验事实</h3><Status kind="success">可信</Status></div>{selected.facts.map((fact) => <div className="fact-row" key={fact.label}><span>✓</span><p><b>{fact.label}：{fact.value}</b><small>{fact.source}</small></p></div>)}</div>
+            <div className="insight-section"><h3>用户与业务信息</h3><dl><div><dt>用户等级</dt><dd>{selected.member}</dd></div><div><dt>消费记录</dt><dd>{selected.orderHistory}</dd></div><div><dt>关联订单</dt><dd><a>#{selected.order}</a></dd></div><div><dt>隐私保护</dt><dd>已脱敏</dd></div></dl></div>
+            <div className="insight-section"><h3>AI 会话摘要</h3><p>{selected.summary}</p><button className="feedback-link" onClick={() => flash("已标记摘要问题，将回流至 AI 运营复核队列")}>摘要不准确？反馈问题</button></div>
+          </> : <>
+            <div className="insight-section ai-suggestion"><div className="insight-title"><h3>推荐回复</h3><Status kind="info">有知识依据</Status></div><p>{selected.draft || "当前会话已解决，无需生成新的回复。"}</p><div><button className="primary-button" disabled={!selected.draft} onClick={() => { setDrafts((current) => ({ ...current, [selected.id]: selected.draft })); flash("已将建议带入回复框，可继续编辑"); }}>采用建议</button><button className="ghost-button" onClick={() => flash("已记录建议无帮助，请选择更具体的失败原因")}>无帮助</button></div></div>
+            <div className="insight-section"><h3>下一步业务动作</h3><button className="next-action" onClick={() => flash(`${selected.suggestedAction}已完成，结果已写入会话记录`)}><b>{selected.suggestedAction}</b><span>只读核验 · 预计 30 秒</span></button><button className="next-action" onClick={() => flash("已向值班主管发起审批，SLA 继续计时")}><b>升级值班主管</b><span>自动附带会话、订单和核验事实</span></button></div>
+            <div className="insight-section safety-note"><h3>操作边界</h3><p>客服可以查询并解释业务结果；退款、补偿、账户与地址变更需要身份核验或审批，系统不会代替你直接执行。</p></div>
+          </>}
+        </aside>
+      </div>
+      {showClose && <div className="close-sheet" role="dialog" aria-modal="true" aria-labelledby="close-title"><button className="sheet-backdrop" aria-label="取消结案" onClick={() => setShowClose(false)} /><section><header><div><span>结构化结案</span><h2 id="close-title">确认问题已经解决</h2></div><button aria-label="关闭结案面板" onClick={() => setShowClose(false)}>×</button></header><p>结案信息会用于 SLA、质检和 AI 改进。用户再次咨询时仍会保留完整上下文。</p><label>解决结果<select value={resolution} onChange={(event) => setResolution(event.target.value)}><option>已解释规则并完成业务核验</option><option>已创建工单，等待内部处理</option><option>已完成授权业务操作</option><option>用户主动取消咨询</option></select></label><label className="close-check"><input type="checkbox" checked={customerConfirmed} onChange={(event) => setCustomerConfirmed(event.target.checked)} /><span><b>用户已确认问题解决</b><small>若用户尚未确认，应先发送回复并保持会话处理中</small></span></label><div className="close-summary"><span>结案分类</span><b>{selected.topic}</b><span>解决方式</span><b>{resolution}</b><span>AI 建议反馈</span><b>采用后编辑</b></div><footer><button className="ghost-button" onClick={() => setShowClose(false)}>继续处理</button><button className="primary-button" disabled={!customerConfirmed} onClick={closeConversation}>确认结案</button></footer></section></div>}
     </section>
   );
 }
