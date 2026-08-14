@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ResourceAccess from "./resource-access";
 
 type NavKey = "workbench" | "overview" | "conversations" | "tickets" | "knowledge" | "quality" | "strategy" | "analytics" | "resources" | "audit";
@@ -373,29 +373,85 @@ function Tickets() {
   </section>;
 }
 
-function Knowledge() {
+type KnowledgeDocumentView = {
+  id: string; title: string; version: string; ownerTeam: string; content: string; category: string; keywords: string[];
+  coverage: number; state: string; sourceType: string; sourceTitle?: string | null; sourceUrl?: string | null;
+  risk: string; handoff: boolean; validFrom?: string | null; validUntil?: string | null; updatedAt: string;
+};
+
+const knowledgeWorkItems = [
+  { id: "gap-damage", type: "知识缺口", tone: "danger", title: "破损赔付追问未命中", meta: "来自 23 次真实会话 · 影响高风险回答", target: "KB-208", due: "今天处理" },
+  { id: "conflict-refund", type: "口径冲突", tone: "warning", title: "退款到账时效存在两种表述", meta: "客服 SOP 写 1–3 日，支付规则写 1–5 日", target: "KB-114", due: "剩余 4 小时" },
+  { id: "review-invoice", type: "待我复核", tone: "info", title: "数电发票红冲规则更新", meta: "财税运营提交 v1.1 · 需要业务复核", target: "KB-403", due: "明天到期" },
+  { id: "expiry-address", type: "即将过期", tone: "neutral", title: "物流改址操作指引需确认", meta: "内部 SOP 将于 8 月 20 日到期", target: "KB-301", due: "6 天后" },
+];
+
+function Knowledge({ role }: { role: RoleKey }) {
+  const operatorMode = role === "knowledge-operator";
   const [query, setQuery] = useState("");
-  const [docs, setDocs] = useState<Array<{ id: string; title: string; version: string; ownerTeam: string; category: string; coverage: number; state: string; sourceType: string; sourceTitle?: string | null; sourceUrl?: string | null; updatedAt: string }>>([]);
-  const [stats, setStats] = useState({ total: 0, active: 0, review: 0, official: 0 });
+  const [docs, setDocs] = useState<KnowledgeDocumentView[]>([]);
+  const [stats, setStats] = useState({ total: 0, active: 0, review: 0, draft: 0, archived: 0, official: 0 });
   const [total, setTotal] = useState(0);
   const [offset, setOffset] = useState(0);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [selectedId, setSelectedId] = useState("KB-208");
+  const [surface, setSurface] = useState<"work" | "library">(operatorMode ? "work" : "library");
+  const [editorTab, setEditorTab] = useState<"content" | "test" | "history">("content");
+  const [draftContent, setDraftContent] = useState("");
+  const [testQuestion, setTestQuestion] = useState("商品破损了，但外包装已经丢了，还能申请处理吗？");
+  const [testState, setTestState] = useState<"idle" | "running" | "passed">("idle");
+  const [reviewState, setReviewState] = useState<"editing" | "submitted" | "published">("editing");
+  const [notice, setNotice] = useState("");
+  const [importOpen, setImportOpen] = useState(false);
+  const initializedKnowledge = useRef(false);
   useEffect(() => {
-    const timer = window.setTimeout(() => fetch(`/api/knowledge?limit=50&offset=${offset}&q=${encodeURIComponent(query)}`)
-      .then((response) => response.ok ? response.json() : Promise.reject(new Error("知识库读取失败")))
-      .then((payload: { documents: typeof docs; total: number; stats: typeof stats }) => { setDocs(payload.documents); setTotal(payload.total); setStats(payload.stats); setError(""); })
-      .catch((cause) => setError(cause instanceof Error ? cause.message : "知识库读取失败")), 180);
+    const timer = window.setTimeout(() => { setLoading(true); fetch(`/api/knowledge?limit=50&offset=${offset}&q=${encodeURIComponent(query)}`)
+      .then((response) => response.ok ? response.json() : Promise.reject(new Error("知识资产读取失败，请检查数据连接后重试")))
+      .then((payload: { documents: KnowledgeDocumentView[]; total: number; stats: typeof stats }) => {
+        setDocs(payload.documents); setTotal(payload.total); setStats(payload.stats); setError("");
+        if (!initializedKnowledge.current && payload.documents[0]) {
+          const initial = payload.documents.find((item) => item.id === "KB-208") ?? payload.documents[0];
+          initializedKnowledge.current = true; setSelectedId(initial.id); setDraftContent(initial.content);
+        }
+      })
+      .catch((cause) => setError(cause instanceof Error ? cause.message : "知识资产读取失败"))
+      .finally(() => setLoading(false)); }, 180);
     return () => window.clearTimeout(timer);
   }, [query, offset]);
+  const selected = docs.find((item) => item.id === selectedId) ?? docs[0];
   const stateLabel: Record<string, string> = { active: "生效中", review: "待复核", draft: "草稿", archived: "已归档" };
-  return <section className="knowledge-layout">
-    <article className="panel knowledge-main"><div className="table-toolbar"><div className="search-box wide">⌕ <input name="knowledge-search" autoComplete="off" aria-label="搜索知识、规则或负责人" value={query} onChange={(e) => { setQuery(e.target.value); setOffset(0); }} placeholder="搜索知识、规则或负责人…" /></div><button className="ghost-button">批量导入</button><button className="primary-button">＋ 新建知识</button></div>
-      <div className="knowledge-summary"><div><span>知识条目</span><b>{stats.total || "—"}</b></div><div><span>已审核生效</span><b>{stats.active || "—"}</b></div><div><span>待人工复核</span><b className="warning-text">{stats.review}</b></div><div><span>官方来源</span><b>{stats.official || "—"}</b></div></div>
-      {error && <div className="evaluation-error">{error}</div>}
-      <table><thead><tr><th>知识文档</th><th>版本</th><th>责任团队</th><th>问题覆盖率</th><th>来源</th><th>状态</th></tr></thead><tbody>{docs.map((doc) => <tr key={doc.id}><td><b>{doc.title}</b><small>{doc.id} · {doc.category}</small></td><td>{doc.version}</td><td>{doc.ownerTeam}</td><td>{doc.state === "active" ? <div className="coverage"><i style={{ width: `${doc.coverage * 100}%` }} /><span>{(doc.coverage * 100).toFixed(0)}%</span></div> : <span>待评测</span>}</td><td>{doc.sourceUrl ? <a href={doc.sourceUrl} target="_blank" rel="noreferrer">{doc.sourceType === "official" ? "官方依据 ↗" : "演示规则"}</a> : <span>{doc.sourceType === "official" ? "官方依据" : "演示规则"}</span>}<small>{doc.sourceTitle}</small></td><td><Status kind={doc.state === "active" ? "success" : doc.state === "review" ? "warning" : "neutral"}>{stateLabel[doc.state] ?? doc.state}</Status></td></tr>)}</tbody></table>
-      <div className="table-toolbar"><span>显示 {total ? offset + 1 : 0}-{Math.min(offset + docs.length, total)} / {total}</span><div><button className="ghost-button" disabled={offset === 0} onClick={() => setOffset(Math.max(0, offset - 50))}>上一页</button><button className="ghost-button" disabled={offset + 50 >= total} onClick={() => setOffset(offset + 50)}>下一页</button></div></div>
-    </article>
-    <aside className="panel knowledge-aside"><h3>内容治理流程</h3><div className="governance-step done"><i>1</i><p><b>内容录入</b><span>来源、责任人、有效期</span></p></div><div className="governance-step done"><i>2</i><p><b>自动解析</b><span>切片、标签、冲突检测</span></p></div><div className="governance-step active"><i>3</i><p><b>双人复核</b><span>业务与合规共同确认</span></p></div><div className="governance-step"><i>4</i><p><b>灰度发布</b><span>小流量验证命中效果</span></p></div><div className="governance-step"><i>5</i><p><b>失效归档</b><span>保留版本与审计记录</span></p></div><div className="aside-callout"><b>检测到 3 处潜在冲突</b><span>“生鲜赔付标准”与旧版客服 SOP 存在口径差异。</span><button>查看冲突</button></div></aside>
+  const categoryLabel: Record<string, string> = { refund: "退款售后", damage: "破损与质量", address: "物流改址", invoice: "发票服务" };
+  function flash(message: string) { setNotice(message); window.setTimeout(() => setNotice(""), 2400); }
+  function selectWorkItem(target: string) { const targetDocument = docs.find((item) => item.id === target); setSelectedId(target); if (targetDocument) setDraftContent(targetDocument.content); setSurface("work"); setEditorTab("content"); setReviewState("editing"); setTestState("idle"); }
+  function runKnowledgeTest() {
+    if (!testQuestion.trim() || testState === "running") return;
+    setTestState("running");
+    window.setTimeout(() => { setTestState("passed"); flash("测试完成：知识命中、回答边界和转人工策略均符合预期"); }, 720);
+  }
+  function submitForReview() { setReviewState("submitted"); flash("已提交业务与合规双人复核，当前线上版本不受影响"); }
+  function publishKnowledge() { setReviewState("published"); flash("新版本已发布至 10% 灰度流量，可随时回退上一版本"); }
+
+  if (!operatorMode) return <section className="panel knowledge-reader" aria-labelledby="knowledge-reader-title"><header><div><h2 id="knowledge-reader-title">已发布知识查询</h2><p>搜索并引用当前生效的知识；编辑、审核和发布仅对知识运营开放。</p></div><div className="search-box wide">⌕ <input aria-label="搜索已发布知识" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜索规则、用户问法或知识编号…" /></div></header>{error && <div className="evaluation-error">{error}</div>}{loading ? <div className="knowledge-skeleton"><i /><i /><i /></div> : <div className="knowledge-reader-list">{docs.filter((item) => item.state === "active").map((doc) => <article key={doc.id}><div><Status kind={doc.risk === "high" ? "danger" : "success"}>{categoryLabel[doc.category] ?? doc.category}</Status><b>{doc.title}</b><p>{doc.content}</p></div><aside><span>{doc.id} · {doc.version}</span><small>{doc.sourceTitle}</small><button onClick={() => flash(`已引用 ${doc.id}，发送回复时将保留知识版本`)}>引用知识</button></aside></article>)}</div>}{!loading && !error && !docs.length && <div className="knowledge-empty"><b>没有找到已发布知识</b><span>尝试输入更短的关键词，或向知识运营反馈缺口。</span></div>}{notice && <div className="agent-toast" role="status">✓ {notice}</div>}</section>;
+
+  return <section className="knowledge-operations" aria-label="知识运营工作台">
+    {notice && <div className="agent-toast" role="status">✓ {notice}</div>}
+    <header className="knowledge-command">
+      <div><span>知识运营 · 今日工作</span><h2>先处理会影响真实回答的知识</h2><p>从客服反馈和评测失败进入，完成修订、验证、审核与安全发布。</p></div>
+      <div className="knowledge-command-stats"><div><b>7</b><span>知识缺口</span><small>影响 96 次会话</small></div><div><b>3</b><span>口径冲突</span><small>1 项高风险</small></div><div><b>12</b><span>待我复核</span><small>3 项即将到期</small></div></div>
+      <button className="primary-button" onClick={() => setImportOpen(true)}>＋ 导入知识来源</button>
+    </header>
+    <nav className="knowledge-surface-tabs" aria-label="知识运营视图"><button className={surface === "work" ? "active" : ""} onClick={() => setSurface("work")}>工作队列 <b>22</b></button><button className={surface === "library" ? "active" : ""} onClick={() => setSurface("library")}>知识资产 <b>{stats.total || "—"}</b></button></nav>
+    {surface === "work" ? <div className="knowledge-workspace">
+      <aside className="panel knowledge-queue"><header><div><h3>优先处理</h3><p>按影响会话、风险和时限排序</p></div><button onClick={() => flash("工作队列已刷新")}>↻</button></header><div className="knowledge-queue-filters"><button className="active">全部 22</button><button>缺口 7</button><button>冲突 3</button><button>复核 12</button></div><div className="knowledge-queue-list">{knowledgeWorkItems.map((item) => <button key={item.id} className={selected?.id === item.target ? "active" : ""} onClick={() => selectWorkItem(item.target)}><span className={`work-type ${item.tone}`}>{item.type}</span><b>{item.title}</b><p>{item.meta}</p><small>{item.due} · 关联 {item.target}</small></button>)}</div><footer><span>排序依据</span><b>受影响会话 × 风险 × 剩余时间</b></footer></aside>
+      <article className="panel knowledge-editor">{selected ? <><header className="knowledge-editor-head"><div><span>{selected.id} · {selected.version}</span><h3>{selected.title}</h3><p>{categoryLabel[selected.category] ?? selected.category} · {selected.ownerTeam} · 更新于 {selected.updatedAt?.slice(0, 10) || "今天"}</p></div><Status kind={reviewState === "published" ? "success" : reviewState === "submitted" ? "warning" : "info"}>{reviewState === "published" ? "灰度发布中" : reviewState === "submitted" ? "复核中" : "修订草稿"}</Status></header><div className="knowledge-editor-tabs" role="tablist"><button role="tab" aria-selected={editorTab === "content"} className={editorTab === "content" ? "active" : ""} onClick={() => setEditorTab("content")}>内容与边界</button><button role="tab" aria-selected={editorTab === "test"} className={editorTab === "test" ? "active" : ""} onClick={() => setEditorTab("test")}>回答验证 <b>{testState === "passed" ? "已通过" : "3 个用例"}</b></button><button role="tab" aria-selected={editorTab === "history"} className={editorTab === "history" ? "active" : ""} onClick={() => setEditorTab("history")}>版本记录</button></div>
+        {editorTab === "content" && <div className="knowledge-edit-body"><section><label>客服可引用内容<textarea value={draftContent} onChange={(event) => { setDraftContent(event.target.value); setReviewState("editing"); }} maxLength={800} /><small>{draftContent.length}/800 · 只写可被客服直接解释的事实和处理边界</small></label><div className="knowledge-field-grid"><label>适用场景<input value={(selected.keywords ?? []).join("、")} readOnly /></label><label>责任团队<input value={selected.ownerTeam} readOnly /></label><label>风险等级<select defaultValue={selected.risk}><option value="low">低风险</option><option value="medium">中风险</option><option value="high">高风险</option></select></label><label>人工接管<select defaultValue={selected.handoff ? "yes" : "no"}><option value="no">允许自动回答</option><option value="yes">必须转人工</option></select></label></div></section><aside><div className="source-card"><span>原始依据</span><b>{selected.sourceTitle || "内部业务规范"}</b><small>{selected.sourceType === "official" ? "官方公开来源 · 已留存快照" : "内部来源 · 需要业务复核"}</small>{selected.sourceUrl ? <a href={selected.sourceUrl} target="_blank" rel="noreferrer">查看原文 ↗</a> : <button onClick={() => flash("已打开内部来源快照")}>查看来源快照</button>}</div><div className="conflict-card"><span>!</span><p><b>检测到 1 处口径差异</b><small>旧版客服 SOP 对处理时效的描述不同，发布前需确认适用范围。</small></p><button onClick={() => flash("已采用当前业务规则，并保留冲突处理记录")}>确认处理</button></div></aside></div>}
+        {editorTab === "test" && <div className="knowledge-test-body"><header><div><h4>用真实用户问法验证</h4><p>发布前确认知识能被正确召回、回答不越界、该转人工时会转人工。</p></div><Status kind={testState === "passed" ? "success" : "neutral"}>{testState === "passed" ? "3/3 通过" : "等待测试"}</Status></header><label>测试问题<textarea value={testQuestion} onChange={(event) => { setTestQuestion(event.target.value); setTestState("idle"); }} /></label><button className="primary-button" onClick={runKnowledgeTest} disabled={testState === "running"}>{testState === "running" ? "正在调用 Agent…" : "运行回答测试"}</button>{testState === "passed" && <div className="knowledge-test-result"><div><span>用户意图</span><b>商品破损处理 · 正确</b></div><div><span>命中知识</span><b>{selected.id} {selected.version}</b></div><div><span>回答边界</span><b>未承诺赔付金额 · 通过</b></div><div><span>人工接管</span><b>高风险场景已转人工 · 通过</b></div><p>示例回答：{draftContent}</p></div>}</div>}
+        {editorTab === "history" && <div className="knowledge-history"><div><span>当前草稿</span><b>{selected.version} 修订中</b><small>陈悠 · 刚刚 · 修改回答边界</small></div><div><span>线上版本</span><b>{selected.version}</b><small>业务与合规双人复核 · 当前 100% 流量</small></div><div><span>上一版本</span><b>v{Math.max(1, Number(selected.version.replace(/[^0-9.]/g, "")) - 0.1).toFixed(1)}</b><small>已归档 · 可审计，不再参与召回</small></div></div>}
+        <footer className="knowledge-editor-actions"><span>{reviewState === "editing" ? "修改仅保存在草稿，不影响线上回答" : reviewState === "submitted" ? "等待业务与合规复核" : "10% 灰度流量 · 可回退"}</span><button className="ghost-button" onClick={() => { setDraftContent(selected.content); setReviewState("editing"); flash("已恢复为线上版本内容"); }}>恢复线上内容</button>{reviewState === "editing" && <button className="primary-button" onClick={submitForReview} disabled={testState !== "passed"}>提交双人复核</button>}{reviewState === "submitted" && <button className="primary-button" onClick={publishKnowledge}>批准并灰度发布</button>}{reviewState === "published" && <button className="primary-button" onClick={() => flash("灰度观察详情已打开：当前未发现异常回答")}>查看灰度效果</button>}</footer></> : <div className="knowledge-empty"><b>选择一个工作项</b><span>从左侧队列开始处理知识缺口、冲突或复核任务。</span></div>}</article>
+      <aside className="panel release-readiness"><header><h3>发布就绪度</h3><Status kind={testState === "passed" ? "success" : "warning"}>{testState === "passed" ? "可以提交" : "还差 1 项"}</Status></header><div className="readiness-score"><b>{testState === "passed" ? "100" : "80"}</b><span>/100</span><small>高风险知识必须全部通过</small></div><div className="readiness-list"><div className="passed"><i>✓</i><p><b>来源可追溯</b><span>原文与快照已留存</span></p></div><div className="passed"><i>✓</i><p><b>责任与有效期明确</b><span>{selected?.ownerTeam || "责任团队"}负责</span></p></div><div className="passed"><i>✓</i><p><b>冲突已识别</b><span>1 处差异等待复核确认</span></p></div><div className={testState === "passed" ? "passed" : "pending"}><i>{testState === "passed" ? "✓" : "4"}</i><p><b>回答验证</b><span>{testState === "passed" ? "召回、回答、转人工均通过" : "运行 3 个真实问法后解锁复核"}</span></p></div><div className={reviewState !== "editing" ? "passed" : "pending"}><i>{reviewState !== "editing" ? "✓" : "5"}</i><p><b>双人复核</b><span>{reviewState === "published" ? "业务与合规已通过" : reviewState === "submitted" ? "审核任务已创建" : "测试通过后提交"}</span></p></div></div><div className="release-impact"><span>发布影响预估</span><b>37 次/日相关会话</b><small>预计知识命中率 +6.8%，转人工策略保持不变</small></div></aside>
+    </div> : <article className="panel knowledge-library"><header><div className="search-box wide">⌕ <input aria-label="搜索知识资产" value={query} onChange={(event) => { setQuery(event.target.value); setOffset(0); }} placeholder="搜索知识、用户问法、来源或负责人…" /></div><div className="segmented"><button className="active">全部 {stats.total}</button><button>生效 {stats.active}</button><button>待复核 {stats.review}</button><button>草稿 {stats.draft}</button></div><button className="ghost-button" onClick={() => setImportOpen(true)}>批量导入</button><button className="primary-button" onClick={() => { setSurface("work"); flash("已创建空白知识草稿"); }}>＋ 新建知识</button></header>{error && <div className="evaluation-error">{error}</div>}{loading ? <div className="knowledge-skeleton"><i /><i /><i /></div> : <table><thead><tr><th>知识资产</th><th>责任团队</th><th>来源</th><th>覆盖率</th><th>状态</th><th>最近更新</th></tr></thead><tbody>{docs.map((doc) => <tr key={doc.id} onClick={() => { setSelectedId(doc.id); setDraftContent(doc.content); setTestState("idle"); setReviewState("editing"); setSurface("work"); }}><td><b>{doc.title}</b><small>{doc.id} · {doc.version} · {categoryLabel[doc.category] ?? doc.category}</small></td><td>{doc.ownerTeam}</td><td><span>{doc.sourceType === "official" ? "官方来源" : "内部规范"}</span><small>{doc.sourceTitle}</small></td><td><div className="coverage"><i style={{ width: `${doc.coverage * 100}%` }} /><span>{(doc.coverage * 100).toFixed(0)}%</span></div></td><td><Status kind={doc.state === "active" ? "success" : doc.state === "review" ? "warning" : "neutral"}>{stateLabel[doc.state] ?? doc.state}</Status></td><td>{doc.updatedAt?.slice(0, 10)}</td></tr>)}</tbody></table>}{!loading && !error && !docs.length && <div className="knowledge-empty"><b>没有找到知识资产</b><span>调整搜索词，或导入一个新的可信来源。</span></div>}<footer><span>显示 {total ? offset + 1 : 0}-{Math.min(offset + docs.length, total)} / {total}</span><div><button className="ghost-button" disabled={offset === 0} onClick={() => setOffset(Math.max(0, offset - 50))}>上一页</button><button className="ghost-button" disabled={offset + 50 >= total} onClick={() => setOffset(offset + 50)}>下一页</button></div></footer></article>}
+    {importOpen && <div className="close-sheet knowledge-import-sheet" role="dialog" aria-modal="true" aria-labelledby="import-title"><button className="sheet-backdrop" aria-label="取消导入" onClick={() => setImportOpen(false)} /><section><header><div><span>知识来源接入</span><h2 id="import-title">导入可信业务资料</h2></div><button aria-label="关闭导入面板" onClick={() => setImportOpen(false)}>×</button></header><p>系统会解析结构、建议切片并检测冲突，但不会绕过人工审核直接发布。</p><label>来源类型<select defaultValue="official"><option value="official">官方政策或法规</option><option value="internal">内部业务规范</option><option value="faq">客服 FAQ</option></select></label><label>来源地址或文件名<input defaultValue="国家税务总局数电发票业务公告.pdf" /></label><label>责任团队<select defaultValue="财税运营"><option>财税运营</option><option>售后运营</option><option>履约团队</option><option>合规运营</option></select></label><div className="import-preview"><span>自动检查</span><div><b>来源身份</b><em>待校验</em></div><div><b>预计知识片段</b><em>8–12 条</em></div><div><b>潜在冲突</b><em>导入后检测</em></div></div><footer><button className="ghost-button" onClick={() => setImportOpen(false)}>取消</button><button className="primary-button" onClick={() => { setImportOpen(false); setSurface("work"); flash("来源已导入并完成解析，生成 9 条知识草稿和 2 条冲突提示"); }}>开始解析</button></footer></section></div>}
   </section>;
 }
 
@@ -577,7 +633,13 @@ export default function Home() {
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
   const [dataMode, setDataMode] = useState<"connecting" | "persistent" | "preview">("connecting");
-  const title = active === "workbench" ? { title: roles[role].title, desc: screenTitles.workbench.desc } : screenTitles[active];
+  const title = active === "workbench"
+    ? { title: roles[role].title, desc: screenTitles.workbench.desc }
+    : active === "knowledge" && role === "knowledge-operator"
+      ? { title: "知识运营", desc: "把可信业务资料转化为可验证、可审核、可安全发布的 Agent 知识" }
+      : active === "knowledge" && role === "agent"
+        ? { title: "知识查询", desc: "查找并引用当前已审核生效的服务知识" }
+        : screenTitles[active];
   const visibleNav = navItems.filter((item) => roles[role].nav.includes(item.key));
   function enterWorkbench(nextRole: RoleKey) {
     if (!workspaces[workspace].roles.includes(nextRole)) return;
@@ -653,7 +715,7 @@ export default function Home() {
       <main id="main-content" tabIndex={-1}>
         <header className="topbar"><div><h1>{title.title}</h1><p>{title.desc}</p></div><div className="top-actions"><button className="icon-button" aria-label="刷新当前页面">↻</button><button className="ghost-button">操作记录</button></div></header>
         <div className={active === "resources" ? "content content-wide" : "content"}>
-          {active === "workbench" && <RoleWorkbench role={role} workspaceName={workspaces[workspace].name} onNavigate={setActive} />}{active === "overview" && <Overview onNavigate={setActive} />}{active === "conversations" && <Conversations />}{active === "tickets" && <Tickets />}{active === "knowledge" && <Knowledge />}{active === "quality" && <Quality />}{active === "strategy" && <Strategy />}{active === "analytics" && <Analytics />}{active === "resources" && <ResourceAccess />}{active === "audit" && <Audit />}
+          {active === "workbench" && <RoleWorkbench role={role} workspaceName={workspaces[workspace].name} onNavigate={setActive} />}{active === "overview" && <Overview onNavigate={setActive} />}{active === "conversations" && <Conversations />}{active === "tickets" && <Tickets />}{active === "knowledge" && <Knowledge role={role} />}{active === "quality" && <Quality />}{active === "strategy" && <Strategy />}{active === "analytics" && <Analytics />}{active === "resources" && <ResourceAccess />}{active === "audit" && <Audit />}
         </div>
       </main>
     </div>

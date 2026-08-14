@@ -108,6 +108,21 @@ test("ships a traceable database-backed knowledge library", async () => {
   assert.match(api, /documents\.map/);
   assert.match(api, /\.limit\(limit\)\.offset\(offset\)/);
   assert.match(page, /\/api\/knowledge/);
+  for (const operatorCapability of [
+    "知识运营工作台",
+    "优先处理",
+    "知识缺口",
+    "口径冲突",
+    "客服可引用内容",
+    "用真实用户问法验证",
+    "提交双人复核",
+    "灰度发布",
+    "发布就绪度",
+    "已发布知识查询",
+  ]) assert.match(page, new RegExp(operatorCapability));
+  assert.match(page, /operatorMode/);
+  assert.match(page, /testState !== "passed"/);
+  assert.match(page, /当前线上版本不受影响/);
   assert.doesNotMatch(page, /知识条目<\/span><b>1,284/);
 });
 
