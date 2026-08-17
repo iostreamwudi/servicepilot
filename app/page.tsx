@@ -167,15 +167,40 @@ const roleWorkbench: Record<RoleKey, {
 function RoleWorkbench({ role, workspaceName, onNavigate }: { role: RoleKey; workspaceName: string; onNavigate: (key: NavKey) => void }) {
   const profile = roles[role];
   const data = roleWorkbench[role];
+  const [liveAgentTasks, setLiveAgentTasks] = useState<Array<{ level: string; title: string; meta: string; action: string; target: NavKey }>>([]);
+  useEffect(() => {
+    if (role !== "agent") return;
+    let mounted = true;
+    async function loadAgentTasks() {
+      try {
+        const response = await fetch("/api/conversations", { cache: "no-store" });
+        if (!response.ok) return;
+        const body = await response.json() as { conversations?: Array<{ id: string; name: string; topic: string; status: string; risk: string; summary: string; sla: string }> };
+        if (!mounted) return;
+        setLiveAgentTasks((body.conversations ?? []).filter((item) => item.status === "待接管" || item.status === "等待内部").slice(0, 5).map((item) => ({
+          level: item.status === "等待内部" ? "等待内部" : item.risk === "高" ? "高风险" : "需人工",
+          title: `${item.name} · ${item.topic}`,
+          meta: `${item.summary} · ${item.id}`,
+          action: item.status === "待接管" ? "接管会话" : "继续处理",
+          target: "conversations",
+        })));
+      } catch { /* keep the role baseline when the queue is temporarily unavailable */ }
+    }
+    loadAgentTasks();
+    const timer = window.setInterval(loadAgentTasks, 5000);
+    return () => { mounted = false; window.clearInterval(timer); };
+  }, [role]);
+  const priorityTasks = role === "agent" && liveAgentTasks.length ? liveAgentTasks : data.tasks;
+  const stats = role === "agent" && liveAgentTasks.length ? data.stats.map(([label, value, helper], index) => index === 0 ? [label, String(liveAgentTasks.filter((task) => task.action === "接管会话").length), "来自真实会话队列"] as [string, string, string] : [label, value, helper] as [string, string, string]) : data.stats;
   return <section className="role-workbench">
     <header className="workbench-hero">
       <div><span className="workbench-eyebrow">{profile.label} · {workspaceName}</span><h2>{profile.greeting}</h2><p>{profile.focus}</p></div>
       <div className="workbench-date"><span>今日</span><b>8月13日 · 周四</b><small>数据更新于 10:46</small></div>
     </header>
-    <section className="workbench-stats" aria-label="工作台概览">{data.stats.map(([label, value, helper]) => <article key={label}><span>{label}</span><b>{value}</b><small>{helper}</small></article>)}</section>
+    <section className="workbench-stats" aria-label="工作台概览">{stats.map(([label, value, helper]) => <article key={label}><span>{label}</span><b>{value}</b><small>{helper}</small></article>)}</section>
     <div className="workbench-grid">
       <article className="panel priority-panel"><div className="workbench-section-head"><div><h3>优先处理</h3><p>按业务影响、风险和剩余时间排序</p></div><button className="text-button">查看全部 17 项 →</button></div>
-        <div className="priority-list">{data.tasks.map((task, index) => <button key={task.title} onClick={() => onNavigate(task.target)}><span className={`priority-rank rank-${index + 1}`}>{index + 1}</span><span className="priority-copy"><em>{task.level}</em><b>{task.title}</b><small>{task.meta}</small></span><strong>{task.action} →</strong></button>)}</div>
+        <div className="priority-list">{priorityTasks.map((task, index) => <button key={task.title} onClick={() => onNavigate(task.target)}><span className={`priority-rank rank-${index + 1}`}>{index + 1}</span><span className="priority-copy"><em>{task.level}</em><b>{task.title}</b><small>{task.meta}</small></span><strong>{task.action} →</strong></button>)}</div>
       </article>
       <aside className="panel role-brief"><div className="workbench-section-head"><div><h3>今日简报</h3><p>与你当前工作台相关的关键结果</p></div></div>{data.brief.map(([label, value, helper]) => <div className="brief-row" key={label}><span>{label}</span><b>{value}</b><small>{helper}</small></div>)}<button className="brief-link" onClick={() => onNavigate("analytics")}>查看完整业务分析 →</button></aside>
     </div>
@@ -257,32 +282,64 @@ function Overview({ onNavigate }: { onNavigate: (key: NavKey) => void }) {
 
 function Conversations() {
   type QueueFilter = "待接管" | "处理中" | "等待内部" | "已解决";
-  const [selectedId, setSelectedId] = useState(conversations[0].id);
+  const [liveConversations, setLiveConversations] = useState<Conversation[]>([]);
+  const [selectedId, setSelectedId] = useState("");
   const [queueFilter, setQueueFilter] = useState<QueueFilter>("待接管");
   const [query, setQuery] = useState("");
-  const [states, setStates] = useState<Record<string, ConversationState>>(() => Object.fromEntries(conversations.map((item) => [item.id, item.status])));
-  const [drafts, setDrafts] = useState<Record<string, string>>(() => Object.fromEntries(conversations.map((item) => [item.id, item.draft])));
+  const [states, setStates] = useState<Record<string, ConversationState>>({});
+  const [drafts, setDrafts] = useState<Record<string, string>>({});
   const [notice, setNotice] = useState("");
   const [rightTab, setRightTab] = useState<"context" | "assist">("context");
   const [showClose, setShowClose] = useState(false);
   const [resolution, setResolution] = useState("已解释规则并完成业务核验");
   const [customerConfirmed, setCustomerConfirmed] = useState(false);
-  const selected = conversations.find((item) => item.id === selectedId) ?? conversations[0];
-  const currentState = states[selected.id] ?? selected.status;
-  const draft = drafts[selected.id] ?? "";
-  const queueCounts = (state: QueueFilter) => conversations.filter((item) => (states[item.id] ?? item.status) === state).length;
-  const visibleConversations = conversations.filter((item) => {
+  const [loading, setLoading] = useState(true);
+  const selected = liveConversations.find((item) => item.id === selectedId) ?? liveConversations[0];
+  const currentState = selected ? (states[selected.id] ?? selected.status) : "待接管";
+  const draft = selected ? (drafts[selected.id] ?? "") : "";
+  const queueCounts = (state: QueueFilter) => liveConversations.filter((item) => (states[item.id] ?? item.status) === state).length;
+  const visibleConversations = liveConversations.filter((item) => {
     const matchesState = (states[item.id] ?? item.status) === queueFilter;
     const normalized = query.trim().toLocaleLowerCase();
     return matchesState && (!normalized || `${item.name} ${item.id} ${item.topic} ${item.order}`.toLocaleLowerCase().includes(normalized));
   });
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadConversations() {
+      try {
+        const response = await fetch("/api/conversations", { cache: "no-store" });
+        if (!response.ok) throw new Error("会话队列读取失败");
+        const body = await response.json() as { conversations?: Conversation[] };
+        if (!mounted) return;
+        const next = body.conversations ?? [];
+        setLiveConversations(next);
+        setSelectedId((current) => current && next.some((item) => item.id === current) ? current : next[0]?.id ?? "");
+        setStates(Object.fromEntries(next.map((item) => [item.id, item.status])));
+        setDrafts((current) => Object.fromEntries(next.map((item) => [item.id, current[item.id] ?? item.draft])));
+        setLoading(false);
+      } catch {
+        if (mounted) setLoading(false);
+      }
+    }
+    loadConversations();
+    const timer = window.setInterval(loadConversations, 5000);
+    return () => { mounted = false; window.clearInterval(timer); };
+  }, []);
 
   function flash(message: string) {
     setNotice(message);
     window.setTimeout(() => setNotice(""), 2400);
   }
 
-  function claimConversation() {
+  async function updateConversation(action: "claim" | "reply" | "resolve" | "reopen", content?: string) {
+    const response = await fetch(`/api/conversations/${selected?.id ?? ""}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ action, content }) });
+    if (!response.ok) throw new Error("会话操作未保存，请重试");
+  }
+
+  async function claimConversation() {
+    try { await updateConversation("claim"); }
+    catch (cause) { flash(cause instanceof Error ? cause.message : "接管失败"); return; }
     setStates((current) => ({ ...current, [selected.id]: "处理中" }));
     setQueueFilter("处理中");
     flash(`已接管 ${selected.id}，会话上下文和 SLA 已锁定给你`);
@@ -292,19 +349,26 @@ function Conversations() {
     setDrafts((current) => ({ ...current, [selected.id]: `${current[selected.id] ?? ""}${current[selected.id] ? "\n" : ""}${value}` }));
   }
 
-  function sendReply() {
+  async function sendReply() {
     if (!draft.trim()) return;
+    try { await updateConversation("reply", draft); }
+    catch (cause) { flash(cause instanceof Error ? cause.message : "回复未保存"); return; }
     setStates((current) => ({ ...current, [selected.id]: "处理中" }));
     flash("回复已发送，当前会话已进入等待用户响应");
   }
 
-  function closeConversation() {
+  async function closeConversation() {
     if (!customerConfirmed) return;
+    try { await updateConversation("resolve"); }
+    catch (cause) { flash(cause instanceof Error ? cause.message : "结案未保存"); return; }
     setStates((current) => ({ ...current, [selected.id]: "已解决" }));
     setShowClose(false);
     setQueueFilter("已解决");
     flash("会话已结构化结案，并进入 72 小时重新打开观察期");
   }
+
+  if (loading && !selected) return <section className="panel table-panel"><div className="queue-heading"><div><b>我的会话</b><small>正在从真实会话服务加载</small></div></div></section>;
+  if (!selected) return <section className="panel table-panel"><div className="conversation-empty"><span>✓</span><b>当前没有会话</b><small>用户提交问题后，Agent 会将需要人工处理的会话放入这里。</small></div></section>;
 
   return (
     <section className="agent-console" aria-label="一线客服会话处理台">
@@ -610,7 +674,7 @@ function CustomerDemo({ onClose }: { onClose: () => void }) {
     try {
       const activeConversationId = conversationId || createDemoConversationId();
       if (!conversationId) setConversationId(activeConversationId);
-      const response = await fetch("/api/agent/respond", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ query: value, history: history.slice(-6), conversationId: activeConversationId }) });
+      const response = await fetch("/api/agent/respond", { method: "POST", headers: { "content-type": "application/json", "x-servicepilot-channel": "customer-demo" }, body: JSON.stringify({ query: value, history: history.slice(-6), conversationId: activeConversationId, customerName: "体验用户", channel: "商城智能客服" }) });
       const body = await response.json() as AgentResult & { error?: string };
       if (!response.ok) throw new Error(body.error || "服务暂时不可用");
       setResult(body); setHistory((previous) => [...previous, { role: "user", content: value }, { role: "assistant", content: body.answer }].slice(-6) as DemoTurn[]);
@@ -619,7 +683,7 @@ function CustomerDemo({ onClose }: { onClose: () => void }) {
   }
   const quick = ["订单 OR-773928 的退款什么时候到账？", "那周末算工作日吗？", "收到的生鲜破损了怎么办？", "订单还没发货怎么改地址？"];
   const resetConversation = () => { setConversationId(""); setHistory([]); setSubmitted(""); setResult(null); setError(""); };
-  return <div className="modal-backdrop" onClick={onClose}><div className="customer-demo" role="dialog" aria-modal="true" aria-label="商城智能客服体验" onClick={(e) => e.stopPropagation()}><div className="demo-head"><div className="brand-mark small">S</div><div><b>商城智能客服</b><span>Agent API 已连接 · 30 分钟会话记忆 · 随时可转人工</span></div><button aria-label="新会话" onClick={resetConversation}>↻</button><button aria-label="关闭" onClick={onClose}>×</button></div><div className="demo-body"><div className="demo-welcome"><b>您好，我是商城智能客服</b><span>先询问退款，再追问“那周末算工作日吗”，体验多轮意图继承。</span></div><div className="quick-questions">{quick.map((item) => <button key={item} onClick={() => send(item)}>{item.replace("？", "")}</button>)}</div>{submitted && <div className="demo-user">{submitted}</div>}{loading && <div className="demo-ai loading"><b>正在执行 Agent 工作流…</b><span>会话状态 → 意图识别 → 知识检索 → 风险校验</span></div>}{error && <div className="demo-ai error"><b>请求失败</b><span>{error}</span></div>}{result && <div className="demo-ai"><b>{result.handoff ? "已生成安全答复并建议转人工" : "已基于可信知识回答"}</b><span>{result.answer}</span>{result.source && <span className="demo-source">依据：{result.source.title} {result.source.version} · {result.source.id}</span>}<small>置信度 {(result.confidence * 100).toFixed(0)}% · {result.mode === "model-grounded" ? "大模型生成（有依据约束）" : result.mode === "safe-fallback" ? "低置信度安全兜底" : "确定性安全模式"}</small>{result.memory && <small>会话记忆：{result.memory.activeIntent ?? "未识别"} · 第 {result.memory.turnCount} 轮 · {result.memory.source === "memory" ? "状态继承" : result.memory.source === "history" ? "历史上下文" : "当前问题"}</small>}<div className="demo-trace">{result.trace.map((step, index) => <i key={step.label}>{index + 1}. {step.label}</i>)}</div>{result.handoff && <button className="handoff-button">转接人工客服</button>}</div>}</div><div className="demo-input"><input name="demo-query" autoComplete="off" aria-label="输入客服问题" value={query} maxLength={500} onChange={(e) => setQuery(e.target.value)} placeholder="请输入您的问题…" onKeyDown={(e) => e.key === 'Enter' && send()} /><button disabled={loading} onClick={() => send()}>{loading ? "处理中…" : "发送"}</button></div><div className="demo-footer">AI生成内容仅供参考 · 会话记忆 30 分钟后自动失效 · 涉及资金、赔付和账户操作需人工确认</div></div></div>;
+  return <div className="modal-backdrop" onClick={onClose}><div className="customer-demo" role="dialog" aria-modal="true" aria-label="商城智能客服体验" onClick={(e) => e.stopPropagation()}><div className="demo-head"><div className="brand-mark small">S</div><div><b>商城智能客服</b><span>Agent API 已连接 · 30 分钟会话记忆 · 随时可转人工</span></div><button aria-label="新会话" onClick={resetConversation}>↻</button><button aria-label="关闭" onClick={onClose}>×</button></div><div className="demo-body"><div className="demo-welcome"><b>您好，我是商城智能客服</b><span>先询问退款，再追问“那周末算工作日吗”，体验多轮意图继承。</span></div><div className="quick-questions">{quick.map((item) => <button key={item} onClick={() => send(item)}>{item.replace("？", "")}</button>)}</div>{submitted && <div className="demo-user">{submitted}</div>}{loading && <div className="demo-ai loading"><b>正在执行 Agent 工作流…</b><span>会话状态 → 意图识别 → 知识检索 → 风险校验</span></div>}{error && <div className="demo-ai error"><b>请求失败</b><span>{error}</span></div>}{result && <div className="demo-ai"><b>{result.handoff ? "已生成安全答复并建议转人工" : "已基于可信知识回答"}</b><span>{result.answer}</span>{result.source && <span className="demo-source">依据：{result.source.title} {result.source.version} · {result.source.id}</span>}<small>置信度 {(result.confidence * 100).toFixed(0)}% · {result.mode === "model-grounded" ? "大模型生成（有依据约束）" : result.mode === "safe-fallback" ? "低置信度安全兜底" : "确定性安全模式"}</small>{result.memory && <small>会话记忆：{result.memory.activeIntent ?? "未识别"} · 第 {result.memory.turnCount} 轮 · {result.memory.source === "memory" ? "状态继承" : result.memory.source === "history" ? "历史上下文" : "当前问题"}</small>}<div className="demo-trace">{result.trace.map((step, index) => <i key={step.label}>{index + 1}. {step.label}</i>)}</div>{result.handoff && <button className="handoff-button" disabled>已进入客服待接管队列</button>}</div>}</div><div className="demo-input"><input name="demo-query" autoComplete="off" aria-label="输入客服问题" value={query} maxLength={500} onChange={(e) => setQuery(e.target.value)} placeholder="请输入您的问题…" onKeyDown={(e) => e.key === 'Enter' && send()} /><button disabled={loading} onClick={() => send()}>{loading ? "处理中…" : "发送"}</button></div><div className="demo-footer">AI生成内容仅供参考 · 会话记忆 30 分钟后自动失效 · 涉及资金、赔付和账户操作需人工确认</div></div></div>;
 }
 
 export default function Home() {

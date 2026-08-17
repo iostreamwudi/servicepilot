@@ -1,13 +1,14 @@
 import { env } from "cloudflare:workers";
 import { and, eq, gt } from "drizzle-orm";
 import { getDb } from "../../../../db";
-import { agentConversationStates, knowledgeDocuments } from "../../../../db/schema";
+import { agentConversationStates, conversations, knowledgeDocuments, messages, organizations } from "../../../../db/schema";
 import { lookupRefund } from "../../../../lib/order-tool";
 import { continueIntent, routeIntent, shouldHandoff, type BusinessIntent, type ConversationTurn } from "../../../../lib/intent-router";
 
 type RuntimeConfig = { LLM_API_KEY?: string; LLM_BASE_URL?: string; LLM_MODEL?: string };
 type HistoryTurn = ConversationTurn;
 type ConversationState = { activeIntent: string | null; summary: string; turnCount: number; expiresAt: string };
+type AgentPayload = { query?: unknown; history?: unknown; conversationId?: unknown; customerName?: unknown; channel?: unknown };
 const ORG_ID = "org-qingyu";
 const businessIntents: BusinessIntent[] = ["refund", "damage", "address", "invoice"];
 type KnowledgeRule = {
@@ -74,7 +75,62 @@ async function retrieveKnowledge(intent: BusinessIntent, query: string, defaultK
 
 function authenticated(request: Request) {
   const host = new URL(request.url).hostname;
-  return Boolean(request.headers.get("oai-authenticated-user-email")) || host === "localhost" || host === "127.0.0.1";
+  return Boolean(request.headers.get("oai-authenticated-user-email")) || request.headers.get("x-servicepilot-channel") === "customer-demo" || host === "localhost" || host === "127.0.0.1";
+}
+
+function topicLabel(intent: BusinessIntent | null) {
+  return intent === "refund" ? "退款售后" : intent === "damage" ? "破损与质量" : intent === "address" ? "物流改址" : intent === "invoice" ? "发票服务" : "其他咨询";
+}
+
+function sentimentFor(query: string) {
+  return /投诉|生气|着急|必须|怎么还|太差|欺骗|损坏|破损/.test(query) ? "dissatisfied" : "neutral";
+}
+
+async function persistAgentTurn({
+  conversationId,
+  customerName,
+  channel,
+  query,
+  answer,
+  rule,
+  routing,
+  handoff,
+  trace,
+  source,
+}: {
+  conversationId: string;
+  customerName: string;
+  channel: string;
+  query: string;
+  answer: string;
+  rule: KnowledgeRule | null;
+  routing: ReturnType<typeof routeIntent>;
+  handoff: boolean;
+  trace: Array<Record<string, unknown>>;
+  source: Record<string, unknown> | null;
+}) {
+  const db = getDb();
+  const now = new Date().toISOString();
+  const topic = topicLabel(routing?.intent ?? null);
+  const risk = rule?.risk ?? "medium";
+  await db.insert(organizations).values({ id: ORG_ID, name: "青屿商城" }).onConflictDoNothing();
+  await db.insert(conversations).values({
+    id: conversationId,
+    organizationId: ORG_ID,
+    customerName,
+    topic,
+    channel,
+    status: handoff ? "needs_human" : "ai_active",
+    risk,
+    aiScore: rule?.confidence ?? 0.45,
+    sentiment: sentimentFor(query),
+    updatedAt: now,
+  }).onConflictDoNothing();
+  await db.insert(messages).values([
+    { id: `M-${crypto.randomUUID()}`, conversationId, senderType: "customer", content: query, citationsJson: "[]", toolTraceJson: "[]", createdAt: now },
+    { id: `M-${crypto.randomUUID()}`, conversationId, senderType: "ai", content: answer, citationsJson: JSON.stringify(source ? [source] : []), toolTraceJson: JSON.stringify(trace), createdAt: now },
+  ]);
+  await db.update(conversations).set({ topic, channel, status: handoff ? "needs_human" : "ai_active", risk, aiScore: rule?.confidence ?? 0.45, sentiment: sentimentFor(query), updatedAt: now }).where(eq(conversations.id, conversationId));
 }
 
 function redactMemory(value: string) {
@@ -126,8 +182,8 @@ async function generateWithGateway(query: string, history: HistoryTurn[], rule: 
 
 export async function POST(request: Request) {
   if (!authenticated(request)) return Response.json({ error: "Authentication required" }, { status: 401 });
-  let payload: { query?: unknown; history?: unknown; conversationId?: unknown };
-  try { payload = await request.json() as { query?: unknown; history?: unknown; conversationId?: unknown }; }
+  let payload: AgentPayload;
+  try { payload = await request.json() as AgentPayload; }
   catch { return Response.json({ error: "Invalid JSON body" }, { status: 400 }); }
   if (typeof payload.query !== "string" || !payload.query.trim()) return Response.json({ error: "query is required" }, { status: 400 });
   const query = payload.query.trim();
@@ -136,8 +192,11 @@ export async function POST(request: Request) {
   if (!Array.isArray(rawHistory) || rawHistory.length > 6) return Response.json({ error: "history must contain 6 turns or fewer" }, { status: 400 });
   const history = rawHistory.filter((turn): turn is HistoryTurn => Boolean(turn) && typeof turn === "object" && ((turn as HistoryTurn).role === "user" || (turn as HistoryTurn).role === "assistant") && typeof (turn as HistoryTurn).content === "string" && (turn as HistoryTurn).content.trim().length > 0 && (turn as HistoryTurn).content.length <= 500);
   if (history.length !== rawHistory.length) return Response.json({ error: "history contains an invalid turn" }, { status: 400 });
-  const conversationId = payload.conversationId === undefined ? null : typeof payload.conversationId === "string" && /^C-[A-Za-z0-9-]{1,80}$/.test(payload.conversationId) ? payload.conversationId : null;
-  if (payload.conversationId !== undefined && !conversationId) return Response.json({ error: "conversationId is invalid" }, { status: 400 });
+  const channel = typeof payload.channel === "string" && payload.channel.trim() ? payload.channel.trim().slice(0, 80) : "商城智能客服";
+  const customerName = typeof payload.customerName === "string" && payload.customerName.trim() ? payload.customerName.trim().slice(0, 80) : "体验用户";
+  const requestedConversationId = payload.conversationId === undefined ? null : typeof payload.conversationId === "string" && /^C-[A-Za-z0-9-]{1,80}$/.test(payload.conversationId) ? payload.conversationId : null;
+  if (payload.conversationId !== undefined && !requestedConversationId) return Response.json({ error: "conversationId is invalid" }, { status: 400 });
+  const conversationId = requestedConversationId || (request.headers.get("x-servicepilot-channel") === "customer-demo" ? `C-${Date.now()}-${crypto.randomUUID().slice(0, 8)}` : null);
   const started = Date.now();
   let memory: ConversationState | null = null;
   if (conversationId) { try { memory = await loadConversationState(conversationId); } catch { memory = null; } }
@@ -146,11 +205,14 @@ export async function POST(request: Request) {
   if (!rule || !routing) {
     let savedMemory = memory;
     if (conversationId) { try { savedMemory = await saveConversationState(conversationId, memory, asBusinessIntent(memory?.activeIntent), query); } catch { /* memory is non-blocking */ } }
-    return Response.json({ answer: "这个问题超出了当前已验证的知识范围。为了避免给出不准确的信息，我已建议转接人工客服。", source: null, confidence: 0.45, risk: "medium", handoff: true, mode: "safe-fallback", routing: null, memory: savedMemory ? { conversationId, activeIntent: savedMemory.activeIntent, turnCount: savedMemory.turnCount, expiresAt: savedMemory.expiresAt, source: "retained" } : null, trace: [
+    const answer = "这个问题超出了当前已验证的知识范围。为了避免给出不准确的信息，我已建议转接人工客服。";
+    const trace = [
     { type: "intent", label: "未识别到稳定业务意图", durationMs: 32, status: "warning" },
     { type: "retrieval", label: "可信知识未命中", durationMs: 18, status: "warning" },
     { type: "guardrail", label: "已触发低置信度转人工", durationMs: 6, status: "passed" },
-  ] });
+    ];
+    if (conversationId) { try { await persistAgentTurn({ conversationId, customerName, channel, query, answer, rule: null, routing: null, handoff: true, trace, source: null }); } catch { /* persistence is non-blocking for evaluation callers */ } }
+    return Response.json({ answer, source: null, confidence: 0.45, risk: "medium", handoff: true, mode: "safe-fallback", routing: null, memory: savedMemory ? { conversationId, activeIntent: savedMemory.activeIntent, turnCount: savedMemory.turnCount, expiresAt: savedMemory.expiresAt, source: "retained" } : null, trace });
   }
   const config = env as unknown as RuntimeConfig;
   const orderId = query.toUpperCase().match(/OR-\d{6}/)?.[0];
@@ -163,11 +225,16 @@ export async function POST(request: Request) {
   const failedToolAnswer = orderId && !toolResult?.ok ? `暂时无法核验订单 ${orderId} 的退款状态。为避免根据不完整信息推测，我已建议转接人工客服继续核查。` : null;
   let savedMemory: ConversationState | null = memory;
   if (conversationId) { try { savedMemory = await saveConversationState(conversationId, memory, routing.intent, query); } catch { /* memory is non-blocking */ } }
-  return Response.json({ answer: generated ?? toolAnswer ?? failedToolAnswer ?? rule.answer, source: { id: rule.id, title: rule.title, version: rule.version, sourceTitle: rule.sourceTitle, sourceUrl: rule.sourceUrl }, tool: toolResult?.ok ? { name: "order.refund.get", status: "success", data: toolResult.record, readOnly: true } : orderId ? { name: "order.refund.get", status: "failed", code: toolResult?.code } : null, routing, memory: savedMemory ? { conversationId, activeIntent: savedMemory.activeIntent, turnCount: savedMemory.turnCount, expiresAt: savedMemory.expiresAt, source: routing.contextSource } : null, confidence: orderId && !toolResult?.ok ? 0.5 : Math.min(rule.confidence, routing.confidence), risk: rule.risk, handoff: rule.handoff || policyHandoff || Boolean(orderId && !toolResult?.ok), mode: generated ? "model-grounded" : orderId && !toolResult?.ok ? "safe-fallback" : "deterministic-safe", trace: [
+  const answer = generated ?? toolAnswer ?? failedToolAnswer ?? rule.answer;
+  const source = { id: rule.id, title: rule.title, version: rule.version, sourceTitle: rule.sourceTitle, sourceUrl: rule.sourceUrl };
+  const handoff = rule.handoff || policyHandoff || Boolean(orderId && !toolResult?.ok);
+  const trace = [
     { type: "intent", label: `识别 ${routing.intent}${routing.subIntent ? ` / ${routing.subIntent}` : ""} 意图，置信度 ${routing.confidence}`, durationMs: 36, status: "passed" },
     ...(routing.contextSource === "memory" ? [{ type: "memory", label: `继承会话状态 ${routing.intent} · 第 ${(savedMemory?.turnCount ?? 1)} 轮`, durationMs: 12, status: "passed" }] : []),
     { type: "retrieval", label: `向量召回 + 概率 Rerank + 规则融合命中 ${rule.id} ${rule.version} · ${routing.matchedSignals.join(" / ")}`, durationMs: 22, status: "passed" },
     ...(orderId ? [{ type: "tool", label: toolResult?.ok ? `只读查询 ${orderId} 成功，敏感字段已脱敏` : `订单工具未返回结果，禁止模型猜测`, durationMs: 41, status: toolResult?.ok ? "passed" : "warning" }] : []),
     { type: "guardrail", label: orderId && !toolResult?.ok ? "已阻止基于失败工具的状态推测" : policyHandoff ? "策略命中并转人工" : "输出规则校验通过", durationMs: 8, status: "passed" },
-  ], latencyMs: Date.now() - started });
+  ];
+  if (conversationId) { try { await persistAgentTurn({ conversationId, customerName, channel, query, answer, rule, routing, handoff, trace, source }); } catch { /* persistence is non-blocking for evaluation callers */ } }
+  return Response.json({ answer, source, tool: toolResult?.ok ? { name: "order.refund.get", status: "success", data: toolResult.record, readOnly: true } : orderId ? { name: "order.refund.get", status: "failed", code: toolResult?.code } : null, routing, memory: savedMemory ? { conversationId, activeIntent: savedMemory.activeIntent, turnCount: savedMemory.turnCount, expiresAt: savedMemory.expiresAt, source: routing.contextSource } : null, confidence: orderId && !toolResult?.ok ? 0.5 : Math.min(rule.confidence, routing.confidence), risk: rule.risk, handoff, mode: generated ? "model-grounded" : orderId && !toolResult?.ok ? "safe-fallback" : "deterministic-safe", trace, latencyMs: Date.now() - started });
 }
