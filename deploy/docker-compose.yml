@@ -6,7 +6,9 @@ services:
     restart: unless-stopped
     volumes:
       - servicepilot-data:/data
-      - ./secrets/.dev.vars:/app/deploy/.dev.vars:ro
+      # Wrangler resolves the local variables file from the container workdir (/app).
+      # Keep the secret outside git while mounting it at the path Wrangler loads.
+      - ./secrets/.dev.vars:/app/.dev.vars:ro
       - /etc/ssl/certs:/etc/ssl/certs:ro
     networks:
       - servicepilot
