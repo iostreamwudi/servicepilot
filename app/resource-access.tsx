@@ -192,6 +192,7 @@ export default function ResourceAccess() {
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
   const [syncState, setSyncState] = useState<"idle" | "syncing" | "synced">("idle");
   const [activeTab, setActiveTab] = useState<"basic" | "permissions">("basic");
+  const [actionNotice, setActionNotice] = useState("");
 
   const selectedMetric = useMemo(
     () => ALL_METRICS.find((metric) => metric.id === selectedMetricId) ?? ALL_METRICS[0],
@@ -306,6 +307,11 @@ export default function ResourceAccess() {
     window.setTimeout(() => setSyncState("synced"), 780);
   }
 
+  function notify(message: string) {
+    setActionNotice(message);
+    window.setTimeout(() => setActionNotice(""), 2400);
+  }
+
   function handleTabKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
     if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
     event.preventDefault();
@@ -326,6 +332,7 @@ export default function ResourceAccess() {
 
   return (
     <section className="resource-access" aria-labelledby="resource-page-title">
+      {actionNotice && <div className="agent-toast" role="status">✓ {actionNotice}</div>}
       <header className="resource-toolbar">
         <div>
           <h2 id="resource-page-title">数据资源与人员权限</h2>
@@ -394,7 +401,7 @@ export default function ResourceAccess() {
               <div className="metric-title-line"><h3>{selectedMetric.name}</h3><span className={selectedMetric.status === "在线" ? "metric-state" : "metric-state is-checking"}>{selectedMetric.status}</span></div>
               <p><code>{selectedMetric.code}</code><span>责任人：{selectedMetric.owner}</span><span>更新于 {selectedMetric.updatedAt}</span></p>
             </div>
-            <div className="metric-head-actions"><button className="ghost-button" type="button">查看血缘</button><button className="ghost-button" type="button">更多</button></div>
+            <div className="metric-head-actions"><button className="ghost-button" type="button" onClick={() => notify(`${selectedMetric.name} 的血缘：${selectedMetric.source} → ${selectedMetric.code} → 服务工作台`)}>查看血缘</button><button className="ghost-button" type="button" onClick={() => notify(`已打开 ${selectedMetric.name} 操作菜单：复制指标编码、查看变更记录、申请权限`)}>更多</button></div>
           </header>
           <nav className="resource-tabs" aria-label="指标信息" role="tablist">
             <button id="resource-tab-basic" type="button" role="tab" aria-controls="resource-panel-basic" aria-selected={activeTab === "basic"} tabIndex={activeTab === "basic" ? 0 : -1} className={activeTab === "basic" ? "active" : ""} onKeyDown={handleTabKeyDown} onClick={() => setActiveTab("basic")}>基本信息</button>

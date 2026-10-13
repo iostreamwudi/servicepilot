@@ -17,7 +17,18 @@
     }
   ],
   "vars": {
-    "LLM_BASE_URL": "http://nginx:3100/compatible-mode/v1",
-    "LLM_MODEL": "qwen-plus"
+    "LLM_BASE_URL": "https://ark.cn-beijing.volces.com/api/plan/v3",
+    "LLM_MODEL": "minimax-m3",
+    "EMBEDDING_MODEL": "qwen3.7-text-embedding",
+    "RETRIEVAL_SHADOW_ENABLED": "true",
+    "RERANK_ENABLED": "true",
+    "RERANK_MODEL": "qwen3-rerank",
+    "RERANK_TIMEOUT_MS": "1500",
+    "RETRIEVAL_V2_BM25_TOP_K": "30",
+    "RETRIEVAL_V2_DENSE_TOP_K": "30",
+    "RETRIEVAL_V2_FUSION_TOP_K": "25",
+    "RETRIEVAL_V2_RERANK_TOP_K": "8",
+    "RETRIEVAL_V2_RRF_K": "60",
+    "RETRIEVAL_V2_MAX_BUSINESS_BOOST": "0.0005"
   }
 }

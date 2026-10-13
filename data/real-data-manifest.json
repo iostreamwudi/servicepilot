@@ -1,6 +1,6 @@
 {
   "version": "2026.07-hybrid-routing-2",
-  "generatedAt": "2026-07-22T05:25:47.528Z",
+  "generatedAt": "2026-08-24T05:39:32.049Z",
   "policy": "公开真实匿名语料仅用于私有研究评测；官方规则原文仅进入待复核区；内部演示流程不得被表述为真实企业业务数据。",
   "totals": {
     "upstreamDialogues": 10701,
@@ -11,6 +11,12 @@
     "evaluationCases": 4196,
     "uniqueEvaluationQueries": 4196,
     "contextRequiredCases": 891,
+    "fullAgentGeneralizationCases": 100,
+    "fullAgentGeneralizationContextRequired": 24,
+    "fullAgentHoldoutCases": 100,
+    "fullAgentHoldoutContextRequired": 23,
+    "fullAgentHoldout3Cases": 100,
+    "fullAgentHoldout3ContextRequired": 32,
     "officialKnowledgeSources": 21,
     "officialKnowledgeChunks": 1008,
     "curatedKnowledgeDocuments": 25,
@@ -241,7 +247,10 @@
     "supportedRoutePassRate": 0.9033,
     "unsupportedSafeFallbackRate": 0.9518,
     "unsupportedFalsePositiveRoutes": 785,
-    "completeDatasetFingerprint": "697dcc9c0211dd09931bcacad6d14d229b7190f5fcd002a25c982ceca0e325dc"
+    "completeDatasetFingerprint": "697dcc9c0211dd09931bcacad6d14d229b7190f5fcd002a25c982ceca0e325dc",
+    "fullAgentGeneralizationFingerprint": "bc7faf1a8169a5f525b32a34b0c3ceadb47d586025008fed4b4b5df8e4d6dd4e",
+    "fullAgentHoldoutFingerprint": "832b4e91c419ff19e88148a98e19205cac6e34befb65d7c39befdcdc0e281656",
+    "fullAgentHoldout3Fingerprint": "612abf2cc546941fd982cf3d025a439527b6e27902890824a75fa3f6facf3fec"
   },
-  "manifestSha256": "c126ba06f342831e0876401cf62c5be5f2220f44ece6c5e3d579bcbaa66766c8"
+  "manifestSha256": "575d4311afca3f0d80bde4be09132ab1038eb1b01e29bc6968a91400e561e08f"
 }

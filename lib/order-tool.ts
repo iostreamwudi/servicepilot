@@ -1,24 +1,28 @@
+import { and, eq } from "drizzle-orm";
+import { getDb } from "../db";
+import { orders, refunds } from "../db/schema";
+
 export type RefundRecord = {
   orderId: string;
   status: "approved" | "processing" | "completed";
   approvedAt: string;
   expectedBusinessDays: string;
   paymentChannelMasked: string;
-};
-
-const refundRecords: Record<string, RefundRecord> = {
-  "OR-773928": { orderId: "OR-773928", status: "approved", approvedAt: "2026-07-20T10:26:00+08:00", expectedBusinessDays: "1–3", paymentChannelMasked: "支付宝（尾号 **28）" },
-  "OR-773114": { orderId: "OR-773114", status: "processing", approvedAt: "2026-07-18T15:40:00+08:00", expectedBusinessDays: "1–3", paymentChannelMasked: "微信支付（尾号 **06）" },
-  "OR-772601": { orderId: "OR-772601", status: "completed", approvedAt: "2026-07-16T09:15:00+08:00", expectedBusinessDays: "1–3", paymentChannelMasked: "银行卡（尾号 **61）" },
+  sourceType: "production";
+  sourceId: string;
+  dataFreshness: string;
 };
 
 export function validOrderId(value: string) {
   return /^OR-\d{6}$/.test(value);
 }
 
-export function lookupRefund(orderId: string) {
-  if (!validOrderId(orderId)) return { ok: false as const, code: "INVALID_ORDER_ID" };
-  const record = refundRecords[orderId];
-  if (!record) return { ok: false as const, code: "NOT_FOUND" };
-  return { ok: true as const, record };
+export async function lookupRefund(orderId: string, organizationId: string) {
+  if (!validOrderId(orderId)) return { ok: false as const, code: "INVALID_ORDER_ID", sourceType: "production" as const, sourceId: orderId, isSynthetic: false };
+  const db = getDb();
+  const rows = await db.select({ refund: refunds, order: orders }).from(refunds).innerJoin(orders, eq(refunds.orderId, orders.id)).where(and(eq(refunds.organizationId, organizationId), eq(refunds.orderId, orderId))).limit(1);
+  const row = rows[0];
+  if (!row) return { ok: false as const, code: "NOT_FOUND", sourceType: "production" as const, sourceId: orderId, isSynthetic: false };
+  if (row.refund.sourceType !== "production") return { ok: false as const, code: "NON_PRODUCTION_RECORD", sourceType: row.refund.sourceType, sourceId: orderId, isSynthetic: true };
+  return { ok: true as const, record: { orderId, status: row.refund.status as RefundRecord["status"], approvedAt: row.refund.approvedAt ?? "", expectedBusinessDays: row.refund.expectedBusinessDays ?? "", paymentChannelMasked: row.order.paymentChannelMasked ?? "未记录", sourceType: "production", sourceId: row.refund.id, dataFreshness: row.refund.updatedAt }, readOnly: true, isSynthetic: false };
 }

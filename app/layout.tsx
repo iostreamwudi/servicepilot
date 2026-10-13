@@ -14,6 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(origin),
     title,
     description,
+    icons: { icon: "/servicepilot-mark.png", shortcut: "/servicepilot-mark.png", apple: "/servicepilot-mark.png" },
     openGraph: { title, description, type: "website", images: [{ url: image, width: 1200, height: 630, alt: "ServicePilot 产品界面" }] },
     twitter: { card: "summary_large_image", title, description, images: [image] },
   };

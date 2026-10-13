@@ -1,0 +1,20 @@
+CREATE TABLE `ticket_saved_views` (
+	`id` text PRIMARY KEY NOT NULL,
+	`organization_id` text NOT NULL,
+	`owner_user_id` text NOT NULL,
+	`name` text NOT NULL,
+	`scope` text DEFAULT 'personal' NOT NULL,
+	`team_key` text,
+	`filter` text DEFAULT 'all' NOT NULL,
+	`view` text DEFAULT 'all' NOT NULL,
+	`owner_filter` text DEFAULT '' NOT NULL,
+	`team_filter` text DEFAULT '' NOT NULL,
+	`sort` text DEFAULT 'updated' NOT NULL,
+	`query` text DEFAULT '' NOT NULL,
+	`open_only` integer DEFAULT false NOT NULL,
+	`is_default` integer DEFAULT false NOT NULL,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	FOREIGN KEY (`organization_id`) REFERENCES `organizations`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`owner_user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
+);

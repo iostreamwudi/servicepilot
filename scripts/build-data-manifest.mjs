@@ -10,6 +10,9 @@ const evaluationSets = await Promise.all(evalFiles.map(async (path) => ({ path, 
 const corpus = JSON.parse(await readFile("data/knowledge-official-corpus.json", "utf8"));
 const curated = JSON.parse(await readFile("data/knowledge-seed.json", "utf8"));
 const completeEvaluation = JSON.parse(await readFile("data/routing-csds-complete-baseline.json", "utf8"));
+const generalizationEvaluation = JSON.parse(await readFile("data/eval-csds-generalization-100.json", "utf8"));
+const holdoutEvaluation = JSON.parse(await readFile("data/eval-csds-holdout2-100.json", "utf8"));
+const holdout3Evaluation = JSON.parse(await readFile("data/eval-csds-holdout3-100.json", "utf8"));
 const allCases = evaluationSets.flatMap(({ data }) => data.cases);
 const uniqueQueries = new Set(allCases.map((item) => item.query));
 const splitStats = Object.fromEntries(evaluationSets.map(({ path, data }) => [data.source.rawSplitSize === 9101 ? "train" : path.includes("-val") ? "val" : "test", {
@@ -35,6 +38,12 @@ const manifest = {
     evaluationCases: allCases.length,
     uniqueEvaluationQueries: uniqueQueries.size,
     contextRequiredCases: allCases.filter((item) => item.contextRequired).length,
+    fullAgentGeneralizationCases: generalizationEvaluation.cases.length,
+    fullAgentGeneralizationContextRequired: generalizationEvaluation.sampling.contextRequired,
+    fullAgentHoldoutCases: holdoutEvaluation.cases.length,
+    fullAgentHoldoutContextRequired: holdoutEvaluation.sampling.contextRequired,
+    fullAgentHoldout3Cases: holdout3Evaluation.cases.length,
+    fullAgentHoldout3ContextRequired: holdout3Evaluation.sampling.contextRequired,
     officialKnowledgeSources: corpus.sources.length,
     officialKnowledgeChunks: corpus.documents.length,
     curatedKnowledgeDocuments: curated.documents.length,
@@ -80,6 +89,9 @@ const manifest = {
     unsupportedSafeFallbackRate: completeEvaluation.unsupported.safeFallbackRate,
     unsupportedFalsePositiveRoutes: completeEvaluation.unsupported.falsePositiveRoutes,
     completeDatasetFingerprint: completeEvaluation.datasetFingerprint,
+    fullAgentGeneralizationFingerprint: generalizationEvaluation.freeze.casesSha256,
+    fullAgentHoldoutFingerprint: holdoutEvaluation.freeze.casesSha256,
+    fullAgentHoldout3Fingerprint: holdout3Evaluation.freeze.casesSha256,
   },
 };
 manifest.manifestSha256 = createHash("sha256").update(JSON.stringify({ totals: manifest.totals, sources: manifest.sources, quality: manifest.quality })).digest("hex");

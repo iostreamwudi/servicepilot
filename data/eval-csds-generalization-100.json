@@ -1,0 +1,3745 @@
+{
+  "version": "1.0-csds-train-new-agent100",
+  "description": "从用户提供的CSDS原始数据抽取的100条新完整Agent泛化测试；按DialogueID排除指定的既有端到端评测对话，并保证每个对话最多一条。",
+  "source": {
+    "name": "CSDS: A Fine-grained Chinese Dataset for Customer Service Dialogue Summarization",
+    "upstream": "https://github.com/xiaolinAndy/CSDS",
+    "paper": "https://aclanthology.org/2021.emnlp-main.365/",
+    "upstreamCommit": "1421348842ae3041574cc85fea21e15c3a2106cb",
+    "rawSplitSize": 9101,
+    "licenseNote": "Upstream repository does not state an explicit dataset license; keep this derived subset private and use for research/evaluation only."
+  },
+  "sampling": {
+    "method": "deterministic-stratified-sha256-dialogue-grouped",
+    "split": "train",
+    "quotas": {
+      "refund": 25,
+      "invoice": 25,
+      "address": 25,
+      "damage": 25
+    },
+    "total": 100,
+    "excludedDialogueCount": 117,
+    "contextRequired": 24
+  },
+  "privacy": {
+    "upstreamAnonymized": true,
+    "secondaryScan": true,
+    "directIdentifiersFound": 0
+  },
+  "freeze": {
+    "locked": true,
+    "casesSha256": "bc7faf1a8169a5f525b32a34b0c3ceadb47d586025008fed4b4b5df8e4d6dd4e"
+  },
+  "cases": [
+    {
+      "id": "csds-train-refund-4280-0",
+      "category": "real-refund",
+      "query": "我有个退款，支付方式是货到付款，我扫描快递小哥的微信付给他了，然后退款后，会退给我嘛?；快件不合适退货了",
+      "history": [
+        {
+          "role": "user",
+          "content": "?"
+        },
+        {
+          "role": "assistant",
+          "content": "请问您是咨询之前的问题还是有其他的问题需要处理呢?"
+        },
+        {
+          "role": "user",
+          "content": "你好"
+        },
+        {
+          "role": "assistant",
+          "content": "您好"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 4280,
+        "originalIntent": "退款到哪儿",
+        "questionUtteranceIds": [
+          4,
+          5
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-6850-0",
+      "category": "real-refund",
+      "query": "我买了个商品用白条支付的；但是我白条已经还完了，如果申请售后退款了，那会退到哪里?",
+      "history": [
+        {
+          "role": "user",
+          "content": "我要转人工"
+        },
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-114",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 6850,
+        "originalIntent": "白条使用流程",
+        "questionUtteranceIds": [
+          2,
+          4
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-8264-0",
+      "category": "real-refund",
+      "query": "怎么这么慢；还没收到话费",
+      "history": [
+        {
+          "role": "user",
+          "content": "咨询订单号:[订单编号]"
+        },
+        {
+          "role": "assistant",
+          "content": "请问还有其他还可以帮到您的吗?"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-114",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 8264,
+        "originalIntent": "配送周期",
+        "questionUtteranceIds": [
+          2,
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-509-2",
+      "category": "real-refund",
+      "query": "审核通过后多久返回?",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "审核通过会给您退货的"
+        },
+        {
+          "role": "assistant",
+          "content": "今天就会审核完成"
+        },
+        {
+          "role": "user",
+          "content": "钱怎么退?"
+        },
+        {
+          "role": "assistant",
+          "content": "原路返回呢亲"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 509,
+        "originalIntent": "正常退款周期",
+        "questionUtteranceIds": [
+          17
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-136-0",
+      "category": "real-refund",
+      "query": "我不心按多了一双鞋子可以，退一双鞋子吗?",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 136,
+        "originalIntent": "部分商品退款",
+        "questionUtteranceIds": [
+          1
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-10487-0",
+      "category": "real-refund",
+      "query": "什么时候能充值?；没有，充不了的话可以退款吗?",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "亲亲是不是这订单号([订单编号])吗?"
+        },
+        {
+          "role": "user",
+          "content": "嗯"
+        },
+        {
+          "role": "assistant",
+          "content": "亲爱的稍等一下这边小妹帮您查询一下。"
+        },
+        {
+          "role": "assistant",
+          "content": "请问还有其他还可以帮到您的吗?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 10487,
+        "originalIntent": "充值未到账充值到账时间",
+        "questionUtteranceIds": [
+          8,
+          18
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-5239-4",
+      "category": "real-refund",
+      "query": "一定会退回的么、会不会产品退回了、还没收到款、到时候我联系谁",
+      "history": [
+        {
+          "role": "user",
+          "content": "如果我没收到"
+        },
+        {
+          "role": "assistant",
+          "content": "没收到，上面显示取消成功您等待产品返回就可以了"
+        },
+        {
+          "role": "user",
+          "content": "就是说产品返回一定会给我退款的么"
+        },
+        {
+          "role": "assistant",
+          "content": "对的呢"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-114",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 5239,
+        "originalIntent": "正常退款周期",
+        "questionUtteranceIds": [
+          34
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-10645-1",
+      "category": "real-refund",
+      "query": "那定金给我退了吧，我直接用e[姓名]；再说你们之前付定金的时候，也没说尾款不让用e[姓名]",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "我帮您查了"
+        },
+        {
+          "role": "assistant",
+          "content": "预售订单"
+        },
+        {
+          "role": "user",
+          "content": "今天秒杀还一个价格，还让用e卡，早知道我就不付定金了"
+        },
+        {
+          "role": "assistant",
+          "content": "的确是没有办法使用E呢"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 10645,
+        "originalIntent": "退款到哪儿",
+        "questionUtteranceIds": [
+          13,
+          14
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-10308-1",
+      "category": "real-refund",
+      "query": "我是微信转的平台小哥说会返到平台里的；麻烦你转到我卡里好不好",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "是这件商品么亲爱的"
+        },
+        {
+          "role": "user",
+          "content": "是的美女"
+        },
+        {
+          "role": "assistant",
+          "content": "您申请售后退货的话"
+        },
+        {
+          "role": "assistant",
+          "content": "一般是会为您原返的哦"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 10308,
+        "originalIntent": "退款到哪儿",
+        "questionUtteranceIds": [
+          10,
+          11
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-9352-3",
+      "category": "real-refund",
+      "query": "然后我再下单；卡有限额；今天买了很多东西了；先帮我把钱退给我吧",
+      "history": [
+        {
+          "role": "user",
+          "content": "然后选专票吗"
+        },
+        {
+          "role": "assistant",
+          "content": "嗯嗯"
+        },
+        {
+          "role": "assistant",
+          "content": "请问还有其他还可以帮到您的吗?"
+        },
+        {
+          "role": "user",
+          "content": "我退款了"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 9352,
+        "originalIntent": "申请退款",
+        "questionUtteranceIds": [
+          32,
+          34,
+          35,
+          31
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-1693-1",
+      "category": "real-refund",
+      "query": "不签收就退款吗",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "亲爱的这款是比较优惠的呢质量也比较好的建议您留用可以吗"
+        },
+        {
+          "role": "user",
+          "content": "亲爱的呀主要现在有了好几个啦咋整"
+        },
+        {
+          "role": "user",
+          "content": "帮帮忙吧"
+        },
+        {
+          "role": "assistant",
+          "content": "您好一般是不支持取消的，我们这边为您尝试拦截这个订单，如果拦截成功财务退款，不成功商品后续配送的时候不强制签收可以吗"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 1693,
+        "originalIntent": "unlabeled",
+        "questionUtteranceIds": [
+          14
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-8121-0",
+      "category": "real-refund",
+      "query": "两个是一起寄回去的；为什么我申请退货了之后，只退了一个锁的钱",
+      "history": [
+        {
+          "role": "user",
+          "content": "这个单子里包含[数字]个门锁，我申请退货了之后，就寄了回去"
+        },
+        {
+          "role": "assistant",
+          "content": "您说"
+        },
+        {
+          "role": "user",
+          "content": "然后其中一个没有拆封"
+        },
+        {
+          "role": "user",
+          "content": "一个拆了，但是发现型号不对了之后马上就重新放回盒子了"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-114",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 8121,
+        "originalIntent": "保修返修及退换货政策",
+        "questionUtteranceIds": [
+          9,
+          10
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-8157-1",
+      "category": "real-refund",
+      "query": "美女，钱什么时候能给我返呢?；嗯嗯，我用白条支付的，是不是钱也直接返回到白条里呢?美女",
+      "history": [
+        {
+          "role": "user",
+          "content": "钱什么时候能给我返呢?"
+        },
+        {
+          "role": "assistant",
+          "content": "这边自提点直接操作返回的"
+        },
+        {
+          "role": "user",
+          "content": "昂，"
+        },
+        {
+          "role": "assistant",
+          "content": "这个是我们自提点直接安排返回的"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 8157,
+        "originalIntent": "正常退款周期",
+        "questionUtteranceIds": [
+          18,
+          20
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-8892-0",
+      "category": "real-refund",
+      "query": "你好，本月等免运费券怎么没有?",
+      "history": [],
+      "contextRequired": true,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 8892,
+        "originalIntent": "优惠券获得方式",
+        "questionUtteranceIds": [
+          0
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-2014-0",
+      "category": "real-refund",
+      "query": "对白条支付后商家退款退到哪里，?",
+      "history": [
+        {
+          "role": "user",
+          "content": "您好我的购物白条支付的退货后退款退到哪里?"
+        },
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        },
+        {
+          "role": "assistant",
+          "content": "白条还款了吗"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-114",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 2014,
+        "originalIntent": "退款到哪儿",
+        "questionUtteranceIds": [
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-2774-2",
+      "category": "real-refund",
+      "query": "多长时间有结果呢退款什么时候能到",
+      "history": [
+        {
+          "role": "user",
+          "content": "那就代提交吧谢谢"
+        },
+        {
+          "role": "assistant",
+          "content": "好的"
+        },
+        {
+          "role": "user",
+          "content": "从没遇过这样的事儿还是比较信赖平台的"
+        },
+        {
+          "role": "assistant",
+          "content": "请您放心我们这个会及时安排处理的"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 2774,
+        "originalIntent": "正常退款周期",
+        "questionUtteranceIds": [
+          35
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-2072-0",
+      "category": "real-refund",
+      "query": "客户已经拒收了；订单号:[数字]这个订单查下；客户买的是孕妇枕，怎么给发的是地垫；客户已拒收，并且已申请退款，麻烦尽快处理哦",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "尊敬的商家，您好!欢迎咨询平台物流商家在线客服~"
+        },
+        {
+          "role": "user",
+          "content": "您好"
+        },
+        {
+          "role": "assistant",
+          "content": "在的哦，请问有什么可以帮到您的?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 2072,
+        "originalIntent": "拒收",
+        "questionUtteranceIds": [
+          9,
+          3,
+          4,
+          12
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-1614-0",
+      "category": "real-refund",
+      "query": "我买的车子不想要了快递来了我也没有签收这样就可以了吧?；也申请退款了显示在审核",
+      "history": [
+        {
+          "role": "user",
+          "content": "你好"
+        },
+        {
+          "role": "user",
+          "content": "平台快递(移动端)"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 1614,
+        "originalIntent": "查询取消是否成功",
+        "questionUtteranceIds": [
+          2,
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-69-0",
+      "category": "real-refund",
+      "query": "我充的话费大概多久到账啊?你们刚刚说帮我核实一下，什么时候能核实好了呀",
+      "history": [
+        {
+          "role": "user",
+          "content": "还没好吗"
+        },
+        {
+          "role": "assistant",
+          "content": "请问亲爱哒您是咨询之前的问题还是有其他的问题需要处理呢?"
+        },
+        {
+          "role": "assistant",
+          "content": "亲爱的，麻烦您提供下充值号码，小妹帮您核对哟"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 69,
+        "originalIntent": "充值未到账充值到账时间",
+        "questionUtteranceIds": [
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-7064-0",
+      "category": "real-refund",
+      "query": "你好，机子我已经退回去了；能退款吗?",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 7064,
+        "originalIntent": "正常退款周期",
+        "questionUtteranceIds": [
+          1,
+          2
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-9986-0",
+      "category": "real-refund",
+      "query": "还有[数字]多没退呢；我是交[数字]多，剩下的分期的",
+      "history": [
+        {
+          "role": "user",
+          "content": "咨询订单号:[订单编号]"
+        },
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 9986,
+        "originalIntent": "返修退换货处理周期",
+        "questionUtteranceIds": [
+          2,
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-1233-4",
+      "category": "real-refund",
+      "query": "然后是这样，我想买咱们自营的，用公司账户网银付款；当天您那边可以确认到账么?；因为明天就要用到~",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "现在新注册还未到审核系统"
+        },
+        {
+          "role": "user",
+          "content": "好的，那我等一下~"
+        },
+        {
+          "role": "assistant",
+          "content": "好的"
+        },
+        {
+          "role": "assistant",
+          "content": "审核好小妹在线回复您"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 1233,
+        "originalIntent": "支付方式",
+        "questionUtteranceIds": [
+          27,
+          28,
+          31
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-9480-0",
+      "category": "real-refund",
+      "query": "我当时买是打白条的；然后我立马还进去了；现在退给我[数字]说是退白条里；那这[数字]到底退哪去了",
+      "history": [
+        {
+          "role": "user",
+          "content": "在吗"
+        },
+        {
+          "role": "assistant",
+          "content": "请问您是咨询之前的问题还是有其他的问题需要处理呢?"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-114",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 9480,
+        "originalIntent": "白条使用流程",
+        "questionUtteranceIds": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-10512-0",
+      "category": "real-refund",
+      "query": "已经充值到账了吗",
+      "history": [
+        {
+          "role": "user",
+          "content": "咨询订单号:[订单编号]"
+        },
+        {
+          "role": "assistant",
+          "content": "亲爱的，小妹这就帮您查询，请稍等下哦"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 10512,
+        "originalIntent": "充值未到账充值到账时间",
+        "questionUtteranceIds": [
+          2
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-refund-1545-3",
+      "category": "real-refund",
+      "query": "那我实际到账会是多少",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "您是会员plus用户，不收取的"
+        },
+        {
+          "role": "user",
+          "content": "就是申请退货然后就退我[金额]是吧"
+        },
+        {
+          "role": "assistant",
+          "content": "我在重新核对下"
+        },
+        {
+          "role": "assistant",
+          "content": "是在线支付，和礼品卡总共是[金额]的"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-114",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 1545,
+        "originalIntent": "退款到哪儿",
+        "questionUtteranceIds": [
+          16
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-8528-2",
+      "category": "real-invoice",
+      "query": "这个地址，快递可以送到吗?上次大件商品是送到了，不知道发票是否可以送到?",
+      "history": [
+        {
+          "role": "user",
+          "content": "好的"
+        },
+        {
+          "role": "assistant",
+          "content": "请问还有其他可以帮到您的吗?"
+        },
+        {
+          "role": "user",
+          "content": "没了，谢谢"
+        },
+        {
+          "role": "user",
+          "content": "重庆[地址]"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 8528,
+        "originalIntent": "是否提供发票",
+        "questionUtteranceIds": [
+          13
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-2450-0",
+      "category": "real-invoice",
+      "query": "这个鸡蛋能开专票吗；增值税专用发票",
+      "history": [
+        {
+          "role": "user",
+          "content": "https://item.jd.com/3158880.html"
+        },
+        {
+          "role": "assistant",
+          "content": "您好"
+        },
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 2450,
+        "originalIntent": "增票相关",
+        "questionUtteranceIds": [
+          3,
+          5
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-681-0",
+      "category": "real-invoice",
+      "query": "我要返修，可是发票可能找不到了",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 681,
+        "originalIntent": "返修退换货发票",
+        "questionUtteranceIds": [
+          1
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-2027-1",
+      "category": "real-invoice",
+      "query": "完成后就可以了哇?我已经付款了，书也拿到了；对的",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "请您提供一下订单号"
+        },
+        {
+          "role": "user",
+          "content": "[订单编号]"
+        },
+        {
+          "role": "assistant",
+          "content": "您的订单还没有完成，需要等待收款确认"
+        },
+        {
+          "role": "assistant",
+          "content": "订单完成后修改"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 2027,
+        "originalIntent": "查看发票",
+        "questionUtteranceIds": [
+          8,
+          10
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-5396-0",
+      "category": "real-invoice",
+      "query": "我想更改下电子发票的内容",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "在的哦"
+        },
+        {
+          "role": "assistant",
+          "content": "亲亲，有什么可以帮您的吗?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 5396,
+        "originalIntent": "发票退换修改",
+        "questionUtteranceIds": [
+          2,
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-9536-0",
+      "category": "real-invoice",
+      "query": "发票开错可以修改吗；电子发票",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "早上好，亲爱的贵宾，有什么可以帮到您的吗?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 9536,
+        "originalIntent": "发票退换修改",
+        "questionUtteranceIds": [
+          1,
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-2369-0",
+      "category": "real-invoice",
+      "query": "我的这个发票是电子的吗；还是纸质的",
+      "history": [
+        {
+          "role": "user",
+          "content": "我要转人工"
+        },
+        {
+          "role": "user",
+          "content": "你好"
+        },
+        {
+          "role": "assistant",
+          "content": "您好!"
+        },
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 2369,
+        "originalIntent": "电子发票",
+        "questionUtteranceIds": [
+          4,
+          5
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-7627-0",
+      "category": "real-invoice",
+      "query": "需要专票；我要买格力空调；但是我现在不能变更专票信息；还没有下单，担心后面不能更改发票信息",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "您好，平台小秘书很高兴为您服务"
+        },
+        {
+          "role": "assistant",
+          "content": "亲，请问有什么可以帮到您的吗?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 7627,
+        "originalIntent": "发票退换修改",
+        "questionUtteranceIds": [
+          2,
+          3,
+          4,
+          6
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-1806-0",
+      "category": "real-invoice",
+      "query": "这两个的电脑发票，打印机发票，是否已经寄出?",
+      "history": [
+        {
+          "role": "user",
+          "content": "发票问题"
+        },
+        {
+          "role": "assistant",
+          "content": "您好:有什么问题我可以帮您处理或解决呢?"
+        },
+        {
+          "role": "user",
+          "content": "顾客通过点击web咚咚[站点]信息发送:[订单编号:[订单编号]"
+        },
+        {
+          "role": "user",
+          "content": "顾客通过点击web咚咚[站点]信息发送:[订单编号:[订单编号]"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 1806,
+        "originalIntent": "查看发票",
+        "questionUtteranceIds": [
+          5
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-7171-1",
+      "category": "real-invoice",
+      "query": "下订单时，忘了填写单位了",
+      "history": [
+        {
+          "role": "user",
+          "content": "开发票从那里开"
+        },
+        {
+          "role": "assistant",
+          "content": "小主，查询您开具的是电子发票，我们会在订单完成[数字]小时内，生成电子发票，您可以用电脑端点击我的订单-找到对应的商品-点击订单详情-电子发票下载，自行下载到桌面打印，电子发票和纸质发票都一样的，不影响质保的呢!"
+        },
+        {
+          "role": "user",
+          "content": "我的冰柜发票抬头是单位的"
+        },
+        {
+          "role": "assistant",
+          "content": "这边显示是开具的个人抬头呢"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 7171,
+        "originalIntent": "发票退换修改",
+        "questionUtteranceIds": [
+          7
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-5717-1",
+      "category": "real-invoice",
+      "query": "换开我要不要备注什么因为我看到咱们的发票换开系统里提交的信息还是有税号",
+      "history": [
+        {
+          "role": "user",
+          "content": "发票上出现了公司的税号"
+        },
+        {
+          "role": "user",
+          "content": "财务部说这样没办法报销"
+        },
+        {
+          "role": "assistant",
+          "content": "那需要您将发票寄回作废"
+        },
+        {
+          "role": "assistant",
+          "content": "我们给您换开"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 5717,
+        "originalIntent": "发票退换修改",
+        "questionUtteranceIds": [
+          5
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-1120-2",
+      "category": "real-invoice",
+      "query": "可以开专票么",
+      "history": [
+        {
+          "role": "user",
+          "content": "是哪一种啊"
+        },
+        {
+          "role": "assistant",
+          "content": "在平台首页直接搜索平台E卡实体卡"
+        },
+        {
+          "role": "user",
+          "content": "咨询订单号:[订单编号]"
+        },
+        {
+          "role": "user",
+          "content": "目前拍的是对的么"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 1120,
+        "originalIntent": "增票相关",
+        "questionUtteranceIds": [
+          17
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-1974-0",
+      "category": "real-invoice",
+      "query": "就电子票吧；前面说的开增值税的，可以不用换了；帮忙换回来",
+      "history": [
+        {
+          "role": "user",
+          "content": "亲"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 1974,
+        "originalIntent": "电子发票",
+        "questionUtteranceIds": [
+          8,
+          1,
+          10
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-9528-1",
+      "category": "real-invoice",
+      "query": "您啥时改好?",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "抬头呢"
+        },
+        {
+          "role": "user",
+          "content": "没变"
+        },
+        {
+          "role": "assistant",
+          "content": "好哒~"
+        },
+        {
+          "role": "assistant",
+          "content": "没问题哈"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 9528,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          26
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-10358-0",
+      "category": "real-invoice",
+      "query": "发票内容能写办公用品吗；发票抬头写错了，想更改",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "亲亲"
+        },
+        {
+          "role": "assistant",
+          "content": "您好"
+        },
+        {
+          "role": "user",
+          "content": "你好"
+        },
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 10358,
+        "originalIntent": "发票退换修改",
+        "questionUtteranceIds": [
+          8,
+          5
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-6098-1",
+      "category": "real-invoice",
+      "query": "对了我想问一下增值税发票什么时候能开下来?",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "是的呢额"
+        },
+        {
+          "role": "assistant",
+          "content": "有新旧订单的"
+        },
+        {
+          "role": "user",
+          "content": "👌"
+        },
+        {
+          "role": "user",
+          "content": "麻烦您了"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 6098,
+        "originalIntent": "审核时效",
+        "questionUtteranceIds": [
+          25
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-2897-1",
+      "category": "real-invoice",
+      "query": "不能换其他抬头吗",
+      "history": [
+        {
+          "role": "user",
+          "content": "对"
+        },
+        {
+          "role": "assistant",
+          "content": "[组织机构]"
+        },
+        {
+          "role": "assistant",
+          "content": "查看是这个抬头"
+        },
+        {
+          "role": "assistant",
+          "content": "不支持换开其他公司哦"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 2897,
+        "originalIntent": "发票退换修改",
+        "questionUtteranceIds": [
+          9
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-1321-0",
+      "category": "real-invoice",
+      "query": "发票还是发我邮箱，我自己打出来；找不到",
+      "history": [
+        {
+          "role": "user",
+          "content": "顾客通过点击web咚咚[站点]信息发送:[订单编号:[订单编号]"
+        },
+        {
+          "role": "assistant",
+          "content": "亲，您是咨询之前反馈过的问题，还是咨询最新的问题?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 1321,
+        "originalIntent": "查看发票",
+        "questionUtteranceIds": [
+          2,
+          6
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-3125-1",
+      "category": "real-invoice",
+      "query": "可以开增值税票吗?；这两个都把发票改为:[组织机构]",
+      "history": [
+        {
+          "role": "user",
+          "content": "是的，还有幕布那个也需要改"
+        },
+        {
+          "role": "assistant",
+          "content": "修改发票辛苦您提供下需要换开的发票具体信息的哦"
+        },
+        {
+          "role": "user",
+          "content": "[组织机构]"
+        },
+        {
+          "role": "user",
+          "content": "[数字]C"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 3125,
+        "originalIntent": "增票相关",
+        "questionUtteranceIds": [
+          8,
+          19
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-3596-0",
+      "category": "real-invoice",
+      "query": "就是改发票问题；修改发票",
+      "history": [
+        {
+          "role": "user",
+          "content": "有"
+        },
+        {
+          "role": "assistant",
+          "content": "您好，平台客服[数字]号很高兴为您服务!"
+        },
+        {
+          "role": "assistant",
+          "content": "请问您是咨询之前的问题还是有其他的问题需要处理呢?"
+        },
+        {
+          "role": "user",
+          "content": "之前的"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 3596,
+        "originalIntent": "发票退换修改",
+        "questionUtteranceIds": [
+          4,
+          5
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-2332-1",
+      "category": "real-invoice",
+      "query": "可我看还是原来的；是自动给我开，还是要申请",
+      "history": [
+        {
+          "role": "user",
+          "content": "刚保了价退我[数字]元，但我的发票是不是要重开，还是保留原来的"
+        },
+        {
+          "role": "user",
+          "content": "刚保了价退我[数字]元，但我的发票是不是要重开，还是保留原来的"
+        },
+        {
+          "role": "assistant",
+          "content": "重新开具的呢"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-401",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 2332,
+        "originalIntent": "发票退换修改",
+        "questionUtteranceIds": [
+          10,
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-3747-0",
+      "category": "real-invoice",
+      "query": "用户询问为什么购买的书本订单没有显示电子发票。",
+      "history": [
+        {
+          "role": "user",
+          "content": "好的"
+        },
+        {
+          "role": "user",
+          "content": "我再等两天看看"
+        },
+        {
+          "role": "user",
+          "content": "谢谢你"
+        },
+        {
+          "role": "assistant",
+          "content": "嗯嗯"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 3747,
+        "originalIntent": "unlabeled",
+        "questionUtteranceIds": [
+          11
+        ],
+        "form": "human-annotated-question-summary"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-7033-3",
+      "category": "real-invoice",
+      "query": "我有资质的；那要是退货的话，增票也要退回给你们的",
+      "history": [
+        {
+          "role": "user",
+          "content": "那个发票能不能先慢点开，如果不好用的话，我会退货的"
+        },
+        {
+          "role": "assistant",
+          "content": "电子发票在您订单完成的[数字]-[数字]个工作日后为您开据的，开具了之后您可以在“我的订单”--“订单详情”--“发票详情”中直接下载即可."
+        },
+        {
+          "role": "user",
+          "content": "我单位是开增票的哦"
+        },
+        {
+          "role": "assistant",
+          "content": "可以开增值税专用发票的呢您下单在发票里选择增票然后在平台账户里上传公司资质(只有电脑端才能选择，手机端无法选择)"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 7033,
+        "originalIntent": "增票相关",
+        "questionUtteranceIds": [
+          18,
+          19
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-6953-2",
+      "category": "real-invoice",
+      "query": "有发票一起是吗",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "[姓名]"
+        },
+        {
+          "role": "user",
+          "content": "你们确定可以刷公务卡吗?"
+        },
+        {
+          "role": "assistant",
+          "content": "可以哈"
+        },
+        {
+          "role": "assistant",
+          "content": "只要是银联的都可以哈"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 6953,
+        "originalIntent": "是否提供发票",
+        "questionUtteranceIds": [
+          16
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-invoice-3154-1",
+      "category": "real-invoice",
+      "query": "哪里可以设置发票信息；可以补开票吗；有些能补开发票吗",
+      "history": [
+        {
+          "role": "user",
+          "content": "怎么样才能改好"
+        },
+        {
+          "role": "assistant",
+          "content": "您的是普通发票是吧亲"
+        },
+        {
+          "role": "user",
+          "content": "对"
+        },
+        {
+          "role": "user",
+          "content": "我可能从一开始就错了"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-401",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 3154,
+        "originalIntent": "补发票",
+        "questionUtteranceIds": [
+          19,
+          20,
+          6
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-2429-1",
+      "category": "real-address",
+      "query": "是的；可以联系快递明天送到我公司呢",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "稍等哈"
+        },
+        {
+          "role": "assistant",
+          "content": "亲亲，小妹这边查询您的订单在平台[站点]发货完成，准备送往平台[站点]了呢，是预计儿童节送达的哦，建议您耐心等待呢"
+        },
+        {
+          "role": "user",
+          "content": "今天到不了?"
+        },
+        {
+          "role": "assistant",
+          "content": "亲亲，这边小妹查询是预计明天送达的呢，实在是抱歉"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-301",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 2429,
+        "originalIntent": "配送周期",
+        "questionUtteranceIds": [
+          16,
+          14,
+          15
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-7845-0",
+      "category": "real-address",
+      "query": "已经发货了，地址错误了，如何更改",
+      "history": [
+        {
+          "role": "user",
+          "content": "[订单编号:[订单编号]"
+        },
+        {
+          "role": "assistant",
+          "content": "您好，请问亲爱的有什么可以为您效劳的呢?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 7845,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          2
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-8430-0",
+      "category": "real-address",
+      "query": "你好，我想问下我这个订单可以改地址吗?",
+      "history": [
+        {
+          "role": "user",
+          "content": "咨询订单号:[订单编号]商品ID:5305726"
+        },
+        {
+          "role": "user",
+          "content": "订单业务咨询"
+        },
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 8430,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-8598-0",
+      "category": "real-address",
+      "query": "你那能操作吗；地址写错了；改一下",
+      "history": [
+        {
+          "role": "user",
+          "content": "咨询订单号:[订单编号]"
+        },
+        {
+          "role": "assistant",
+          "content": "请问有什么可以帮助您的吗"
+        },
+        {
+          "role": "assistant",
+          "content": "您好，我在的哦。"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 8598,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          8,
+          3,
+          4
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-1824-1",
+      "category": "real-address",
+      "query": "我人在南京[地址]，我现在要送到南京，可以吗?谢谢!；改一下地址再重新配送不行吗。",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "一般情况下是不会配送的，保险起见和您说一下的"
+        },
+        {
+          "role": "user",
+          "content": "那个地址的喔里没人住啊。他们不要放在门卫处就好了。要不打电话给我放在门卫处就糟了。"
+        },
+        {
+          "role": "assistant",
+          "content": "您这边已经取消订单了"
+        },
+        {
+          "role": "assistant",
+          "content": "是不会进行配送的呢"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 1824,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          9,
+          7
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-5712-0",
+      "category": "real-address",
+      "query": "我的笔记本到浦东站了，系统显示准备送往奉城站；不是改好地址了嘛，亲",
+      "history": [],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 5712,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          0,
+          2
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-8117-0",
+      "category": "real-address",
+      "query": "我能不能改个地址啊",
+      "history": [
+        {
+          "role": "user",
+          "content": "在"
+        },
+        {
+          "role": "user",
+          "content": "人工服务"
+        },
+        {
+          "role": "assistant",
+          "content": "请问有什么问题可以帮您处理或者解决呢?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 8117,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-7969-0",
+      "category": "real-address",
+      "query": "确实是填错了；抱歉，可以帮我重新送到中国地质大学北京吗",
+      "history": [
+        {
+          "role": "user",
+          "content": "咨询订单号:[订单编号]"
+        },
+        {
+          "role": "assistant",
+          "content": "怎么了呢"
+        },
+        {
+          "role": "user",
+          "content": "快递小哥跟我说可能是我地址没写对"
+        },
+        {
+          "role": "assistant",
+          "content": "收货地址北京[地址]"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-301",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 7969,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          5,
+          6
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-8149-0",
+      "category": "real-address",
+      "query": "修改成功了；我买的手机后来改地址了；改之前发货了",
+      "history": [
+        {
+          "role": "user",
+          "content": "在不"
+        },
+        {
+          "role": "user",
+          "content": "会员权益咨询"
+        },
+        {
+          "role": "user",
+          "content": "订单业务咨询"
+        },
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 8149,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          8,
+          4,
+          6
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-2956-0",
+      "category": "real-address",
+      "query": "可以修改一下收货地址吗?；因为周六单位不上班；也没人代收",
+      "history": [
+        {
+          "role": "user",
+          "content": "可以修改收货地址吗?"
+        },
+        {
+          "role": "user",
+          "content": "订单业务咨询"
+        },
+        {
+          "role": "user",
+          "content": "你好"
+        },
+        {
+          "role": "assistant",
+          "content": "您好，我在的哦，让您久等了"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 2956,
+        "originalIntent": "代收",
+        "questionUtteranceIds": [
+          4,
+          5,
+          6
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-6975-1",
+      "category": "real-address",
+      "query": "那我可以修改手机号码吗；绑定的手机号可以修改么",
+      "history": [
+        {
+          "role": "user",
+          "content": "你看对吗"
+        },
+        {
+          "role": "assistant",
+          "content": "稍等一下"
+        },
+        {
+          "role": "user",
+          "content": "好的"
+        },
+        {
+          "role": "assistant",
+          "content": "去去，妹子可以帮您找回之前的实名账户继续使用的呢，您看可以吗"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 6975,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          17,
+          18
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-3448-0",
+      "category": "real-address",
+      "query": "更改手机号",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "亲爱的，请问您是咨询解绑、绑定(手机或者邮箱微信qq)/忘记支付密码的问题吗?"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-301",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 3448,
+        "originalIntent": "手机邮件相关问题",
+        "questionUtteranceIds": [
+          1
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-3043-1",
+      "category": "real-address",
+      "query": "收货人、收货地址和收货人联系方式都需要更改的。",
+      "history": [
+        {
+          "role": "user",
+          "content": "收货地址:广东[地址]"
+        },
+        {
+          "role": "assistant",
+          "content": "好的哈"
+        },
+        {
+          "role": "user",
+          "content": "收货人:[姓名][数字]"
+        },
+        {
+          "role": "assistant",
+          "content": "妹子这边去帮您联系配送哈"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 3043,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          16
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-6606-0",
+      "category": "real-address",
+      "query": "我这个能更改配送地址吗?",
+      "history": [
+        {
+          "role": "user",
+          "content": "咨询订单号:[订单编号]"
+        },
+        {
+          "role": "user",
+          "content": "您好，地址错了"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 6606,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          2
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-8681-2",
+      "category": "real-address",
+      "query": "地址能改吗?；改成我家的地址",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "好的这边来修改"
+        },
+        {
+          "role": "user",
+          "content": "那边?"
+        },
+        {
+          "role": "assistant",
+          "content": "亲您的地址无法预约今天取件的"
+        },
+        {
+          "role": "assistant",
+          "content": "可以预约其他时间段的"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 8681,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          20,
+          21
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-7892-0",
+      "category": "real-address",
+      "query": "修改订单；北京[地址]；你好我有一个小天鹅洗衣机的订单我需要改地址",
+      "history": [],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 7892,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          0,
+          8,
+          2
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-5768-0",
+      "category": "real-address",
+      "query": "我的地址错了能改一下吗",
+      "history": [],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 5768,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          0
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-2639-3",
+      "category": "real-address",
+      "query": "你这边能直接更改派件地址吗?",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "麻烦您保持手机畅通哦"
+        },
+        {
+          "role": "assistant",
+          "content": "客气了呢亲亲"
+        },
+        {
+          "role": "user",
+          "content": "好的"
+        },
+        {
+          "role": "assistant",
+          "content": "请问还有其他还可以帮到您的吗?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 2639,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          44
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-9228-0",
+      "category": "real-address",
+      "query": "你好；我订单地址错了；地址错了",
+      "history": [
+        {
+          "role": "user",
+          "content": "能改下嘛"
+        },
+        {
+          "role": "user",
+          "content": "[订单编号:[订单编号]"
+        },
+        {
+          "role": "user",
+          "content": "能改下嘛"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 9228,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          3,
+          4,
+          6
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-7968-0",
+      "category": "real-address",
+      "query": "我选的是货到付款，但收货地址是转收；平台配送能否中途改地址；最终的送货地址",
+      "history": [
+        {
+          "role": "user",
+          "content": "咨询订单号:[订单编号]"
+        },
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 7968,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          11,
+          2,
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-5492-3",
+      "category": "real-address",
+      "query": "地址要改一下",
+      "history": [
+        {
+          "role": "user",
+          "content": "机子挺好用其他问题没发现，就充电这方面有意义"
+        },
+        {
+          "role": "assistant",
+          "content": "好的我们专员会为您处理的"
+        },
+        {
+          "role": "user",
+          "content": "好的谢谢"
+        },
+        {
+          "role": "assistant",
+          "content": "感谢您对平台的支持，祝您生活愉快，再见"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 5492,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          22
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-9890-0",
+      "category": "real-address",
+      "query": "我地址写错了；可以改吗；这两本书到太原了",
+      "history": [],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 9890,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          0,
+          1,
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-3515-0",
+      "category": "real-address",
+      "query": "我现在还可以更改地址吗?",
+      "history": [
+        {
+          "role": "user",
+          "content": "你好"
+        },
+        {
+          "role": "user",
+          "content": "平台快递(移动端)"
+        },
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": false,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 3515,
+        "originalIntent": "unlabeled",
+        "questionUtteranceIds": [
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-4915-1",
+      "category": "real-address",
+      "query": "[地址]；是广西的；没事，能帮帮我吗",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "您的订单正在配送途中，请您准备签收(配送员:[姓名]，电话:[电话])，感谢您的耐心等待。"
+        },
+        {
+          "role": "assistant",
+          "content": "您可以与配送师傅协商下您修改的地址哦"
+        },
+        {
+          "role": "assistant",
+          "content": "只能修改本市的地址哦"
+        },
+        {
+          "role": "assistant",
+          "content": "不是本站配送会延迟[数字]-[数字]天哦"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-301",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 4915,
+        "originalIntent": "修改订单",
+        "questionUtteranceIds": [
+          8,
+          10,
+          7
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-address-4457-0",
+      "category": "real-address",
+      "query": "你好，我想用我的手机号登录平台，可是应该是以前用这个号的人注册过，我点忘记密码，要填历史收货人，可是我没有用这个号在平台上买过东西，所以登录不上，也改不了密码，该怎么办",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "亲爱的，有什么问题妹子可以帮您处理或解决的呢"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-301",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 4457,
+        "originalIntent": "unlabeled",
+        "questionUtteranceIds": [
+          1
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-5890-2",
+      "category": "real-damage",
+      "query": "你让他们包装好一点应该就是运输过程中损坏的",
+      "history": [
+        {
+          "role": "user",
+          "content": "好吧"
+        },
+        {
+          "role": "user",
+          "content": "什么时候来取货"
+        },
+        {
+          "role": "assistant",
+          "content": "亲爱的，[时间]前提交的服务单，我们会在当天[时间]前审核完毕，[时间]后提交的服务单，我们会在次日[时间]前会审核完毕"
+        },
+        {
+          "role": "assistant",
+          "content": "审核成功之后取件"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 5890,
+        "originalIntent": "物流损",
+        "questionUtteranceIds": [
+          22
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-4468-0",
+      "category": "real-damage",
+      "query": "然后我已经激活了没关系的吧，因为我只有激活之后再能使用才能知道问题的；手机我昨天收到后，发现接打电话时，声音很小，并且有明显的杂音。",
+      "history": [
+        {
+          "role": "user",
+          "content": "https://item.jd.com/3133821.html"
+        },
+        {
+          "role": "user",
+          "content": "你好"
+        },
+        {
+          "role": "assistant",
+          "content": "请问您是咨询之前的问题还是有其他的问题需要处理呢?"
+        },
+        {
+          "role": "user",
+          "content": "晚上好"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 4468,
+        "originalIntent": "保修返修及退换货政策",
+        "questionUtteranceIds": [
+          19,
+          5
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-10505-1",
+      "category": "real-damage",
+      "query": "怎么维修?",
+      "history": [
+        {
+          "role": "user",
+          "content": "好"
+        },
+        {
+          "role": "assistant",
+          "content": "您的这个商品质保期就是二年呢"
+        },
+        {
+          "role": "user",
+          "content": "是啊"
+        },
+        {
+          "role": "user",
+          "content": "但是如果是中途有什么问题的话"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 10505,
+        "originalIntent": "保修返修及退换货政策",
+        "questionUtteranceIds": [
+          12
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-9802-0",
+      "category": "real-damage",
+      "query": "就是我们的货品在平台快递派送过程中被损坏了",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "尊敬的商家朋友，请问有什么可以帮您的呢?"
+        },
+        {
+          "role": "user",
+          "content": "您好"
+        },
+        {
+          "role": "assistant",
+          "content": "您好"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 9802,
+        "originalIntent": "物流损",
+        "questionUtteranceIds": [
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-6261-0",
+      "category": "real-damage",
+      "query": "当时用的白条支付，之后没有发现；[订单编号]",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        },
+        {
+          "role": "user",
+          "content": "[时间]我的一个订单因为活动说明问题，没弄上优惠"
+        },
+        {
+          "role": "user",
+          "content": "我又是个学生"
+        },
+        {
+          "role": "assistant",
+          "content": "亲爱的客户，还麻烦您提供下订单号，妹子这边给您查询哦~"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 6261,
+        "originalIntent": "白条使用流程",
+        "questionUtteranceIds": [
+          4,
+          6
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-8324-0",
+      "category": "real-damage",
+      "query": "我昨天晚上买的蓝月亮刚才快递联系我说有漏的；我申请退款吗",
+      "history": [],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 8324,
+        "originalIntent": "物流损",
+        "questionUtteranceIds": [
+          0,
+          1
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-5856-0",
+      "category": "real-damage",
+      "query": "买来没满一年；非人为损坏；我想问这样得能不能售后",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 5856,
+        "originalIntent": "近期活动咨询",
+        "questionUtteranceIds": [
+          1,
+          2,
+          7
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-4352-0",
+      "category": "real-damage",
+      "query": "我购买的无人机，JJR/C智能[数字]万航拍版A[数字](单电飞[数字]分钟)大型专业高清无人机航拍器儿童遥控，有问题，我要退货。",
+      "history": [
+        {
+          "role": "user",
+          "content": "您好"
+        },
+        {
+          "role": "assistant",
+          "content": "在的"
+        },
+        {
+          "role": "assistant",
+          "content": "请问您是咨询之前的问题还是有其他的问题需要处理呢?"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 4352,
+        "originalIntent": "保修返修及退换货政策",
+        "questionUtteranceIds": [
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-5994-1",
+      "category": "real-damage",
+      "query": "以后坏了怎么办?；上边是电话号码?",
+      "history": [
+        {
+          "role": "user",
+          "content": "己收到洗衣机，没看到十年电机保修卡"
+        },
+        {
+          "role": "assistant",
+          "content": "十年电机保修卡是虚拟的哦"
+        },
+        {
+          "role": "assistant",
+          "content": "无实物的呢"
+        },
+        {
+          "role": "user",
+          "content": "什么情况?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 5994,
+        "originalIntent": "保修返修及退换货政策",
+        "questionUtteranceIds": [
+          8,
+          9
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-6457-0",
+      "category": "real-damage",
+      "query": "行车记录仪的倒车镜坏了；怎么处理?；这个东西保修要怎么保修的啊。",
+      "history": [
+        {
+          "role": "user",
+          "content": "我要转人工"
+        },
+        {
+          "role": "assistant",
+          "content": "请问您是咨询之前的问题还是有其他的问题需要处理呢?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 6457,
+        "originalIntent": "保修返修及退换货政策",
+        "questionUtteranceIds": [
+          2,
+          3,
+          12
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-6793-0",
+      "category": "real-damage",
+      "query": "这个玻璃水壶平台快递员派件过来的时候跟我说了里面东西已经碎了我快递包装还没拆开；你们是想退货呢还是换货",
+      "history": [
+        {
+          "role": "user",
+          "content": "https://item.jd.com/999271.html"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 6793,
+        "originalIntent": "物流损",
+        "questionUtteranceIds": [
+          1,
+          4
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-5250-0",
+      "category": "real-damage",
+      "query": "这个买了才仨月就坏了",
+      "history": [
+        {
+          "role": "user",
+          "content": "这个买了才仨月就坏了"
+        },
+        {
+          "role": "user",
+          "content": "订单业务咨询"
+        },
+        {
+          "role": "assistant",
+          "content": "[订单编号]这个订单吗"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 5250,
+        "originalIntent": "保修返修及退换货政策",
+        "questionUtteranceIds": [
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-1044-0",
+      "category": "real-damage",
+      "query": "我看中了一款红酒；我看评论里面有人收货发现这款有顶塞的现象；如果我收到了发现有问题；你们酒水是不能退的对吧；可以换货吗",
+      "history": [
+        {
+          "role": "user",
+          "content": "但是我看评论里面有人收到顶塞的"
+        },
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        },
+        {
+          "role": "assistant",
+          "content": "您好，很抱歉没太理解您的意思，辛苦您详细描述一下问题以便为您解答哦"
+        },
+        {
+          "role": "user",
+          "content": "是这样的"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 1044,
+        "originalIntent": "保修返修及退换货政策",
+        "questionUtteranceIds": [
+          7,
+          11,
+          15,
+          16,
+          17
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-2789-0",
+      "category": "real-damage",
+      "query": "商品没有质量问题客户申请质量问题我这边可以审核不通过吗?",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "尊敬的商家朋友，请问有什么可以帮到您呢?(人工客服哦)"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 2789,
+        "originalIntent": "返修退换货审核不通过",
+        "questionUtteranceIds": [
+          1
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-7756-0",
+      "category": "real-damage",
+      "query": "生鲜类退款退货那时间长了生鲜都产生变化了这还能退?；送过来的三文鱼都发臭了连皮都没有去干净退款退货时间那么长到时候商家说他送过来的时候是新鲜的怎么处理?",
+      "history": [],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 7756,
+        "originalIntent": "保修返修及退换货政策",
+        "questionUtteranceIds": [
+          0,
+          5
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-3798-0",
+      "category": "real-damage",
+      "query": "有坏的咋办",
+      "history": [
+        {
+          "role": "user",
+          "content": "有没有坏的"
+        },
+        {
+          "role": "assistant",
+          "content": "您好，请问有什么可以帮助您的吗"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 3798,
+        "originalIntent": "物流损",
+        "questionUtteranceIds": [
+          2
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-85-0",
+      "category": "real-damage",
+      "query": "你好，这件商品由于外表损坏，已经在退款处理了吗；我买的牙刷被打开了，已经在退款处理了吗",
+      "history": [],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 85,
+        "originalIntent": "正常退款周期",
+        "questionUtteranceIds": [
+          0,
+          2
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-2241-0",
+      "category": "real-damage",
+      "query": "要求换货；订单[订单编号]商品有质量问题",
+      "history": [
+        {
+          "role": "user",
+          "content": "[订单编号]"
+        },
+        {
+          "role": "user",
+          "content": "我要转人工"
+        },
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 2241,
+        "originalIntent": "保修返修及退换货政策",
+        "questionUtteranceIds": [
+          3,
+          4
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-75-0",
+      "category": "real-damage",
+      "query": "我的蛋卷手环突然坏了",
+      "history": [],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 75,
+        "originalIntent": "保修返修及退换货政策",
+        "questionUtteranceIds": [
+          0
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-169-0",
+      "category": "real-damage",
+      "query": "刚收到货就是坏的；第三方卖家根本联系不到，只有机器人",
+      "history": [
+        {
+          "role": "user",
+          "content": "您好"
+        },
+        {
+          "role": "user",
+          "content": "[订单编号]"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 169,
+        "originalIntent": "物流损",
+        "questionUtteranceIds": [
+          2,
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-8290-1",
+      "category": "real-damage",
+      "query": "要是发来是坏的；给换不",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "[数字]年"
+        },
+        {
+          "role": "user",
+          "content": "你为啥就几个字的说"
+        },
+        {
+          "role": "user",
+          "content": "你是客服么"
+        },
+        {
+          "role": "assistant",
+          "content": "刷新率[数字]hz呢质保期[数字]你那"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 8290,
+        "originalIntent": "保修返修及退换货政策",
+        "questionUtteranceIds": [
+          17,
+          18
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-6505-0",
+      "category": "real-damage",
+      "query": "会不会出现挤坏呢",
+      "history": [
+        {
+          "role": "user",
+          "content": "http://item.jd.com/6325184.html"
+        },
+        {
+          "role": "assistant",
+          "content": "请问您是咨询之前的问题还是有其他的问题需要处理呢"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 6505,
+        "originalIntent": "物流损",
+        "questionUtteranceIds": [
+          2
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-157-0",
+      "category": "real-damage",
+      "query": "声音很大；感觉不到吸力；炉灶稍微开大点就烤的眼睛疼；除非很小火才感觉不到",
+      "history": [
+        {
+          "role": "assistant",
+          "content": "您好，有什么可以帮助您的呢??"
+        },
+        {
+          "role": "user",
+          "content": "我刚买的油烟机"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 157,
+        "originalIntent": "保修返修及退换货政策",
+        "questionUtteranceIds": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-9342-0",
+      "category": "real-damage",
+      "query": "去年双十一买的手表坏了怎么办呢?",
+      "history": [
+        {
+          "role": "user",
+          "content": "https://item.jd.com/5326046.html"
+        },
+        {
+          "role": "user",
+          "content": "你好"
+        },
+        {
+          "role": "assistant",
+          "content": "您好请问有什么可以帮到您的"
+        }
+      ],
+      "contextRequired": false,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 9342,
+        "originalIntent": "保修返修及退换货政策",
+        "questionUtteranceIds": [
+          3
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    },
+    {
+      "id": "csds-train-damage-4208-0",
+      "category": "real-damage",
+      "query": "我要退货；我买了吸尘器，有了两次，感觉第二次吸力明显不可以了；吸不上东西来",
+      "history": [
+        {
+          "role": "user",
+          "content": "您好"
+        },
+        {
+          "role": "assistant",
+          "content": "有什么问题我可以帮您处理或解决呢?"
+        }
+      ],
+      "contextRequired": true,
+      "expectedSource": "KB-208",
+      "expectedHandoff": true,
+      "source": {
+        "dataset": "CSDS",
+        "split": "train",
+        "dialogueId": 4208,
+        "originalIntent": "保修返修及退换货政策",
+        "questionUtteranceIds": [
+          8,
+          2,
+          4
+        ],
+        "form": "verbatim-key-utterances"
+      },
+      "transformations": [
+        "detokenized",
+        "platform-name-generalized",
+        "secondary-pii-redaction"
+      ]
+    }
+  ]
+}

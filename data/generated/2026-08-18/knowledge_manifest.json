@@ -1,0 +1,6782 @@
+[
+  {
+    "id": "KB-SYN-001",
+    "category": "refund",
+    "title": "退款申请受理条件",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-001_refund_退款申请受理条件.md"
+  },
+  {
+    "id": "KB-SYN-002",
+    "category": "refund",
+    "title": "退款申请受理条件-新客场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-002_refund_退款申请受理条件-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-003",
+    "category": "refund",
+    "title": "退款申请受理条件-老客复购场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-003_refund_退款申请受理条件-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-004",
+    "category": "refund",
+    "title": "退款申请受理条件-高峰期场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-004_refund_退款申请受理条件-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-005",
+    "category": "refund",
+    "title": "退款申请受理条件-跨区域场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-005_refund_退款申请受理条件-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-006",
+    "category": "refund",
+    "title": "退款申请受理条件-偏远地区场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-006_refund_退款申请受理条件-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-007",
+    "category": "refund",
+    "title": "退款申请受理条件-节假日场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-007_refund_退款申请受理条件-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-008",
+    "category": "refund",
+    "title": "退款申请受理条件-大促活动场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-008_refund_退款申请受理条件-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-009",
+    "category": "refund",
+    "title": "退款申请受理条件-部分商品场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-009_refund_退款申请受理条件-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-010",
+    "category": "refund",
+    "title": "退款申请受理条件-多商品订单场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-010_refund_退款申请受理条件-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-011",
+    "category": "refund",
+    "title": "退款申请受理条件-礼品订单场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-011_refund_退款申请受理条件-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-012",
+    "category": "refund",
+    "title": "退款申请受理条件-企业客户场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-012_refund_退款申请受理条件-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-013",
+    "category": "refund",
+    "title": "退款申请受理条件-会员权益场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-013_refund_退款申请受理条件-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-014",
+    "category": "refund",
+    "title": "退款申请受理条件-异常复核场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-014_refund_退款申请受理条件-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-015",
+    "category": "refund",
+    "title": "退款申请受理条件-证据不足场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-015_refund_退款申请受理条件-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-016",
+    "category": "refund",
+    "title": "退款申请受理条件-重复咨询场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-016_refund_退款申请受理条件-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-017",
+    "category": "refund",
+    "title": "退款申请受理条件-情绪升级场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-017_refund_退款申请受理条件-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-018",
+    "category": "refund",
+    "title": "退款申请受理条件-超时未处理场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-018_refund_退款申请受理条件-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-019",
+    "category": "refund",
+    "title": "退款申请受理条件-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-019_refund_退款申请受理条件-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-020",
+    "category": "refund",
+    "title": "退款申请受理条件-夜间服务场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "申请",
+      "条件"
+    ],
+    "filename": "KB-SYN-020_refund_退款申请受理条件-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-021",
+    "category": "refund",
+    "title": "退款审核与处理时效",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-021_refund_退款审核与处理时效.md"
+  },
+  {
+    "id": "KB-SYN-022",
+    "category": "refund",
+    "title": "退款审核与处理时效-新客场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-022_refund_退款审核与处理时效-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-023",
+    "category": "refund",
+    "title": "退款审核与处理时效-老客复购场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-023_refund_退款审核与处理时效-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-024",
+    "category": "refund",
+    "title": "退款审核与处理时效-高峰期场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-024_refund_退款审核与处理时效-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-025",
+    "category": "refund",
+    "title": "退款审核与处理时效-跨区域场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-025_refund_退款审核与处理时效-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-026",
+    "category": "refund",
+    "title": "退款审核与处理时效-偏远地区场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-026_refund_退款审核与处理时效-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-027",
+    "category": "refund",
+    "title": "退款审核与处理时效-节假日场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-027_refund_退款审核与处理时效-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-028",
+    "category": "refund",
+    "title": "退款审核与处理时效-大促活动场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-028_refund_退款审核与处理时效-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-029",
+    "category": "refund",
+    "title": "退款审核与处理时效-部分商品场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-029_refund_退款审核与处理时效-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-030",
+    "category": "refund",
+    "title": "退款审核与处理时效-多商品订单场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-030_refund_退款审核与处理时效-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-031",
+    "category": "refund",
+    "title": "退款审核与处理时效-礼品订单场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-031_refund_退款审核与处理时效-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-032",
+    "category": "refund",
+    "title": "退款审核与处理时效-企业客户场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-032_refund_退款审核与处理时效-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-033",
+    "category": "refund",
+    "title": "退款审核与处理时效-会员权益场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-033_refund_退款审核与处理时效-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-034",
+    "category": "refund",
+    "title": "退款审核与处理时效-异常复核场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-034_refund_退款审核与处理时效-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-035",
+    "category": "refund",
+    "title": "退款审核与处理时效-证据不足场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-035_refund_退款审核与处理时效-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-036",
+    "category": "refund",
+    "title": "退款审核与处理时效-重复咨询场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-036_refund_退款审核与处理时效-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-037",
+    "category": "refund",
+    "title": "退款审核与处理时效-情绪升级场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-037_refund_退款审核与处理时效-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-038",
+    "category": "refund",
+    "title": "退款审核与处理时效-超时未处理场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-038_refund_退款审核与处理时效-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-039",
+    "category": "refund",
+    "title": "退款审核与处理时效-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-039_refund_退款审核与处理时效-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-040",
+    "category": "refund",
+    "title": "退款审核与处理时效-夜间服务场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "退款",
+      "审核",
+      "时效"
+    ],
+    "filename": "KB-SYN-040_refund_退款审核与处理时效-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-041",
+    "category": "refund",
+    "title": "退款到账异常处理",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-041_refund_退款到账异常处理.md"
+  },
+  {
+    "id": "KB-SYN-042",
+    "category": "refund",
+    "title": "退款到账异常处理-新客场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-042_refund_退款到账异常处理-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-043",
+    "category": "refund",
+    "title": "退款到账异常处理-老客复购场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-043_refund_退款到账异常处理-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-044",
+    "category": "refund",
+    "title": "退款到账异常处理-高峰期场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-044_refund_退款到账异常处理-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-045",
+    "category": "refund",
+    "title": "退款到账异常处理-跨区域场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-045_refund_退款到账异常处理-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-046",
+    "category": "refund",
+    "title": "退款到账异常处理-偏远地区场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-046_refund_退款到账异常处理-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-047",
+    "category": "refund",
+    "title": "退款到账异常处理-节假日场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-047_refund_退款到账异常处理-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-048",
+    "category": "refund",
+    "title": "退款到账异常处理-大促活动场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-048_refund_退款到账异常处理-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-049",
+    "category": "refund",
+    "title": "退款到账异常处理-部分商品场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-049_refund_退款到账异常处理-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-050",
+    "category": "refund",
+    "title": "退款到账异常处理-多商品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-050_refund_退款到账异常处理-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-051",
+    "category": "refund",
+    "title": "退款到账异常处理-礼品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-051_refund_退款到账异常处理-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-052",
+    "category": "refund",
+    "title": "退款到账异常处理-企业客户场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-052_refund_退款到账异常处理-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-053",
+    "category": "refund",
+    "title": "退款到账异常处理-会员权益场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-053_refund_退款到账异常处理-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-054",
+    "category": "refund",
+    "title": "退款到账异常处理-异常复核场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-054_refund_退款到账异常处理-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-055",
+    "category": "refund",
+    "title": "退款到账异常处理-证据不足场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-055_refund_退款到账异常处理-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-056",
+    "category": "refund",
+    "title": "退款到账异常处理-重复咨询场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-056_refund_退款到账异常处理-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-057",
+    "category": "refund",
+    "title": "退款到账异常处理-情绪升级场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-057_refund_退款到账异常处理-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-058",
+    "category": "refund",
+    "title": "退款到账异常处理-超时未处理场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-058_refund_退款到账异常处理-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-059",
+    "category": "refund",
+    "title": "退款到账异常处理-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-059_refund_退款到账异常处理-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-060",
+    "category": "refund",
+    "title": "退款到账异常处理-夜间服务场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款",
+      "到账",
+      "异常"
+    ],
+    "filename": "KB-SYN-060_refund_退款到账异常处理-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-061",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-061_refund_订单取消与优惠权益退回.md"
+  },
+  {
+    "id": "KB-SYN-062",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-新客场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-062_refund_订单取消与优惠权益退回-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-063",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-老客复购场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-063_refund_订单取消与优惠权益退回-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-064",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-高峰期场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-064_refund_订单取消与优惠权益退回-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-065",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-跨区域场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-065_refund_订单取消与优惠权益退回-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-066",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-偏远地区场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-066_refund_订单取消与优惠权益退回-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-067",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-节假日场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-067_refund_订单取消与优惠权益退回-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-068",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-大促活动场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-068_refund_订单取消与优惠权益退回-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-069",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-部分商品场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-069_refund_订单取消与优惠权益退回-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-070",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-多商品订单场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-070_refund_订单取消与优惠权益退回-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-071",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-礼品订单场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-071_refund_订单取消与优惠权益退回-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-072",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-企业客户场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-072_refund_订单取消与优惠权益退回-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-073",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-会员权益场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-073_refund_订单取消与优惠权益退回-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-074",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-异常复核场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-074_refund_订单取消与优惠权益退回-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-075",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-证据不足场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-075_refund_订单取消与优惠权益退回-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-076",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-重复咨询场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-076_refund_订单取消与优惠权益退回-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-077",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-情绪升级场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-077_refund_订单取消与优惠权益退回-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-078",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-超时未处理场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-078_refund_订单取消与优惠权益退回-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-079",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-079_refund_订单取消与优惠权益退回-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-080",
+    "category": "refund",
+    "title": "订单取消与优惠权益退回-夜间服务场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "取消订单",
+      "优惠券",
+      "退回"
+    ],
+    "filename": "KB-SYN-080_refund_订单取消与优惠权益退回-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-081",
+    "category": "refund",
+    "title": "已完成订单的售后期限",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-081_refund_已完成订单的售后期限.md"
+  },
+  {
+    "id": "KB-SYN-082",
+    "category": "refund",
+    "title": "已完成订单的售后期限-新客场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-082_refund_已完成订单的售后期限-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-083",
+    "category": "refund",
+    "title": "已完成订单的售后期限-老客复购场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-083_refund_已完成订单的售后期限-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-084",
+    "category": "refund",
+    "title": "已完成订单的售后期限-高峰期场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-084_refund_已完成订单的售后期限-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-085",
+    "category": "refund",
+    "title": "已完成订单的售后期限-跨区域场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-085_refund_已完成订单的售后期限-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-086",
+    "category": "refund",
+    "title": "已完成订单的售后期限-偏远地区场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-086_refund_已完成订单的售后期限-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-087",
+    "category": "refund",
+    "title": "已完成订单的售后期限-节假日场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-087_refund_已完成订单的售后期限-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-088",
+    "category": "refund",
+    "title": "已完成订单的售后期限-大促活动场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-088_refund_已完成订单的售后期限-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-089",
+    "category": "refund",
+    "title": "已完成订单的售后期限-部分商品场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-089_refund_已完成订单的售后期限-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-090",
+    "category": "refund",
+    "title": "已完成订单的售后期限-多商品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-090_refund_已完成订单的售后期限-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-091",
+    "category": "refund",
+    "title": "已完成订单的售后期限-礼品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-091_refund_已完成订单的售后期限-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-092",
+    "category": "refund",
+    "title": "已完成订单的售后期限-企业客户场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-092_refund_已完成订单的售后期限-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-093",
+    "category": "refund",
+    "title": "已完成订单的售后期限-会员权益场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-093_refund_已完成订单的售后期限-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-094",
+    "category": "refund",
+    "title": "已完成订单的售后期限-异常复核场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-094_refund_已完成订单的售后期限-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-095",
+    "category": "refund",
+    "title": "已完成订单的售后期限-证据不足场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-095_refund_已完成订单的售后期限-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-096",
+    "category": "refund",
+    "title": "已完成订单的售后期限-重复咨询场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-096_refund_已完成订单的售后期限-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-097",
+    "category": "refund",
+    "title": "已完成订单的售后期限-情绪升级场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-097_refund_已完成订单的售后期限-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-098",
+    "category": "refund",
+    "title": "已完成订单的售后期限-超时未处理场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-098_refund_已完成订单的售后期限-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-099",
+    "category": "refund",
+    "title": "已完成订单的售后期限-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-099_refund_已完成订单的售后期限-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-100",
+    "category": "refund",
+    "title": "已完成订单的售后期限-夜间服务场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "完成订单",
+      "售后",
+      "期限"
+    ],
+    "filename": "KB-SYN-100_refund_已完成订单的售后期限-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-101",
+    "category": "refund",
+    "title": "退款金额核对规范",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-101_refund_退款金额核对规范.md"
+  },
+  {
+    "id": "KB-SYN-102",
+    "category": "refund",
+    "title": "退款金额核对规范-新客场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-102_refund_退款金额核对规范-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-103",
+    "category": "refund",
+    "title": "退款金额核对规范-老客复购场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-103_refund_退款金额核对规范-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-104",
+    "category": "refund",
+    "title": "退款金额核对规范-高峰期场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-104_refund_退款金额核对规范-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-105",
+    "category": "refund",
+    "title": "退款金额核对规范-跨区域场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-105_refund_退款金额核对规范-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-106",
+    "category": "refund",
+    "title": "退款金额核对规范-偏远地区场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-106_refund_退款金额核对规范-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-107",
+    "category": "refund",
+    "title": "退款金额核对规范-节假日场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-107_refund_退款金额核对规范-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-108",
+    "category": "refund",
+    "title": "退款金额核对规范-大促活动场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-108_refund_退款金额核对规范-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-109",
+    "category": "refund",
+    "title": "退款金额核对规范-部分商品场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-109_refund_退款金额核对规范-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-110",
+    "category": "refund",
+    "title": "退款金额核对规范-多商品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-110_refund_退款金额核对规范-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-111",
+    "category": "refund",
+    "title": "退款金额核对规范-礼品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-111_refund_退款金额核对规范-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-112",
+    "category": "refund",
+    "title": "退款金额核对规范-企业客户场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-112_refund_退款金额核对规范-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-113",
+    "category": "refund",
+    "title": "退款金额核对规范-会员权益场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-113_refund_退款金额核对规范-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-114",
+    "category": "refund",
+    "title": "退款金额核对规范-异常复核场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-114_refund_退款金额核对规范-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-115",
+    "category": "refund",
+    "title": "退款金额核对规范-证据不足场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-115_refund_退款金额核对规范-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-116",
+    "category": "refund",
+    "title": "退款金额核对规范-重复咨询场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-116_refund_退款金额核对规范-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-117",
+    "category": "refund",
+    "title": "退款金额核对规范-情绪升级场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-117_refund_退款金额核对规范-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-118",
+    "category": "refund",
+    "title": "退款金额核对规范-超时未处理场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-118_refund_退款金额核对规范-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-119",
+    "category": "refund",
+    "title": "退款金额核对规范-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-119_refund_退款金额核对规范-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-120",
+    "category": "refund",
+    "title": "退款金额核对规范-夜间服务场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款金额",
+      "核对"
+    ],
+    "filename": "KB-SYN-120_refund_退款金额核对规范-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-121",
+    "category": "refund",
+    "title": "部分退款处理规范",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-121_refund_部分退款处理规范.md"
+  },
+  {
+    "id": "KB-SYN-122",
+    "category": "refund",
+    "title": "部分退款处理规范-新客场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-122_refund_部分退款处理规范-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-123",
+    "category": "refund",
+    "title": "部分退款处理规范-老客复购场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-123_refund_部分退款处理规范-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-124",
+    "category": "refund",
+    "title": "部分退款处理规范-高峰期场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-124_refund_部分退款处理规范-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-125",
+    "category": "refund",
+    "title": "部分退款处理规范-跨区域场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-125_refund_部分退款处理规范-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-126",
+    "category": "refund",
+    "title": "部分退款处理规范-偏远地区场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-126_refund_部分退款处理规范-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-127",
+    "category": "refund",
+    "title": "部分退款处理规范-节假日场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-127_refund_部分退款处理规范-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-128",
+    "category": "refund",
+    "title": "部分退款处理规范-大促活动场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-128_refund_部分退款处理规范-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-129",
+    "category": "refund",
+    "title": "部分退款处理规范-部分商品场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-129_refund_部分退款处理规范-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-130",
+    "category": "refund",
+    "title": "部分退款处理规范-多商品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-130_refund_部分退款处理规范-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-131",
+    "category": "refund",
+    "title": "部分退款处理规范-礼品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-131_refund_部分退款处理规范-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-132",
+    "category": "refund",
+    "title": "部分退款处理规范-企业客户场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-132_refund_部分退款处理规范-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-133",
+    "category": "refund",
+    "title": "部分退款处理规范-会员权益场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-133_refund_部分退款处理规范-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-134",
+    "category": "refund",
+    "title": "部分退款处理规范-异常复核场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-134_refund_部分退款处理规范-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-135",
+    "category": "refund",
+    "title": "部分退款处理规范-证据不足场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-135_refund_部分退款处理规范-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-136",
+    "category": "refund",
+    "title": "部分退款处理规范-重复咨询场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-136_refund_部分退款处理规范-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-137",
+    "category": "refund",
+    "title": "部分退款处理规范-情绪升级场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-137_refund_部分退款处理规范-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-138",
+    "category": "refund",
+    "title": "部分退款处理规范-超时未处理场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-138_refund_部分退款处理规范-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-139",
+    "category": "refund",
+    "title": "部分退款处理规范-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-139_refund_部分退款处理规范-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-140",
+    "category": "refund",
+    "title": "部分退款处理规范-夜间服务场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "部分退款",
+      "多件商品"
+    ],
+    "filename": "KB-SYN-140_refund_部分退款处理规范-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-141",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-141_refund_退款拒绝与申诉处理.md"
+  },
+  {
+    "id": "KB-SYN-142",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-新客场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-142_refund_退款拒绝与申诉处理-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-143",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-老客复购场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-143_refund_退款拒绝与申诉处理-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-144",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-高峰期场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-144_refund_退款拒绝与申诉处理-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-145",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-跨区域场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-145_refund_退款拒绝与申诉处理-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-146",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-偏远地区场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-146_refund_退款拒绝与申诉处理-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-147",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-节假日场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-147_refund_退款拒绝与申诉处理-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-148",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-大促活动场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-148_refund_退款拒绝与申诉处理-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-149",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-部分商品场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-149_refund_退款拒绝与申诉处理-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-150",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-多商品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-150_refund_退款拒绝与申诉处理-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-151",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-礼品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-151_refund_退款拒绝与申诉处理-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-152",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-企业客户场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-152_refund_退款拒绝与申诉处理-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-153",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-会员权益场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-153_refund_退款拒绝与申诉处理-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-154",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-异常复核场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-154_refund_退款拒绝与申诉处理-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-155",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-证据不足场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-155_refund_退款拒绝与申诉处理-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-156",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-重复咨询场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-156_refund_退款拒绝与申诉处理-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-157",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-情绪升级场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-157_refund_退款拒绝与申诉处理-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-158",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-超时未处理场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-158_refund_退款拒绝与申诉处理-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-159",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-159_refund_退款拒绝与申诉处理-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-160",
+    "category": "refund",
+    "title": "退款拒绝与申诉处理-夜间服务场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "退款拒绝",
+      "申诉",
+      "复核"
+    ],
+    "filename": "KB-SYN-160_refund_退款拒绝与申诉处理-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-161",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-161_damage_生鲜商品破损赔付标准.md"
+  },
+  {
+    "id": "KB-SYN-162",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-新客场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-162_damage_生鲜商品破损赔付标准-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-163",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-老客复购场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-163_damage_生鲜商品破损赔付标准-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-164",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-高峰期场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-164_damage_生鲜商品破损赔付标准-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-165",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-跨区域场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-165_damage_生鲜商品破损赔付标准-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-166",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-偏远地区场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-166_damage_生鲜商品破损赔付标准-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-167",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-节假日场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-167_damage_生鲜商品破损赔付标准-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-168",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-大促活动场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-168_damage_生鲜商品破损赔付标准-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-169",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-部分商品场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-169_damage_生鲜商品破损赔付标准-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-170",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-多商品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-170_damage_生鲜商品破损赔付标准-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-171",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-礼品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-171_damage_生鲜商品破损赔付标准-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-172",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-企业客户场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-172_damage_生鲜商品破损赔付标准-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-173",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-会员权益场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-173_damage_生鲜商品破损赔付标准-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-174",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-异常复核场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-174_damage_生鲜商品破损赔付标准-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-175",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-证据不足场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-175_damage_生鲜商品破损赔付标准-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-176",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-重复咨询场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-176_damage_生鲜商品破损赔付标准-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-177",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-情绪升级场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-177_damage_生鲜商品破损赔付标准-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-178",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-超时未处理场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-178_damage_生鲜商品破损赔付标准-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-179",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-179_damage_生鲜商品破损赔付标准-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-180",
+    "category": "damage",
+    "title": "生鲜商品破损赔付标准-夜间服务场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "生鲜",
+      "破损",
+      "赔付"
+    ],
+    "filename": "KB-SYN-180_damage_生鲜商品破损赔付标准-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-181",
+    "category": "damage",
+    "title": "普通商品外观破损处理",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-181_damage_普通商品外观破损处理.md"
+  },
+  {
+    "id": "KB-SYN-182",
+    "category": "damage",
+    "title": "普通商品外观破损处理-新客场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-182_damage_普通商品外观破损处理-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-183",
+    "category": "damage",
+    "title": "普通商品外观破损处理-老客复购场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-183_damage_普通商品外观破损处理-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-184",
+    "category": "damage",
+    "title": "普通商品外观破损处理-高峰期场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-184_damage_普通商品外观破损处理-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-185",
+    "category": "damage",
+    "title": "普通商品外观破损处理-跨区域场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-185_damage_普通商品外观破损处理-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-186",
+    "category": "damage",
+    "title": "普通商品外观破损处理-偏远地区场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-186_damage_普通商品外观破损处理-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-187",
+    "category": "damage",
+    "title": "普通商品外观破损处理-节假日场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-187_damage_普通商品外观破损处理-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-188",
+    "category": "damage",
+    "title": "普通商品外观破损处理-大促活动场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-188_damage_普通商品外观破损处理-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-189",
+    "category": "damage",
+    "title": "普通商品外观破损处理-部分商品场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-189_damage_普通商品外观破损处理-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-190",
+    "category": "damage",
+    "title": "普通商品外观破损处理-多商品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-190_damage_普通商品外观破损处理-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-191",
+    "category": "damage",
+    "title": "普通商品外观破损处理-礼品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-191_damage_普通商品外观破损处理-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-192",
+    "category": "damage",
+    "title": "普通商品外观破损处理-企业客户场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-192_damage_普通商品外观破损处理-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-193",
+    "category": "damage",
+    "title": "普通商品外观破损处理-会员权益场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-193_damage_普通商品外观破损处理-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-194",
+    "category": "damage",
+    "title": "普通商品外观破损处理-异常复核场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-194_damage_普通商品外观破损处理-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-195",
+    "category": "damage",
+    "title": "普通商品外观破损处理-证据不足场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-195_damage_普通商品外观破损处理-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-196",
+    "category": "damage",
+    "title": "普通商品外观破损处理-重复咨询场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-196_damage_普通商品外观破损处理-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-197",
+    "category": "damage",
+    "title": "普通商品外观破损处理-情绪升级场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-197_damage_普通商品外观破损处理-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-198",
+    "category": "damage",
+    "title": "普通商品外观破损处理-超时未处理场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-198_damage_普通商品外观破损处理-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-199",
+    "category": "damage",
+    "title": "普通商品外观破损处理-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-199_damage_普通商品外观破损处理-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-200",
+    "category": "damage",
+    "title": "普通商品外观破损处理-夜间服务场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "外观破损",
+      "照片"
+    ],
+    "filename": "KB-SYN-200_damage_普通商品外观破损处理-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-201",
+    "category": "damage",
+    "title": "商品缺件与配件短少",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-201_damage_商品缺件与配件短少.md"
+  },
+  {
+    "id": "KB-SYN-202",
+    "category": "damage",
+    "title": "商品缺件与配件短少-新客场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-202_damage_商品缺件与配件短少-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-203",
+    "category": "damage",
+    "title": "商品缺件与配件短少-老客复购场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-203_damage_商品缺件与配件短少-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-204",
+    "category": "damage",
+    "title": "商品缺件与配件短少-高峰期场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-204_damage_商品缺件与配件短少-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-205",
+    "category": "damage",
+    "title": "商品缺件与配件短少-跨区域场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-205_damage_商品缺件与配件短少-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-206",
+    "category": "damage",
+    "title": "商品缺件与配件短少-偏远地区场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-206_damage_商品缺件与配件短少-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-207",
+    "category": "damage",
+    "title": "商品缺件与配件短少-节假日场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-207_damage_商品缺件与配件短少-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-208",
+    "category": "damage",
+    "title": "商品缺件与配件短少-大促活动场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-208_damage_商品缺件与配件短少-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-209",
+    "category": "damage",
+    "title": "商品缺件与配件短少-部分商品场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-209_damage_商品缺件与配件短少-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-210",
+    "category": "damage",
+    "title": "商品缺件与配件短少-多商品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-210_damage_商品缺件与配件短少-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-211",
+    "category": "damage",
+    "title": "商品缺件与配件短少-礼品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-211_damage_商品缺件与配件短少-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-212",
+    "category": "damage",
+    "title": "商品缺件与配件短少-企业客户场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-212_damage_商品缺件与配件短少-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-213",
+    "category": "damage",
+    "title": "商品缺件与配件短少-会员权益场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-213_damage_商品缺件与配件短少-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-214",
+    "category": "damage",
+    "title": "商品缺件与配件短少-异常复核场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-214_damage_商品缺件与配件短少-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-215",
+    "category": "damage",
+    "title": "商品缺件与配件短少-证据不足场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-215_damage_商品缺件与配件短少-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-216",
+    "category": "damage",
+    "title": "商品缺件与配件短少-重复咨询场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-216_damage_商品缺件与配件短少-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-217",
+    "category": "damage",
+    "title": "商品缺件与配件短少-情绪升级场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-217_damage_商品缺件与配件短少-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-218",
+    "category": "damage",
+    "title": "商品缺件与配件短少-超时未处理场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-218_damage_商品缺件与配件短少-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-219",
+    "category": "damage",
+    "title": "商品缺件与配件短少-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-219_damage_商品缺件与配件短少-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-220",
+    "category": "damage",
+    "title": "商品缺件与配件短少-夜间服务场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "缺件",
+      "少件",
+      "配件"
+    ],
+    "filename": "KB-SYN-220_damage_商品缺件与配件短少-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-221",
+    "category": "damage",
+    "title": "质量故障与维修处理",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-221_damage_质量故障与维修处理.md"
+  },
+  {
+    "id": "KB-SYN-222",
+    "category": "damage",
+    "title": "质量故障与维修处理-新客场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-222_damage_质量故障与维修处理-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-223",
+    "category": "damage",
+    "title": "质量故障与维修处理-老客复购场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-223_damage_质量故障与维修处理-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-224",
+    "category": "damage",
+    "title": "质量故障与维修处理-高峰期场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-224_damage_质量故障与维修处理-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-225",
+    "category": "damage",
+    "title": "质量故障与维修处理-跨区域场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-225_damage_质量故障与维修处理-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-226",
+    "category": "damage",
+    "title": "质量故障与维修处理-偏远地区场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-226_damage_质量故障与维修处理-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-227",
+    "category": "damage",
+    "title": "质量故障与维修处理-节假日场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-227_damage_质量故障与维修处理-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-228",
+    "category": "damage",
+    "title": "质量故障与维修处理-大促活动场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-228_damage_质量故障与维修处理-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-229",
+    "category": "damage",
+    "title": "质量故障与维修处理-部分商品场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-229_damage_质量故障与维修处理-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-230",
+    "category": "damage",
+    "title": "质量故障与维修处理-多商品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-230_damage_质量故障与维修处理-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-231",
+    "category": "damage",
+    "title": "质量故障与维修处理-礼品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-231_damage_质量故障与维修处理-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-232",
+    "category": "damage",
+    "title": "质量故障与维修处理-企业客户场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-232_damage_质量故障与维修处理-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-233",
+    "category": "damage",
+    "title": "质量故障与维修处理-会员权益场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-233_damage_质量故障与维修处理-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-234",
+    "category": "damage",
+    "title": "质量故障与维修处理-异常复核场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-234_damage_质量故障与维修处理-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-235",
+    "category": "damage",
+    "title": "质量故障与维修处理-证据不足场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-235_damage_质量故障与维修处理-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-236",
+    "category": "damage",
+    "title": "质量故障与维修处理-重复咨询场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-236_damage_质量故障与维修处理-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-237",
+    "category": "damage",
+    "title": "质量故障与维修处理-情绪升级场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-237_damage_质量故障与维修处理-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-238",
+    "category": "damage",
+    "title": "质量故障与维修处理-超时未处理场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-238_damage_质量故障与维修处理-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-239",
+    "category": "damage",
+    "title": "质量故障与维修处理-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-239_damage_质量故障与维修处理-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-240",
+    "category": "damage",
+    "title": "质量故障与维修处理-夜间服务场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "质量",
+      "故障",
+      "维修"
+    ],
+    "filename": "KB-SYN-240_damage_质量故障与维修处理-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-241",
+    "category": "damage",
+    "title": "三包责任核验边界",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-241_damage_三包责任核验边界.md"
+  },
+  {
+    "id": "KB-SYN-242",
+    "category": "damage",
+    "title": "三包责任核验边界-新客场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-242_damage_三包责任核验边界-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-243",
+    "category": "damage",
+    "title": "三包责任核验边界-老客复购场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-243_damage_三包责任核验边界-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-244",
+    "category": "damage",
+    "title": "三包责任核验边界-高峰期场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-244_damage_三包责任核验边界-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-245",
+    "category": "damage",
+    "title": "三包责任核验边界-跨区域场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-245_damage_三包责任核验边界-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-246",
+    "category": "damage",
+    "title": "三包责任核验边界-偏远地区场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-246_damage_三包责任核验边界-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-247",
+    "category": "damage",
+    "title": "三包责任核验边界-节假日场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-247_damage_三包责任核验边界-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-248",
+    "category": "damage",
+    "title": "三包责任核验边界-大促活动场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-248_damage_三包责任核验边界-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-249",
+    "category": "damage",
+    "title": "三包责任核验边界-部分商品场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-249_damage_三包责任核验边界-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-250",
+    "category": "damage",
+    "title": "三包责任核验边界-多商品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-250_damage_三包责任核验边界-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-251",
+    "category": "damage",
+    "title": "三包责任核验边界-礼品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-251_damage_三包责任核验边界-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-252",
+    "category": "damage",
+    "title": "三包责任核验边界-企业客户场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-252_damage_三包责任核验边界-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-253",
+    "category": "damage",
+    "title": "三包责任核验边界-会员权益场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-253_damage_三包责任核验边界-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-254",
+    "category": "damage",
+    "title": "三包责任核验边界-异常复核场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-254_damage_三包责任核验边界-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-255",
+    "category": "damage",
+    "title": "三包责任核验边界-证据不足场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-255_damage_三包责任核验边界-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-256",
+    "category": "damage",
+    "title": "三包责任核验边界-重复咨询场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-256_damage_三包责任核验边界-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-257",
+    "category": "damage",
+    "title": "三包责任核验边界-情绪升级场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-257_damage_三包责任核验边界-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-258",
+    "category": "damage",
+    "title": "三包责任核验边界-超时未处理场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-258_damage_三包责任核验边界-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-259",
+    "category": "damage",
+    "title": "三包责任核验边界-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-259_damage_三包责任核验边界-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-260",
+    "category": "damage",
+    "title": "三包责任核验边界-夜间服务场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "三包",
+      "包修",
+      "包换"
+    ],
+    "filename": "KB-SYN-260_damage_三包责任核验边界-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-261",
+    "category": "damage",
+    "title": "破损凭证补充要求",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-261_damage_破损凭证补充要求.md"
+  },
+  {
+    "id": "KB-SYN-262",
+    "category": "damage",
+    "title": "破损凭证补充要求-新客场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-262_damage_破损凭证补充要求-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-263",
+    "category": "damage",
+    "title": "破损凭证补充要求-老客复购场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-263_damage_破损凭证补充要求-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-264",
+    "category": "damage",
+    "title": "破损凭证补充要求-高峰期场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-264_damage_破损凭证补充要求-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-265",
+    "category": "damage",
+    "title": "破损凭证补充要求-跨区域场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-265_damage_破损凭证补充要求-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-266",
+    "category": "damage",
+    "title": "破损凭证补充要求-偏远地区场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-266_damage_破损凭证补充要求-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-267",
+    "category": "damage",
+    "title": "破损凭证补充要求-节假日场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-267_damage_破损凭证补充要求-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-268",
+    "category": "damage",
+    "title": "破损凭证补充要求-大促活动场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-268_damage_破损凭证补充要求-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-269",
+    "category": "damage",
+    "title": "破损凭证补充要求-部分商品场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-269_damage_破损凭证补充要求-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-270",
+    "category": "damage",
+    "title": "破损凭证补充要求-多商品订单场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-270_damage_破损凭证补充要求-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-271",
+    "category": "damage",
+    "title": "破损凭证补充要求-礼品订单场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-271_damage_破损凭证补充要求-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-272",
+    "category": "damage",
+    "title": "破损凭证补充要求-企业客户场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-272_damage_破损凭证补充要求-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-273",
+    "category": "damage",
+    "title": "破损凭证补充要求-会员权益场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-273_damage_破损凭证补充要求-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-274",
+    "category": "damage",
+    "title": "破损凭证补充要求-异常复核场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-274_damage_破损凭证补充要求-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-275",
+    "category": "damage",
+    "title": "破损凭证补充要求-证据不足场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-275_damage_破损凭证补充要求-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-276",
+    "category": "damage",
+    "title": "破损凭证补充要求-重复咨询场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-276_damage_破损凭证补充要求-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-277",
+    "category": "damage",
+    "title": "破损凭证补充要求-情绪升级场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-277_damage_破损凭证补充要求-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-278",
+    "category": "damage",
+    "title": "破损凭证补充要求-超时未处理场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-278_damage_破损凭证补充要求-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-279",
+    "category": "damage",
+    "title": "破损凭证补充要求-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-279_damage_破损凭证补充要求-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-280",
+    "category": "damage",
+    "title": "破损凭证补充要求-夜间服务场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "凭证",
+      "照片",
+      "补充"
+    ],
+    "filename": "KB-SYN-280_damage_破损凭证补充要求-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-281",
+    "category": "address",
+    "title": "未出库订单修改地址",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-281_address_未出库订单修改地址.md"
+  },
+  {
+    "id": "KB-SYN-282",
+    "category": "address",
+    "title": "未出库订单修改地址-新客场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-282_address_未出库订单修改地址-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-283",
+    "category": "address",
+    "title": "未出库订单修改地址-老客复购场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-283_address_未出库订单修改地址-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-284",
+    "category": "address",
+    "title": "未出库订单修改地址-高峰期场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-284_address_未出库订单修改地址-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-285",
+    "category": "address",
+    "title": "未出库订单修改地址-跨区域场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-285_address_未出库订单修改地址-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-286",
+    "category": "address",
+    "title": "未出库订单修改地址-偏远地区场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-286_address_未出库订单修改地址-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-287",
+    "category": "address",
+    "title": "未出库订单修改地址-节假日场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-287_address_未出库订单修改地址-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-288",
+    "category": "address",
+    "title": "未出库订单修改地址-大促活动场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-288_address_未出库订单修改地址-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-289",
+    "category": "address",
+    "title": "未出库订单修改地址-部分商品场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-289_address_未出库订单修改地址-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-290",
+    "category": "address",
+    "title": "未出库订单修改地址-多商品订单场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-290_address_未出库订单修改地址-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-291",
+    "category": "address",
+    "title": "未出库订单修改地址-礼品订单场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-291_address_未出库订单修改地址-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-292",
+    "category": "address",
+    "title": "未出库订单修改地址-企业客户场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-292_address_未出库订单修改地址-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-293",
+    "category": "address",
+    "title": "未出库订单修改地址-会员权益场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-293_address_未出库订单修改地址-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-294",
+    "category": "address",
+    "title": "未出库订单修改地址-异常复核场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-294_address_未出库订单修改地址-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-295",
+    "category": "address",
+    "title": "未出库订单修改地址-证据不足场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-295_address_未出库订单修改地址-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-296",
+    "category": "address",
+    "title": "未出库订单修改地址-重复咨询场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-296_address_未出库订单修改地址-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-297",
+    "category": "address",
+    "title": "未出库订单修改地址-情绪升级场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-297_address_未出库订单修改地址-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-298",
+    "category": "address",
+    "title": "未出库订单修改地址-超时未处理场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-298_address_未出库订单修改地址-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-299",
+    "category": "address",
+    "title": "未出库订单修改地址-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-299_address_未出库订单修改地址-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-300",
+    "category": "address",
+    "title": "未出库订单修改地址-夜间服务场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "改地址",
+      "未出库"
+    ],
+    "filename": "KB-SYN-300_address_未出库订单修改地址-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-301",
+    "category": "address",
+    "title": "已出库订单地址变更",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-301_address_已出库订单地址变更.md"
+  },
+  {
+    "id": "KB-SYN-302",
+    "category": "address",
+    "title": "已出库订单地址变更-新客场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-302_address_已出库订单地址变更-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-303",
+    "category": "address",
+    "title": "已出库订单地址变更-老客复购场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-303_address_已出库订单地址变更-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-304",
+    "category": "address",
+    "title": "已出库订单地址变更-高峰期场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-304_address_已出库订单地址变更-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-305",
+    "category": "address",
+    "title": "已出库订单地址变更-跨区域场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-305_address_已出库订单地址变更-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-306",
+    "category": "address",
+    "title": "已出库订单地址变更-偏远地区场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-306_address_已出库订单地址变更-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-307",
+    "category": "address",
+    "title": "已出库订单地址变更-节假日场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-307_address_已出库订单地址变更-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-308",
+    "category": "address",
+    "title": "已出库订单地址变更-大促活动场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-308_address_已出库订单地址变更-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-309",
+    "category": "address",
+    "title": "已出库订单地址变更-部分商品场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-309_address_已出库订单地址变更-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-310",
+    "category": "address",
+    "title": "已出库订单地址变更-多商品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-310_address_已出库订单地址变更-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-311",
+    "category": "address",
+    "title": "已出库订单地址变更-礼品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-311_address_已出库订单地址变更-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-312",
+    "category": "address",
+    "title": "已出库订单地址变更-企业客户场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-312_address_已出库订单地址变更-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-313",
+    "category": "address",
+    "title": "已出库订单地址变更-会员权益场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-313_address_已出库订单地址变更-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-314",
+    "category": "address",
+    "title": "已出库订单地址变更-异常复核场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-314_address_已出库订单地址变更-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-315",
+    "category": "address",
+    "title": "已出库订单地址变更-证据不足场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-315_address_已出库订单地址变更-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-316",
+    "category": "address",
+    "title": "已出库订单地址变更-重复咨询场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-316_address_已出库订单地址变更-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-317",
+    "category": "address",
+    "title": "已出库订单地址变更-情绪升级场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-317_address_已出库订单地址变更-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-318",
+    "category": "address",
+    "title": "已出库订单地址变更-超时未处理场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-318_address_已出库订单地址变更-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-319",
+    "category": "address",
+    "title": "已出库订单地址变更-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-319_address_已出库订单地址变更-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-320",
+    "category": "address",
+    "title": "已出库订单地址变更-夜间服务场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "已出库",
+      "改址",
+      "物流"
+    ],
+    "filename": "KB-SYN-320_address_已出库订单地址变更-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-321",
+    "category": "address",
+    "title": "收件信息安全核验",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-321_address_收件信息安全核验.md"
+  },
+  {
+    "id": "KB-SYN-322",
+    "category": "address",
+    "title": "收件信息安全核验-新客场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-322_address_收件信息安全核验-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-323",
+    "category": "address",
+    "title": "收件信息安全核验-老客复购场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-323_address_收件信息安全核验-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-324",
+    "category": "address",
+    "title": "收件信息安全核验-高峰期场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-324_address_收件信息安全核验-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-325",
+    "category": "address",
+    "title": "收件信息安全核验-跨区域场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-325_address_收件信息安全核验-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-326",
+    "category": "address",
+    "title": "收件信息安全核验-偏远地区场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-326_address_收件信息安全核验-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-327",
+    "category": "address",
+    "title": "收件信息安全核验-节假日场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-327_address_收件信息安全核验-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-328",
+    "category": "address",
+    "title": "收件信息安全核验-大促活动场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-328_address_收件信息安全核验-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-329",
+    "category": "address",
+    "title": "收件信息安全核验-部分商品场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-329_address_收件信息安全核验-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-330",
+    "category": "address",
+    "title": "收件信息安全核验-多商品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-330_address_收件信息安全核验-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-331",
+    "category": "address",
+    "title": "收件信息安全核验-礼品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-331_address_收件信息安全核验-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-332",
+    "category": "address",
+    "title": "收件信息安全核验-企业客户场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-332_address_收件信息安全核验-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-333",
+    "category": "address",
+    "title": "收件信息安全核验-会员权益场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-333_address_收件信息安全核验-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-334",
+    "category": "address",
+    "title": "收件信息安全核验-异常复核场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-334_address_收件信息安全核验-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-335",
+    "category": "address",
+    "title": "收件信息安全核验-证据不足场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-335_address_收件信息安全核验-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-336",
+    "category": "address",
+    "title": "收件信息安全核验-重复咨询场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-336_address_收件信息安全核验-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-337",
+    "category": "address",
+    "title": "收件信息安全核验-情绪升级场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-337_address_收件信息安全核验-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-338",
+    "category": "address",
+    "title": "收件信息安全核验-超时未处理场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-338_address_收件信息安全核验-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-339",
+    "category": "address",
+    "title": "收件信息安全核验-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-339_address_收件信息安全核验-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-340",
+    "category": "address",
+    "title": "收件信息安全核验-夜间服务场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "收件人",
+      "身份核验"
+    ],
+    "filename": "KB-SYN-340_address_收件信息安全核验-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-341",
+    "category": "address",
+    "title": "物流异常与丢件调查",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-341_address_物流异常与丢件调查.md"
+  },
+  {
+    "id": "KB-SYN-342",
+    "category": "address",
+    "title": "物流异常与丢件调查-新客场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-342_address_物流异常与丢件调查-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-343",
+    "category": "address",
+    "title": "物流异常与丢件调查-老客复购场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-343_address_物流异常与丢件调查-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-344",
+    "category": "address",
+    "title": "物流异常与丢件调查-高峰期场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-344_address_物流异常与丢件调查-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-345",
+    "category": "address",
+    "title": "物流异常与丢件调查-跨区域场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-345_address_物流异常与丢件调查-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-346",
+    "category": "address",
+    "title": "物流异常与丢件调查-偏远地区场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-346_address_物流异常与丢件调查-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-347",
+    "category": "address",
+    "title": "物流异常与丢件调查-节假日场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-347_address_物流异常与丢件调查-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-348",
+    "category": "address",
+    "title": "物流异常与丢件调查-大促活动场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-348_address_物流异常与丢件调查-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-349",
+    "category": "address",
+    "title": "物流异常与丢件调查-部分商品场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-349_address_物流异常与丢件调查-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-350",
+    "category": "address",
+    "title": "物流异常与丢件调查-多商品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-350_address_物流异常与丢件调查-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-351",
+    "category": "address",
+    "title": "物流异常与丢件调查-礼品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-351_address_物流异常与丢件调查-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-352",
+    "category": "address",
+    "title": "物流异常与丢件调查-企业客户场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-352_address_物流异常与丢件调查-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-353",
+    "category": "address",
+    "title": "物流异常与丢件调查-会员权益场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-353_address_物流异常与丢件调查-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-354",
+    "category": "address",
+    "title": "物流异常与丢件调查-异常复核场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-354_address_物流异常与丢件调查-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-355",
+    "category": "address",
+    "title": "物流异常与丢件调查-证据不足场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-355_address_物流异常与丢件调查-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-356",
+    "category": "address",
+    "title": "物流异常与丢件调查-重复咨询场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-356_address_物流异常与丢件调查-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-357",
+    "category": "address",
+    "title": "物流异常与丢件调查-情绪升级场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-357_address_物流异常与丢件调查-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-358",
+    "category": "address",
+    "title": "物流异常与丢件调查-超时未处理场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-358_address_物流异常与丢件调查-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-359",
+    "category": "address",
+    "title": "物流异常与丢件调查-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-359_address_物流异常与丢件调查-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-360",
+    "category": "address",
+    "title": "物流异常与丢件调查-夜间服务场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "丢件",
+      "物流异常"
+    ],
+    "filename": "KB-SYN-360_address_物流异常与丢件调查-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-361",
+    "category": "address",
+    "title": "拒收与退回处理",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-361_address_拒收与退回处理.md"
+  },
+  {
+    "id": "KB-SYN-362",
+    "category": "address",
+    "title": "拒收与退回处理-新客场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-362_address_拒收与退回处理-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-363",
+    "category": "address",
+    "title": "拒收与退回处理-老客复购场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-363_address_拒收与退回处理-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-364",
+    "category": "address",
+    "title": "拒收与退回处理-高峰期场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-364_address_拒收与退回处理-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-365",
+    "category": "address",
+    "title": "拒收与退回处理-跨区域场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-365_address_拒收与退回处理-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-366",
+    "category": "address",
+    "title": "拒收与退回处理-偏远地区场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-366_address_拒收与退回处理-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-367",
+    "category": "address",
+    "title": "拒收与退回处理-节假日场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-367_address_拒收与退回处理-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-368",
+    "category": "address",
+    "title": "拒收与退回处理-大促活动场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-368_address_拒收与退回处理-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-369",
+    "category": "address",
+    "title": "拒收与退回处理-部分商品场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-369_address_拒收与退回处理-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-370",
+    "category": "address",
+    "title": "拒收与退回处理-多商品订单场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-370_address_拒收与退回处理-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-371",
+    "category": "address",
+    "title": "拒收与退回处理-礼品订单场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-371_address_拒收与退回处理-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-372",
+    "category": "address",
+    "title": "拒收与退回处理-企业客户场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-372_address_拒收与退回处理-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-373",
+    "category": "address",
+    "title": "拒收与退回处理-会员权益场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-373_address_拒收与退回处理-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-374",
+    "category": "address",
+    "title": "拒收与退回处理-异常复核场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-374_address_拒收与退回处理-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-375",
+    "category": "address",
+    "title": "拒收与退回处理-证据不足场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-375_address_拒收与退回处理-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-376",
+    "category": "address",
+    "title": "拒收与退回处理-重复咨询场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-376_address_拒收与退回处理-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-377",
+    "category": "address",
+    "title": "拒收与退回处理-情绪升级场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-377_address_拒收与退回处理-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-378",
+    "category": "address",
+    "title": "拒收与退回处理-超时未处理场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-378_address_拒收与退回处理-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-379",
+    "category": "address",
+    "title": "拒收与退回处理-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-379_address_拒收与退回处理-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-380",
+    "category": "address",
+    "title": "拒收与退回处理-夜间服务场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "拒收",
+      "退回"
+    ],
+    "filename": "KB-SYN-380_address_拒收与退回处理-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-381",
+    "category": "address",
+    "title": "配送时效解释规范",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-381_address_配送时效解释规范.md"
+  },
+  {
+    "id": "KB-SYN-382",
+    "category": "address",
+    "title": "配送时效解释规范-新客场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-382_address_配送时效解释规范-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-383",
+    "category": "address",
+    "title": "配送时效解释规范-老客复购场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-383_address_配送时效解释规范-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-384",
+    "category": "address",
+    "title": "配送时效解释规范-高峰期场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-384_address_配送时效解释规范-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-385",
+    "category": "address",
+    "title": "配送时效解释规范-跨区域场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-385_address_配送时效解释规范-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-386",
+    "category": "address",
+    "title": "配送时效解释规范-偏远地区场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-386_address_配送时效解释规范-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-387",
+    "category": "address",
+    "title": "配送时效解释规范-节假日场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-387_address_配送时效解释规范-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-388",
+    "category": "address",
+    "title": "配送时效解释规范-大促活动场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-388_address_配送时效解释规范-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-389",
+    "category": "address",
+    "title": "配送时效解释规范-部分商品场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-389_address_配送时效解释规范-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-390",
+    "category": "address",
+    "title": "配送时效解释规范-多商品订单场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-390_address_配送时效解释规范-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-391",
+    "category": "address",
+    "title": "配送时效解释规范-礼品订单场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-391_address_配送时效解释规范-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-392",
+    "category": "address",
+    "title": "配送时效解释规范-企业客户场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-392_address_配送时效解释规范-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-393",
+    "category": "address",
+    "title": "配送时效解释规范-会员权益场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-393_address_配送时效解释规范-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-394",
+    "category": "address",
+    "title": "配送时效解释规范-异常复核场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-394_address_配送时效解释规范-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-395",
+    "category": "address",
+    "title": "配送时效解释规范-证据不足场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-395_address_配送时效解释规范-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-396",
+    "category": "address",
+    "title": "配送时效解释规范-重复咨询场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-396_address_配送时效解释规范-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-397",
+    "category": "address",
+    "title": "配送时效解释规范-情绪升级场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-397_address_配送时效解释规范-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-398",
+    "category": "address",
+    "title": "配送时效解释规范-超时未处理场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-398_address_配送时效解释规范-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-399",
+    "category": "address",
+    "title": "配送时效解释规范-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-399_address_配送时效解释规范-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-400",
+    "category": "address",
+    "title": "配送时效解释规范-夜间服务场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "配送周期",
+      "时效"
+    ],
+    "filename": "KB-SYN-400_address_配送时效解释规范-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-401",
+    "category": "invoice",
+    "title": "电子发票申请条件",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-401_invoice_电子发票申请条件.md"
+  },
+  {
+    "id": "KB-SYN-402",
+    "category": "invoice",
+    "title": "电子发票申请条件-新客场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-402_invoice_电子发票申请条件-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-403",
+    "category": "invoice",
+    "title": "电子发票申请条件-老客复购场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-403_invoice_电子发票申请条件-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-404",
+    "category": "invoice",
+    "title": "电子发票申请条件-高峰期场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-404_invoice_电子发票申请条件-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-405",
+    "category": "invoice",
+    "title": "电子发票申请条件-跨区域场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-405_invoice_电子发票申请条件-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-406",
+    "category": "invoice",
+    "title": "电子发票申请条件-偏远地区场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-406_invoice_电子发票申请条件-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-407",
+    "category": "invoice",
+    "title": "电子发票申请条件-节假日场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-407_invoice_电子发票申请条件-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-408",
+    "category": "invoice",
+    "title": "电子发票申请条件-大促活动场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-408_invoice_电子发票申请条件-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-409",
+    "category": "invoice",
+    "title": "电子发票申请条件-部分商品场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-409_invoice_电子发票申请条件-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-410",
+    "category": "invoice",
+    "title": "电子发票申请条件-多商品订单场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-410_invoice_电子发票申请条件-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-411",
+    "category": "invoice",
+    "title": "电子发票申请条件-礼品订单场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-411_invoice_电子发票申请条件-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-412",
+    "category": "invoice",
+    "title": "电子发票申请条件-企业客户场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-412_invoice_电子发票申请条件-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-413",
+    "category": "invoice",
+    "title": "电子发票申请条件-会员权益场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-413_invoice_电子发票申请条件-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-414",
+    "category": "invoice",
+    "title": "电子发票申请条件-异常复核场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-414_invoice_电子发票申请条件-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-415",
+    "category": "invoice",
+    "title": "电子发票申请条件-证据不足场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-415_invoice_电子发票申请条件-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-416",
+    "category": "invoice",
+    "title": "电子发票申请条件-重复咨询场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-416_invoice_电子发票申请条件-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-417",
+    "category": "invoice",
+    "title": "电子发票申请条件-情绪升级场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-417_invoice_电子发票申请条件-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-418",
+    "category": "invoice",
+    "title": "电子发票申请条件-超时未处理场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-418_invoice_电子发票申请条件-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-419",
+    "category": "invoice",
+    "title": "电子发票申请条件-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-419_invoice_电子发票申请条件-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-420",
+    "category": "invoice",
+    "title": "电子发票申请条件-夜间服务场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "电子发票",
+      "申请"
+    ],
+    "filename": "KB-SYN-420_invoice_电子发票申请条件-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-421",
+    "category": "invoice",
+    "title": "发票抬头与税号修改",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-421_invoice_发票抬头与税号修改.md"
+  },
+  {
+    "id": "KB-SYN-422",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-新客场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-422_invoice_发票抬头与税号修改-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-423",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-老客复购场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-423_invoice_发票抬头与税号修改-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-424",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-高峰期场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-424_invoice_发票抬头与税号修改-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-425",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-跨区域场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-425_invoice_发票抬头与税号修改-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-426",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-偏远地区场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-426_invoice_发票抬头与税号修改-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-427",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-节假日场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-427_invoice_发票抬头与税号修改-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-428",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-大促活动场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-428_invoice_发票抬头与税号修改-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-429",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-部分商品场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-429_invoice_发票抬头与税号修改-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-430",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-多商品订单场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-430_invoice_发票抬头与税号修改-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-431",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-礼品订单场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-431_invoice_发票抬头与税号修改-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-432",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-企业客户场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-432_invoice_发票抬头与税号修改-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-433",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-会员权益场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-433_invoice_发票抬头与税号修改-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-434",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-异常复核场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-434_invoice_发票抬头与税号修改-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-435",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-证据不足场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-435_invoice_发票抬头与税号修改-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-436",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-重复咨询场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-436_invoice_发票抬头与税号修改-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-437",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-情绪升级场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-437_invoice_发票抬头与税号修改-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-438",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-超时未处理场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-438_invoice_发票抬头与税号修改-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-439",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-439_invoice_发票抬头与税号修改-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-440",
+    "category": "invoice",
+    "title": "发票抬头与税号修改-夜间服务场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": false,
+    "keywords": [
+      "发票",
+      "抬头",
+      "税号"
+    ],
+    "filename": "KB-SYN-440_invoice_发票抬头与税号修改-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-441",
+    "category": "invoice",
+    "title": "发票红冲与重开",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-441_invoice_发票红冲与重开.md"
+  },
+  {
+    "id": "KB-SYN-442",
+    "category": "invoice",
+    "title": "发票红冲与重开-新客场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-442_invoice_发票红冲与重开-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-443",
+    "category": "invoice",
+    "title": "发票红冲与重开-老客复购场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-443_invoice_发票红冲与重开-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-444",
+    "category": "invoice",
+    "title": "发票红冲与重开-高峰期场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-444_invoice_发票红冲与重开-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-445",
+    "category": "invoice",
+    "title": "发票红冲与重开-跨区域场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-445_invoice_发票红冲与重开-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-446",
+    "category": "invoice",
+    "title": "发票红冲与重开-偏远地区场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-446_invoice_发票红冲与重开-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-447",
+    "category": "invoice",
+    "title": "发票红冲与重开-节假日场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-447_invoice_发票红冲与重开-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-448",
+    "category": "invoice",
+    "title": "发票红冲与重开-大促活动场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-448_invoice_发票红冲与重开-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-449",
+    "category": "invoice",
+    "title": "发票红冲与重开-部分商品场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-449_invoice_发票红冲与重开-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-450",
+    "category": "invoice",
+    "title": "发票红冲与重开-多商品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-450_invoice_发票红冲与重开-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-451",
+    "category": "invoice",
+    "title": "发票红冲与重开-礼品订单场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-451_invoice_发票红冲与重开-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-452",
+    "category": "invoice",
+    "title": "发票红冲与重开-企业客户场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-452_invoice_发票红冲与重开-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-453",
+    "category": "invoice",
+    "title": "发票红冲与重开-会员权益场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-453_invoice_发票红冲与重开-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-454",
+    "category": "invoice",
+    "title": "发票红冲与重开-异常复核场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-454_invoice_发票红冲与重开-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-455",
+    "category": "invoice",
+    "title": "发票红冲与重开-证据不足场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-455_invoice_发票红冲与重开-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-456",
+    "category": "invoice",
+    "title": "发票红冲与重开-重复咨询场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-456_invoice_发票红冲与重开-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-457",
+    "category": "invoice",
+    "title": "发票红冲与重开-情绪升级场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-457_invoice_发票红冲与重开-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-458",
+    "category": "invoice",
+    "title": "发票红冲与重开-超时未处理场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-458_invoice_发票红冲与重开-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-459",
+    "category": "invoice",
+    "title": "发票红冲与重开-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-459_invoice_发票红冲与重开-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-460",
+    "category": "invoice",
+    "title": "发票红冲与重开-夜间服务场景",
+    "version": "v1.0",
+    "risk": "high",
+    "handoff": true,
+    "keywords": [
+      "红冲",
+      "重开",
+      "发票"
+    ],
+    "filename": "KB-SYN-460_invoice_发票红冲与重开-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-461",
+    "category": "invoice",
+    "title": "发票下载与发送",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-461_invoice_发票下载与发送.md"
+  },
+  {
+    "id": "KB-SYN-462",
+    "category": "invoice",
+    "title": "发票下载与发送-新客场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-462_invoice_发票下载与发送-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-463",
+    "category": "invoice",
+    "title": "发票下载与发送-老客复购场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-463_invoice_发票下载与发送-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-464",
+    "category": "invoice",
+    "title": "发票下载与发送-高峰期场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-464_invoice_发票下载与发送-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-465",
+    "category": "invoice",
+    "title": "发票下载与发送-跨区域场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-465_invoice_发票下载与发送-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-466",
+    "category": "invoice",
+    "title": "发票下载与发送-偏远地区场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-466_invoice_发票下载与发送-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-467",
+    "category": "invoice",
+    "title": "发票下载与发送-节假日场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-467_invoice_发票下载与发送-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-468",
+    "category": "invoice",
+    "title": "发票下载与发送-大促活动场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-468_invoice_发票下载与发送-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-469",
+    "category": "invoice",
+    "title": "发票下载与发送-部分商品场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-469_invoice_发票下载与发送-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-470",
+    "category": "invoice",
+    "title": "发票下载与发送-多商品订单场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-470_invoice_发票下载与发送-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-471",
+    "category": "invoice",
+    "title": "发票下载与发送-礼品订单场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-471_invoice_发票下载与发送-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-472",
+    "category": "invoice",
+    "title": "发票下载与发送-企业客户场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-472_invoice_发票下载与发送-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-473",
+    "category": "invoice",
+    "title": "发票下载与发送-会员权益场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-473_invoice_发票下载与发送-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-474",
+    "category": "invoice",
+    "title": "发票下载与发送-异常复核场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-474_invoice_发票下载与发送-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-475",
+    "category": "invoice",
+    "title": "发票下载与发送-证据不足场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-475_invoice_发票下载与发送-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-476",
+    "category": "invoice",
+    "title": "发票下载与发送-重复咨询场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-476_invoice_发票下载与发送-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-477",
+    "category": "invoice",
+    "title": "发票下载与发送-情绪升级场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-477_invoice_发票下载与发送-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-478",
+    "category": "invoice",
+    "title": "发票下载与发送-超时未处理场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-478_invoice_发票下载与发送-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-479",
+    "category": "invoice",
+    "title": "发票下载与发送-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-479_invoice_发票下载与发送-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-480",
+    "category": "invoice",
+    "title": "发票下载与发送-夜间服务场景",
+    "version": "v1.0",
+    "risk": "low",
+    "handoff": false,
+    "keywords": [
+      "发票下载",
+      "发送"
+    ],
+    "filename": "KB-SYN-480_invoice_发票下载与发送-夜间服务场景.md"
+  },
+  {
+    "id": "KB-SYN-481",
+    "category": "invoice",
+    "title": "企业发票信息核验",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-481_invoice_企业发票信息核验.md"
+  },
+  {
+    "id": "KB-SYN-482",
+    "category": "invoice",
+    "title": "企业发票信息核验-新客场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-482_invoice_企业发票信息核验-新客场景.md"
+  },
+  {
+    "id": "KB-SYN-483",
+    "category": "invoice",
+    "title": "企业发票信息核验-老客复购场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-483_invoice_企业发票信息核验-老客复购场景.md"
+  },
+  {
+    "id": "KB-SYN-484",
+    "category": "invoice",
+    "title": "企业发票信息核验-高峰期场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-484_invoice_企业发票信息核验-高峰期场景.md"
+  },
+  {
+    "id": "KB-SYN-485",
+    "category": "invoice",
+    "title": "企业发票信息核验-跨区域场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-485_invoice_企业发票信息核验-跨区域场景.md"
+  },
+  {
+    "id": "KB-SYN-486",
+    "category": "invoice",
+    "title": "企业发票信息核验-偏远地区场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-486_invoice_企业发票信息核验-偏远地区场景.md"
+  },
+  {
+    "id": "KB-SYN-487",
+    "category": "invoice",
+    "title": "企业发票信息核验-节假日场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-487_invoice_企业发票信息核验-节假日场景.md"
+  },
+  {
+    "id": "KB-SYN-488",
+    "category": "invoice",
+    "title": "企业发票信息核验-大促活动场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-488_invoice_企业发票信息核验-大促活动场景.md"
+  },
+  {
+    "id": "KB-SYN-489",
+    "category": "invoice",
+    "title": "企业发票信息核验-部分商品场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-489_invoice_企业发票信息核验-部分商品场景.md"
+  },
+  {
+    "id": "KB-SYN-490",
+    "category": "invoice",
+    "title": "企业发票信息核验-多商品订单场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-490_invoice_企业发票信息核验-多商品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-491",
+    "category": "invoice",
+    "title": "企业发票信息核验-礼品订单场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-491_invoice_企业发票信息核验-礼品订单场景.md"
+  },
+  {
+    "id": "KB-SYN-492",
+    "category": "invoice",
+    "title": "企业发票信息核验-企业客户场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-492_invoice_企业发票信息核验-企业客户场景.md"
+  },
+  {
+    "id": "KB-SYN-493",
+    "category": "invoice",
+    "title": "企业发票信息核验-会员权益场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-493_invoice_企业发票信息核验-会员权益场景.md"
+  },
+  {
+    "id": "KB-SYN-494",
+    "category": "invoice",
+    "title": "企业发票信息核验-异常复核场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-494_invoice_企业发票信息核验-异常复核场景.md"
+  },
+  {
+    "id": "KB-SYN-495",
+    "category": "invoice",
+    "title": "企业发票信息核验-证据不足场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-495_invoice_企业发票信息核验-证据不足场景.md"
+  },
+  {
+    "id": "KB-SYN-496",
+    "category": "invoice",
+    "title": "企业发票信息核验-重复咨询场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-496_invoice_企业发票信息核验-重复咨询场景.md"
+  },
+  {
+    "id": "KB-SYN-497",
+    "category": "invoice",
+    "title": "企业发票信息核验-情绪升级场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-497_invoice_企业发票信息核验-情绪升级场景.md"
+  },
+  {
+    "id": "KB-SYN-498",
+    "category": "invoice",
+    "title": "企业发票信息核验-超时未处理场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-498_invoice_企业发票信息核验-超时未处理场景.md"
+  },
+  {
+    "id": "KB-SYN-499",
+    "category": "invoice",
+    "title": "企业发票信息核验-跨部门协同场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-499_invoice_企业发票信息核验-跨部门协同场景.md"
+  },
+  {
+    "id": "KB-SYN-500",
+    "category": "invoice",
+    "title": "企业发票信息核验-夜间服务场景",
+    "version": "v1.0",
+    "risk": "medium",
+    "handoff": true,
+    "keywords": [
+      "企业发票",
+      "公司名称"
+    ],
+    "filename": "KB-SYN-500_invoice_企业发票信息核验-夜间服务场景.md"
+  }
+]

@@ -1,0 +1,4424 @@
+{
+  "status": "completed",
+  "testClass": "Real-model Retrieval Eval",
+  "dataset": "1.0-csds-train-holdout3-agent100",
+  "knowledgeSource": {
+    "type": "live-d1-active-current-index-export",
+    "organizationId": "org-qingyu",
+    "documentCount": 25
+  },
+  "embeddingModel": "qwen3.7-text-embedding",
+  "indexVersion": "2026-08-20T09:23:19.197Z",
+  "indexModel": "qwen3.7-text-embedding",
+  "retrievalConfig": {
+    "bm25TopK": 30,
+    "denseTopK": 30,
+    "fusionTopK": 25,
+    "rerankTopK": 8,
+    "rrfK": 60,
+    "maxBusinessBoost": 0.0005
+  },
+  "sameKnowledgeAndIndexValidated": true,
+  "missingIndexedDocuments": [],
+  "orphanedIndexRecords": [],
+  "knowledgeIndexVersionMismatches": [],
+  "routingCoverage": {
+    "datasetCases": 100,
+    "routedCases": 94,
+    "answerableDatasetCases": 100,
+    "answerableRoutedCases": 94,
+    "noAnswerDatasetCases": 0,
+    "noAnswerCorrectlyUnrouted": 0,
+    "answerableUnroutedCaseIds": [
+      "csds-train-refund-5919-1",
+      "csds-train-refund-8672-0",
+      "csds-train-invoice-8533-1",
+      "csds-train-address-149-0",
+      "csds-train-damage-529-0",
+      "csds-train-damage-6255-0"
+    ],
+    "routedNoAnswerCaseIds": []
+  },
+  "reranker": {
+    "status": "real-api",
+    "provider": "qwen3-rerank",
+    "fallbackCases": 0,
+    "p50LatencyMs": 173.4111670000002,
+    "p95LatencyMs": 220.81437499999993,
+    "top1ImprovedCases": [],
+    "top1DegradedCases": [
+      "csds-train-refund-4365-2",
+      "csds-train-refund-2898-0",
+      "csds-train-refund-5147-0",
+      "csds-train-refund-9419-1",
+      "csds-train-refund-8098-2",
+      "csds-train-refund-6188-0",
+      "csds-train-refund-2411-4",
+      "csds-train-refund-3678-1",
+      "csds-train-refund-2139-5",
+      "csds-train-refund-7023-1",
+      "csds-train-refund-2268-0",
+      "csds-train-refund-1022-1",
+      "csds-train-invoice-4430-1",
+      "csds-train-invoice-10578-0",
+      "csds-train-invoice-8176-0",
+      "csds-train-invoice-5590-1",
+      "csds-train-invoice-1716-0",
+      "csds-train-invoice-10310-0",
+      "csds-train-invoice-9506-1",
+      "csds-train-address-10406-1",
+      "csds-train-damage-8350-1",
+      "csds-train-damage-2866-0",
+      "csds-train-damage-10300-0",
+      "csds-train-damage-9210-0",
+      "csds-train-damage-9004-0",
+      "csds-train-damage-9901-0",
+      "csds-train-damage-8418-2",
+      "csds-train-damage-427-0",
+      "csds-train-damage-1661-0",
+      "csds-train-damage-1907-0",
+      "csds-train-damage-858-0",
+      "csds-train-damage-10402-1",
+      "csds-train-damage-164-0"
+    ]
+  },
+  "metrics": {
+    "v1": {
+      "cases": 94,
+      "recallAt1": 0.9680851063829787,
+      "recallAt3": 0.9787234042553191,
+      "recallAt5": 0.9787234042553191,
+      "recallAt10": null,
+      "mrr": 0.973404255319149,
+      "ndcgAt5": 0.9747971250379942
+    },
+    "bm25Only": {
+      "cases": 94,
+      "recallAt1": 0.6170212765957447,
+      "recallAt3": 0.7872340425531915,
+      "recallAt5": 0.8085106382978723,
+      "recallAt10": 0.8191489361702128,
+      "mrr": 0.698049645390071,
+      "ndcgAt5": 0.7247534776704521
+    },
+    "denseOnly": {
+      "cases": 94,
+      "recallAt1": 0.6276595744680851,
+      "recallAt3": 0.8404255319148937,
+      "recallAt5": 0.9574468085106383,
+      "recallAt10": 0.9787234042553191,
+      "mrr": 0.7482269503546097,
+      "ndcgAt5": 0.7974313901478625
+    },
+    "hybridBeforeRerank": {
+      "cases": 94,
+      "recallAt1": 0.8723404255319149,
+      "recallAt3": 0.9574468085106383,
+      "recallAt5": 0.9680851063829787,
+      "recallAt10": 0.9787234042553191,
+      "mrr": 0.9175531914893619,
+      "ndcgAt5": 0.9292253705646124
+    },
+    "hybridAfterRerank": {
+      "cases": 94,
+      "recallAt1": 0.5212765957446809,
+      "recallAt3": 0.6808510638297872,
+      "recallAt5": 0.8404255319148937,
+      "recallAt10": null,
+      "mrr": 0.646048632218845,
+      "ndcgAt5": 0.6804597994669002
+    }
+  },
+  "metricsByCategory": {
+    "address": {
+      "v1": {
+        "cases": 26,
+        "recallAt1": 0.9230769230769231,
+        "recallAt3": 0.9230769230769231,
+        "recallAt5": 0.9230769230769231,
+        "recallAt10": null,
+        "mrr": 0.9230769230769231,
+        "ndcgAt5": 0.9230769230769231
+      },
+      "bm25Only": {
+        "cases": 26,
+        "recallAt1": 0.8076923076923077,
+        "recallAt3": 0.8076923076923077,
+        "recallAt5": 0.8076923076923077,
+        "recallAt10": 0.8076923076923077,
+        "mrr": 0.8076923076923077,
+        "ndcgAt5": 0.8076923076923077
+      },
+      "denseOnly": {
+        "cases": 26,
+        "recallAt1": 0.8461538461538461,
+        "recallAt3": 0.9230769230769231,
+        "recallAt5": 0.9230769230769231,
+        "recallAt10": 0.9230769230769231,
+        "mrr": 0.8846153846153846,
+        "ndcgAt5": 0.8946869041208814
+      },
+      "hybridBeforeRerank": {
+        "cases": 26,
+        "recallAt1": 0.9230769230769231,
+        "recallAt3": 0.9230769230769231,
+        "recallAt5": 0.9230769230769231,
+        "recallAt10": 0.9230769230769231,
+        "mrr": 0.9230769230769231,
+        "ndcgAt5": 0.9230769230769231
+      },
+      "hybridAfterRerank": {
+        "cases": 26,
+        "recallAt1": 0.8846153846153846,
+        "recallAt3": 0.9230769230769231,
+        "recallAt5": 0.9230769230769231,
+        "recallAt10": null,
+        "mrr": 0.8974358974358974,
+        "ndcgAt5": 0.9038461538461539
+      }
+    },
+    "damage": {
+      "v1": {
+        "cases": 22,
+        "recallAt1": 0.9545454545454546,
+        "recallAt3": 1,
+        "recallAt5": 1,
+        "recallAt10": null,
+        "mrr": 0.9772727272727273,
+        "ndcgAt5": 0.9832240797077936
+      },
+      "bm25Only": {
+        "cases": 22,
+        "recallAt1": 0.36363636363636365,
+        "recallAt3": 0.5909090909090909,
+        "recallAt5": 0.6818181818181818,
+        "recallAt10": 0.7272727272727273,
+        "mrr": 0.4825757575757576,
+        "ndcgAt5": 0.5263358578386751
+      },
+      "denseOnly": {
+        "cases": 22,
+        "recallAt1": 0.4090909090909091,
+        "recallAt3": 0.7272727272727273,
+        "recallAt5": 0.9090909090909091,
+        "recallAt10": 1,
+        "mrr": 0.5962121212121212,
+        "ndcgAt5": 0.6623487155531407
+      },
+      "hybridBeforeRerank": {
+        "cases": 22,
+        "recallAt1": 0.7727272727272727,
+        "recallAt3": 0.9090909090909091,
+        "recallAt5": 0.9545454545454546,
+        "recallAt10": 1,
+        "mrr": 0.8598484848484848,
+        "ndcgAt5": 0.878339355399444
+      },
+      "hybridAfterRerank": {
+        "cases": 22,
+        "recallAt1": 0.18181818181818182,
+        "recallAt3": 0.4090909090909091,
+        "recallAt5": 0.5909090909090909,
+        "recallAt10": null,
+        "mrr": 0.36406926406926404,
+        "ndcgAt5": 0.3836700903908017
+      }
+    },
+    "invoice": {
+      "v1": {
+        "cases": 24,
+        "recallAt1": 1,
+        "recallAt3": 1,
+        "recallAt5": 1,
+        "recallAt10": null,
+        "mrr": 1,
+        "ndcgAt5": 1
+      },
+      "bm25Only": {
+        "cases": 24,
+        "recallAt1": 0.625,
+        "recallAt3": 1,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "mrr": 0.7916666666666666,
+        "ndcgAt5": 0.8452324383928644
+      },
+      "denseOnly": {
+        "cases": 24,
+        "recallAt1": 0.5833333333333334,
+        "recallAt3": 0.8333333333333334,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "mrr": 0.7208333333333332,
+        "ndcgAt5": 0.7891750204021891
+      },
+      "hybridBeforeRerank": {
+        "cases": 24,
+        "recallAt1": 0.875,
+        "recallAt3": 1,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "mrr": 0.9305555555555557,
+        "ndcgAt5": 0.9484108127976215
+      },
+      "hybridAfterRerank": {
+        "cases": 24,
+        "recallAt1": 0.5833333333333334,
+        "recallAt3": 0.8333333333333334,
+        "recallAt5": 1,
+        "recallAt10": null,
+        "mrr": 0.7340277777777778,
+        "ndcgAt5": 0.8001083956558563
+      }
+    },
+    "refund": {
+      "v1": {
+        "cases": 22,
+        "recallAt1": 1,
+        "recallAt3": 1,
+        "recallAt5": 1,
+        "recallAt10": null,
+        "mrr": 1,
+        "ndcgAt5": 1
+      },
+      "bm25Only": {
+        "cases": 22,
+        "recallAt1": 0.6363636363636364,
+        "recallAt3": 0.7272727272727273,
+        "recallAt5": 0.7272727272727273,
+        "recallAt10": 0.7272727272727273,
+        "mrr": 0.6818181818181818,
+        "ndcgAt5": 0.6937208866883143
+      },
+      "denseOnly": {
+        "cases": 22,
+        "recallAt1": 0.6363636363636364,
+        "recallAt3": 0.8636363636363636,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "mrr": 0.7689393939393938,
+        "ndcgAt5": 0.8265826788606616
+      },
+      "hybridBeforeRerank": {
+        "cases": 22,
+        "recallAt1": 0.9090909090909091,
+        "recallAt3": 1,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "mrr": 0.9545454545454546,
+        "ndcgAt5": 0.966448159415587
+      },
+      "hybridAfterRerank": {
+        "cases": 22,
+        "recallAt1": 0.36363636363636365,
+        "recallAt3": 0.5,
+        "recallAt5": 0.8181818181818182,
+        "recallAt10": null,
+        "mrr": 0.5349567099567099,
+        "ndcgAt5": 0.5827217120704739
+      }
+    }
+  },
+  "denseIncrement": {
+    "keywordOnlyWins": 13,
+    "denseOnlyWins": 14,
+    "bothHit": 45,
+    "bothMiss": 22
+  },
+  "records": [
+    {
+      "id": "csds-train-refund-7608-1",
+      "query": "申请退款了，你们会联系谁；款是原路返回嘛；订单还没有显示状态",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-120",
+        "KB-119"
+      ],
+      "bm25": [
+        "KB-114",
+        "KB-120"
+      ],
+      "dense": [
+        "KB-114",
+        "KB-120",
+        "KB-118",
+        "KB-117",
+        "KB-116",
+        "KB-119",
+        "KB-115"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-120",
+        "KB-116",
+        "KB-118",
+        "KB-117",
+        "KB-115",
+        "KB-119"
+      ],
+      "reranked": [
+        "KB-114",
+        "KB-120",
+        "KB-119",
+        "KB-118",
+        "KB-116",
+        "KB-117",
+        "KB-115"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-9773-2",
+      "query": "运费是退到哪里的了",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-119",
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-120"
+      ],
+      "bm25": [
+        "KB-119",
+        "KB-114"
+      ],
+      "dense": [
+        "KB-119",
+        "KB-120",
+        "KB-114",
+        "KB-118",
+        "KB-117",
+        "KB-115",
+        "KB-116"
+      ],
+      "hybrid": [
+        "KB-119",
+        "KB-114",
+        "KB-120",
+        "KB-115",
+        "KB-118",
+        "KB-116",
+        "KB-117"
+      ],
+      "reranked": [
+        "KB-119",
+        "KB-120",
+        "KB-114",
+        "KB-118",
+        "KB-117",
+        "KB-116",
+        "KB-115"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-4365-2",
+      "query": "那你先退我吧；什么时候退给我?；能退吗?",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-120",
+        "KB-119"
+      ],
+      "bm25": [],
+      "dense": [
+        "KB-120",
+        "KB-114",
+        "KB-115",
+        "KB-116",
+        "KB-117",
+        "KB-118",
+        "KB-119"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-120",
+        "KB-115",
+        "KB-116",
+        "KB-117",
+        "KB-118",
+        "KB-119"
+      ],
+      "reranked": [
+        "KB-120",
+        "KB-114",
+        "KB-115",
+        "KB-119",
+        "KB-116",
+        "KB-117",
+        "KB-118"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-10103-0",
+      "query": "请速处理退款；我是plus会员；地址错误，退款，请速处理",
+      "intent": "address",
+      "expected": "KB-114",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301",
+        "KB-304",
+        "KB-303"
+      ],
+      "dense": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-304",
+        "KB-303",
+        "KB-302"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-304",
+        "KB-303",
+        "KB-302"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-2898-0",
+      "query": "我有一个退款，但是我不知道是什么；我没买东西啊",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-119",
+        "KB-120"
+      ],
+      "bm25": [
+        "KB-114",
+        "KB-120"
+      ],
+      "dense": [
+        "KB-120",
+        "KB-114",
+        "KB-118",
+        "KB-116",
+        "KB-119",
+        "KB-117",
+        "KB-115"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-120",
+        "KB-116",
+        "KB-118",
+        "KB-115",
+        "KB-119",
+        "KB-117"
+      ],
+      "reranked": [
+        "KB-120",
+        "KB-118",
+        "KB-119",
+        "KB-117",
+        "KB-116",
+        "KB-114",
+        "KB-115"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-5147-0",
+      "query": "保价；退款到我的平台余额",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-119",
+        "KB-120",
+        "KB-118"
+      ],
+      "bm25": [
+        "KB-114",
+        "KB-120"
+      ],
+      "dense": [
+        "KB-114",
+        "KB-120",
+        "KB-118",
+        "KB-119",
+        "KB-117",
+        "KB-116",
+        "KB-115"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-120",
+        "KB-118",
+        "KB-116",
+        "KB-119",
+        "KB-115",
+        "KB-117"
+      ],
+      "reranked": [
+        "KB-120",
+        "KB-114",
+        "KB-119",
+        "KB-118",
+        "KB-117",
+        "KB-116",
+        "KB-115"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-1560-3",
+      "query": "退款什么时候能到账呀?",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-115",
+        "KB-116",
+        "KB-120",
+        "KB-119"
+      ],
+      "bm25": [
+        "KB-114",
+        "KB-120"
+      ],
+      "dense": [
+        "KB-114",
+        "KB-120",
+        "KB-115",
+        "KB-118",
+        "KB-116",
+        "KB-119",
+        "KB-117"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-120",
+        "KB-115",
+        "KB-116",
+        "KB-118",
+        "KB-119",
+        "KB-117"
+      ],
+      "reranked": [
+        "KB-114",
+        "KB-120",
+        "KB-119",
+        "KB-118",
+        "KB-117",
+        "KB-116",
+        "KB-115"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-9419-1",
+      "query": "是退回支付卡吗；能退回来不",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-120",
+        "KB-119"
+      ],
+      "bm25": [
+        "KB-114",
+        "KB-120",
+        "KB-119"
+      ],
+      "dense": [
+        "KB-114",
+        "KB-120",
+        "KB-118",
+        "KB-116",
+        "KB-119",
+        "KB-117",
+        "KB-115"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-120",
+        "KB-119",
+        "KB-116",
+        "KB-118",
+        "KB-115",
+        "KB-117"
+      ],
+      "reranked": [
+        "KB-120",
+        "KB-119",
+        "KB-118",
+        "KB-114",
+        "KB-116",
+        "KB-117",
+        "KB-115"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-8098-2",
+      "query": "客户多久的订单可以申请售后退款呢",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-120",
+        "KB-119"
+      ],
+      "bm25": [
+        "KB-114",
+        "KB-120"
+      ],
+      "dense": [
+        "KB-120",
+        "KB-115",
+        "KB-114",
+        "KB-116",
+        "KB-117",
+        "KB-119",
+        "KB-118"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-120",
+        "KB-115",
+        "KB-116",
+        "KB-117",
+        "KB-119",
+        "KB-118"
+      ],
+      "reranked": [
+        "KB-120",
+        "KB-115",
+        "KB-119",
+        "KB-116",
+        "KB-114",
+        "KB-117",
+        "KB-118"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-10471-0",
+      "query": "可以退吗",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-119",
+        "KB-120"
+      ],
+      "bm25": [],
+      "dense": [
+        "KB-116",
+        "KB-120",
+        "KB-117",
+        "KB-114",
+        "KB-115",
+        "KB-118",
+        "KB-119"
+      ],
+      "hybrid": [
+        "KB-116",
+        "KB-114",
+        "KB-120",
+        "KB-115",
+        "KB-117",
+        "KB-118",
+        "KB-119"
+      ],
+      "reranked": [
+        "KB-120",
+        "KB-119",
+        "KB-116",
+        "KB-117",
+        "KB-118",
+        "KB-115",
+        "KB-114"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-6188-0",
+      "query": "麻烦帮我看一下售后退货；说我的东西没退回去。其实快递小哥一次性拿走了九个；上次申请不来，只退了一个的钱。；再早一点的一个退货单，一起给快递小哥拿走了，喊我再申请其他八个的。一共九个。；那天，小哥还问我申请没有，其他八个还放在物流那里的，你们确认一下",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-119",
+        "KB-120"
+      ],
+      "bm25": [
+        "KB-116",
+        "KB-114",
+        "KB-118",
+        "KB-120",
+        "KB-119",
+        "KB-115",
+        "KB-117"
+      ],
+      "dense": [
+        "KB-120",
+        "KB-118",
+        "KB-119",
+        "KB-114",
+        "KB-115",
+        "KB-117",
+        "KB-116"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-120",
+        "KB-118",
+        "KB-116",
+        "KB-119",
+        "KB-115",
+        "KB-117"
+      ],
+      "reranked": [
+        "KB-119",
+        "KB-118",
+        "KB-120",
+        "KB-117",
+        "KB-116",
+        "KB-115",
+        "KB-114"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-6598-0",
+      "query": "我交的手机费怎么还没到账",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-120",
+        "KB-119"
+      ],
+      "bm25": [
+        "KB-114",
+        "KB-120"
+      ],
+      "dense": [
+        "KB-114",
+        "KB-120",
+        "KB-119",
+        "KB-118",
+        "KB-117",
+        "KB-116",
+        "KB-115"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-120",
+        "KB-119",
+        "KB-116",
+        "KB-118",
+        "KB-115",
+        "KB-117"
+      ],
+      "reranked": [
+        "KB-114",
+        "KB-120",
+        "KB-119",
+        "KB-118",
+        "KB-116",
+        "KB-115",
+        "KB-117"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-2411-4",
+      "query": "我现在说拍一台新的，不就正好一趟送到吗?；这样是还要跑两趟吗?",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-119",
+        "KB-120"
+      ],
+      "bm25": [],
+      "dense": [
+        "KB-117",
+        "KB-119",
+        "KB-118",
+        "KB-114",
+        "KB-115",
+        "KB-120",
+        "KB-116"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-117",
+        "KB-119",
+        "KB-115",
+        "KB-118",
+        "KB-116",
+        "KB-120"
+      ],
+      "reranked": [
+        "KB-120",
+        "KB-117",
+        "KB-119",
+        "KB-114",
+        "KB-115",
+        "KB-116",
+        "KB-118"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-3678-1",
+      "query": "我已经拒收了；我申请的退款",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-120",
+        "KB-119"
+      ],
+      "bm25": [
+        "KB-114",
+        "KB-120",
+        "KB-119"
+      ],
+      "dense": [
+        "KB-114",
+        "KB-120",
+        "KB-118",
+        "KB-116",
+        "KB-115",
+        "KB-119",
+        "KB-117"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-120",
+        "KB-119",
+        "KB-116",
+        "KB-115",
+        "KB-118",
+        "KB-117"
+      ],
+      "reranked": [
+        "KB-120",
+        "KB-119",
+        "KB-117",
+        "KB-114",
+        "KB-115",
+        "KB-118",
+        "KB-116"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-1650-0",
+      "query": "平台商城余额提现；不是提供了银行卡退款到卡里吗，怎么在余额里，现在我想提现",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-120",
+        "KB-119"
+      ],
+      "bm25": [
+        "KB-114",
+        "KB-120"
+      ],
+      "dense": [
+        "KB-114",
+        "KB-120",
+        "KB-118",
+        "KB-117",
+        "KB-116",
+        "KB-119",
+        "KB-115"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-120",
+        "KB-116",
+        "KB-118",
+        "KB-117",
+        "KB-115",
+        "KB-119"
+      ],
+      "reranked": [
+        "KB-114",
+        "KB-120",
+        "KB-116",
+        "KB-118",
+        "KB-119",
+        "KB-117",
+        "KB-115"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-4916-1",
+      "query": "退款几天能到；我是银行卡付的，是不是退到我的账户上",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-115",
+        "KB-116",
+        "KB-120",
+        "KB-119"
+      ],
+      "bm25": [
+        "KB-114",
+        "KB-120",
+        "KB-116"
+      ],
+      "dense": [
+        "KB-114",
+        "KB-120",
+        "KB-115",
+        "KB-118",
+        "KB-116",
+        "KB-119",
+        "KB-117"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-120",
+        "KB-116",
+        "KB-115",
+        "KB-118",
+        "KB-119",
+        "KB-117"
+      ],
+      "reranked": [
+        "KB-114",
+        "KB-120",
+        "KB-119",
+        "KB-118",
+        "KB-115",
+        "KB-117",
+        "KB-116"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-2139-5",
+      "query": "嗯，好。那么，退的钱是怎么退呢",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-120",
+        "KB-119"
+      ],
+      "bm25": [],
+      "dense": [
+        "KB-114",
+        "KB-120",
+        "KB-118",
+        "KB-117",
+        "KB-119",
+        "KB-116",
+        "KB-115"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-120",
+        "KB-118",
+        "KB-116",
+        "KB-117",
+        "KB-115",
+        "KB-119"
+      ],
+      "reranked": [
+        "KB-120",
+        "KB-119",
+        "KB-118",
+        "KB-114",
+        "KB-117",
+        "KB-116",
+        "KB-115"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-7023-1",
+      "query": "白条?；退到哪",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-120",
+        "KB-119"
+      ],
+      "bm25": [],
+      "dense": [
+        "KB-114",
+        "KB-120",
+        "KB-118",
+        "KB-119",
+        "KB-116",
+        "KB-117",
+        "KB-115"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-120",
+        "KB-116",
+        "KB-118",
+        "KB-119",
+        "KB-115",
+        "KB-117"
+      ],
+      "reranked": [
+        "KB-120",
+        "KB-119",
+        "KB-117",
+        "KB-118",
+        "KB-114",
+        "KB-116",
+        "KB-115"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-3707-1",
+      "query": "呵呵，好的好的!谢谢你了!请问款是退到微信上吗；大概多久可以取消呢?",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-120",
+        "KB-119"
+      ],
+      "bm25": [],
+      "dense": [
+        "KB-114",
+        "KB-120",
+        "KB-116",
+        "KB-115",
+        "KB-118",
+        "KB-117",
+        "KB-119"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-116",
+        "KB-120",
+        "KB-115",
+        "KB-118",
+        "KB-117",
+        "KB-119"
+      ],
+      "reranked": [
+        "KB-114",
+        "KB-120",
+        "KB-119",
+        "KB-115",
+        "KB-118",
+        "KB-117",
+        "KB-116"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-2268-0",
+      "query": "[订单编号:[订单编号]；我已经拒收，要求退款。",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-120",
+        "KB-119"
+      ],
+      "bm25": [
+        "KB-114",
+        "KB-120",
+        "KB-115"
+      ],
+      "dense": [
+        "KB-120",
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-119",
+        "KB-118",
+        "KB-117"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-120",
+        "KB-115",
+        "KB-116",
+        "KB-119",
+        "KB-118",
+        "KB-117"
+      ],
+      "reranked": [
+        "KB-120",
+        "KB-119",
+        "KB-117",
+        "KB-115",
+        "KB-116",
+        "KB-114",
+        "KB-118"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-1022-1",
+      "query": "券能返吗；刚刚申请的退款；还能恢复吗",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-120",
+        "KB-119",
+        "KB-117"
+      ],
+      "bm25": [
+        "KB-114",
+        "KB-120",
+        "KB-119"
+      ],
+      "dense": [
+        "KB-114",
+        "KB-118",
+        "KB-117",
+        "KB-120",
+        "KB-116",
+        "KB-119",
+        "KB-115"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-120",
+        "KB-119",
+        "KB-118",
+        "KB-116",
+        "KB-117",
+        "KB-115"
+      ],
+      "reranked": [
+        "KB-120",
+        "KB-114",
+        "KB-118",
+        "KB-119",
+        "KB-117",
+        "KB-116",
+        "KB-115"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-6067-2",
+      "query": "退款的时候；又说不支持取消",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-115",
+        "KB-119",
+        "KB-120"
+      ],
+      "bm25": [
+        "KB-116",
+        "KB-114",
+        "KB-120"
+      ],
+      "dense": [
+        "KB-116",
+        "KB-120",
+        "KB-114",
+        "KB-118",
+        "KB-119",
+        "KB-117",
+        "KB-115"
+      ],
+      "hybrid": [
+        "KB-116",
+        "KB-114",
+        "KB-120",
+        "KB-118",
+        "KB-115",
+        "KB-119",
+        "KB-117"
+      ],
+      "reranked": [
+        "KB-120",
+        "KB-119",
+        "KB-116",
+        "KB-114",
+        "KB-118",
+        "KB-117",
+        "KB-115"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-refund-1435-1",
+      "query": "那能不能按原支付方式退回",
+      "intent": "refund",
+      "expected": "KB-114",
+      "v1": [
+        "KB-114",
+        "KB-116",
+        "KB-119",
+        "KB-120",
+        "KB-117"
+      ],
+      "bm25": [
+        "KB-114",
+        "KB-120",
+        "KB-118",
+        "KB-119"
+      ],
+      "dense": [
+        "KB-114",
+        "KB-120",
+        "KB-118",
+        "KB-117",
+        "KB-116",
+        "KB-119",
+        "KB-115"
+      ],
+      "hybrid": [
+        "KB-114",
+        "KB-120",
+        "KB-118",
+        "KB-119",
+        "KB-116",
+        "KB-117",
+        "KB-115"
+      ],
+      "reranked": [
+        "KB-114",
+        "KB-120",
+        "KB-118",
+        "KB-119",
+        "KB-116",
+        "KB-117",
+        "KB-115"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-4430-1",
+      "query": "我没留意当时是否收到发票了，现在能补开发票吗?",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-402",
+        "KB-403",
+        "KB-405",
+        "KB-404"
+      ],
+      "bm25": [
+        "KB-401",
+        "KB-405",
+        "KB-402",
+        "KB-404",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-402",
+        "KB-401",
+        "KB-405",
+        "KB-403",
+        "KB-404"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-402",
+        "KB-405",
+        "KB-404",
+        "KB-403"
+      ],
+      "reranked": [
+        "KB-402",
+        "KB-403",
+        "KB-404",
+        "KB-401",
+        "KB-405"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-10578-0",
+      "query": "想改下发票信息；请问我的发票信息可以更改吗；我有个订单",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-402",
+        "KB-403",
+        "KB-404",
+        "KB-405"
+      ],
+      "bm25": [
+        "KB-401",
+        "KB-404",
+        "KB-402",
+        "KB-405",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-402",
+        "KB-404",
+        "KB-401",
+        "KB-403",
+        "KB-405"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-402",
+        "KB-404",
+        "KB-405",
+        "KB-403"
+      ],
+      "reranked": [
+        "KB-402",
+        "KB-401",
+        "KB-404",
+        "KB-405",
+        "KB-403"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-4022-2",
+      "query": "这个订单的发票什么时候能开啊",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-403",
+        "KB-402",
+        "KB-404",
+        "KB-405"
+      ],
+      "bm25": [
+        "KB-401",
+        "KB-404",
+        "KB-405",
+        "KB-402",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-401",
+        "KB-403",
+        "KB-402",
+        "KB-404",
+        "KB-405"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-404",
+        "KB-403",
+        "KB-402",
+        "KB-405"
+      ],
+      "reranked": [
+        "KB-401",
+        "KB-402",
+        "KB-403",
+        "KB-405",
+        "KB-404"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-8144-0",
+      "query": "我买的商品，发票是个人，需要换企业的发票；这个发票是个人，需要换企业的发票",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-402",
+        "KB-405",
+        "KB-403",
+        "KB-404"
+      ],
+      "bm25": [
+        "KB-404",
+        "KB-405",
+        "KB-401",
+        "KB-402",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-402",
+        "KB-404",
+        "KB-405",
+        "KB-403",
+        "KB-401"
+      ],
+      "hybrid": [
+        "KB-404",
+        "KB-401",
+        "KB-402",
+        "KB-405",
+        "KB-403"
+      ],
+      "reranked": [
+        "KB-402",
+        "KB-405",
+        "KB-404",
+        "KB-401",
+        "KB-403"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-8642-1",
+      "query": "我怎么改我们单位税号；我们单位税号变了",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-402",
+        "KB-401",
+        "KB-403",
+        "KB-405",
+        "KB-404"
+      ],
+      "bm25": [
+        "KB-402",
+        "KB-405",
+        "KB-401"
+      ],
+      "dense": [
+        "KB-402",
+        "KB-405",
+        "KB-403",
+        "KB-404",
+        "KB-401"
+      ],
+      "hybrid": [
+        "KB-402",
+        "KB-405",
+        "KB-401",
+        "KB-403",
+        "KB-404"
+      ],
+      "reranked": [
+        "KB-402",
+        "KB-405",
+        "KB-403",
+        "KB-404",
+        "KB-401"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-10214-0",
+      "query": "发票寄过来了吗",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-402",
+        "KB-405",
+        "KB-403",
+        "KB-404"
+      ],
+      "bm25": [
+        "KB-401",
+        "KB-405",
+        "KB-402",
+        "KB-404",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-401",
+        "KB-405",
+        "KB-402",
+        "KB-404",
+        "KB-403"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-405",
+        "KB-402",
+        "KB-404",
+        "KB-403"
+      ],
+      "reranked": [
+        "KB-401",
+        "KB-405",
+        "KB-402",
+        "KB-404",
+        "KB-403"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-5060-1",
+      "query": "好的还要我这边申请一下么?",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-403",
+        "KB-402",
+        "KB-405",
+        "KB-404"
+      ],
+      "bm25": [
+        "KB-401"
+      ],
+      "dense": [
+        "KB-401",
+        "KB-403",
+        "KB-402",
+        "KB-405",
+        "KB-404"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-403",
+        "KB-402",
+        "KB-405",
+        "KB-404"
+      ],
+      "reranked": [
+        "KB-401",
+        "KB-404",
+        "KB-402",
+        "KB-403",
+        "KB-405"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-8176-0",
+      "query": "结算时选增值税专用发票是随货物寄过来的纸质发票吗?；有抵扣联吗?",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-405",
+        "KB-403",
+        "KB-402",
+        "KB-404"
+      ],
+      "bm25": [
+        "KB-405",
+        "KB-401",
+        "KB-402",
+        "KB-404",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-401",
+        "KB-405",
+        "KB-404",
+        "KB-403",
+        "KB-402"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-405",
+        "KB-404",
+        "KB-402",
+        "KB-403"
+      ],
+      "reranked": [
+        "KB-405",
+        "KB-404",
+        "KB-401",
+        "KB-403",
+        "KB-402"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-4526-0",
+      "query": "我申请的发票什么时候给我；不是为我推送了吗；怎么还没寄",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-405",
+        "KB-403",
+        "KB-402",
+        "KB-404"
+      ],
+      "bm25": [
+        "KB-401",
+        "KB-404",
+        "KB-405",
+        "KB-402",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-401",
+        "KB-405",
+        "KB-403",
+        "KB-402",
+        "KB-404"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-405",
+        "KB-404",
+        "KB-403",
+        "KB-402"
+      ],
+      "reranked": [
+        "KB-401",
+        "KB-402",
+        "KB-405",
+        "KB-404",
+        "KB-403"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-7280-0",
+      "query": "放在货里面吗?还是单独寄给我；请问我的增值税专用发票，你们是怎么给我",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-402",
+        "KB-405",
+        "KB-403",
+        "KB-404"
+      ],
+      "bm25": [
+        "KB-405",
+        "KB-401",
+        "KB-402",
+        "KB-404",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-401",
+        "KB-402",
+        "KB-405",
+        "KB-404",
+        "KB-403"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-405",
+        "KB-402",
+        "KB-404",
+        "KB-403"
+      ],
+      "reranked": [
+        "KB-401",
+        "KB-402",
+        "KB-404",
+        "KB-405",
+        "KB-403"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-10633-0",
+      "query": "我想更改发票抬头；我想更改这个订单发票的抬头",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-402",
+        "KB-401",
+        "KB-403",
+        "KB-404",
+        "KB-405"
+      ],
+      "bm25": [
+        "KB-402",
+        "KB-401",
+        "KB-403",
+        "KB-405",
+        "KB-404"
+      ],
+      "dense": [
+        "KB-402",
+        "KB-401",
+        "KB-404",
+        "KB-403",
+        "KB-405"
+      ],
+      "hybrid": [
+        "KB-402",
+        "KB-401",
+        "KB-403",
+        "KB-404",
+        "KB-405"
+      ],
+      "reranked": [
+        "KB-402",
+        "KB-401",
+        "KB-405",
+        "KB-404",
+        "KB-403"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-125-0",
+      "query": "帮我改一下发票信息",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-402",
+        "KB-404",
+        "KB-403",
+        "KB-405"
+      ],
+      "bm25": [
+        "KB-402",
+        "KB-401",
+        "KB-405",
+        "KB-404",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-402",
+        "KB-404",
+        "KB-403",
+        "KB-405",
+        "KB-401"
+      ],
+      "hybrid": [
+        "KB-402",
+        "KB-401",
+        "KB-404",
+        "KB-405",
+        "KB-403"
+      ],
+      "reranked": [
+        "KB-402",
+        "KB-404",
+        "KB-401",
+        "KB-405",
+        "KB-403"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-5590-1",
+      "query": "那其他的东西会再给我开一张发票吗?；很多东西一起买的",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-402",
+        "KB-403",
+        "KB-404",
+        "KB-405"
+      ],
+      "bm25": [
+        "KB-401",
+        "KB-405",
+        "KB-402",
+        "KB-404",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-401",
+        "KB-404",
+        "KB-402",
+        "KB-403",
+        "KB-405"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-404",
+        "KB-402",
+        "KB-405",
+        "KB-403"
+      ],
+      "reranked": [
+        "KB-402",
+        "KB-401",
+        "KB-404",
+        "KB-405",
+        "KB-403"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-7899-0",
+      "query": "您好，我下单买了好多东西并要求开了发票，有个请求，发票明细里可否只写一种东西，其余凑单商品发票中不要体现",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-402",
+        "KB-404",
+        "KB-403",
+        "KB-405"
+      ],
+      "bm25": [
+        "KB-401",
+        "KB-405",
+        "KB-402",
+        "KB-404",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-404",
+        "KB-402",
+        "KB-401",
+        "KB-403",
+        "KB-405"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-404",
+        "KB-402",
+        "KB-405",
+        "KB-403"
+      ],
+      "reranked": [
+        "KB-401",
+        "KB-402",
+        "KB-404",
+        "KB-405",
+        "KB-403"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-1716-0",
+      "query": "您帮我查查，开具的发票是增值税专用发票吗；纸质的，我需要的是专票",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-405",
+        "KB-402",
+        "KB-403",
+        "KB-404"
+      ],
+      "bm25": [
+        "KB-405",
+        "KB-404",
+        "KB-401",
+        "KB-402",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-401",
+        "KB-405",
+        "KB-402",
+        "KB-404",
+        "KB-403"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-405",
+        "KB-404",
+        "KB-402",
+        "KB-403"
+      ],
+      "reranked": [
+        "KB-405",
+        "KB-401",
+        "KB-402",
+        "KB-404",
+        "KB-403"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-3778-2",
+      "query": "如果买个手机，发票可以开什么内容呢；如果不开明细的话，可以开大类吗",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-402",
+        "KB-403",
+        "KB-404",
+        "KB-405"
+      ],
+      "bm25": [
+        "KB-401",
+        "KB-402",
+        "KB-405",
+        "KB-404",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-402",
+        "KB-401",
+        "KB-404",
+        "KB-405",
+        "KB-403"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-402",
+        "KB-405",
+        "KB-404",
+        "KB-403"
+      ],
+      "reranked": [
+        "KB-401",
+        "KB-405",
+        "KB-402",
+        "KB-404",
+        "KB-403"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-7935-0",
+      "query": "请问可以重新开一张发票么；改成公司发票；之前是个人的",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-402",
+        "KB-403",
+        "KB-404",
+        "KB-405"
+      ],
+      "bm25": [
+        "KB-405",
+        "KB-402",
+        "KB-401",
+        "KB-404",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-402",
+        "KB-404",
+        "KB-405",
+        "KB-403",
+        "KB-401"
+      ],
+      "hybrid": [
+        "KB-402",
+        "KB-405",
+        "KB-401",
+        "KB-404",
+        "KB-403"
+      ],
+      "reranked": [
+        "KB-402",
+        "KB-404",
+        "KB-403",
+        "KB-401",
+        "KB-405"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-10310-0",
+      "query": "你好，这个发票我记得当时填写是写了单位的，但是现在开具的是个人。；不知道是操作失误还是其他原因，这个需要重新开",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-402",
+        "KB-403",
+        "KB-404",
+        "KB-405"
+      ],
+      "bm25": [
+        "KB-405",
+        "KB-401",
+        "KB-402",
+        "KB-404",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-402",
+        "KB-404",
+        "KB-403",
+        "KB-405",
+        "KB-401"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-402",
+        "KB-405",
+        "KB-404",
+        "KB-403"
+      ],
+      "reranked": [
+        "KB-402",
+        "KB-404",
+        "KB-405",
+        "KB-403",
+        "KB-401"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-9634-0",
+      "query": "请问，这批货的发票什么时候到呢?",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-402",
+        "KB-403",
+        "KB-405",
+        "KB-404"
+      ],
+      "bm25": [
+        "KB-404",
+        "KB-401",
+        "KB-405",
+        "KB-402",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-401",
+        "KB-403",
+        "KB-402",
+        "KB-404",
+        "KB-405"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-404",
+        "KB-403",
+        "KB-402",
+        "KB-405"
+      ],
+      "reranked": [
+        "KB-401",
+        "KB-405",
+        "KB-402",
+        "KB-404",
+        "KB-403"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-9506-1",
+      "query": "那能不能跟财务备注一下，开一张发票呢",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-402",
+        "KB-403",
+        "KB-405",
+        "KB-404"
+      ],
+      "bm25": [
+        "KB-401",
+        "KB-405",
+        "KB-402",
+        "KB-404",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-404",
+        "KB-402",
+        "KB-401",
+        "KB-403",
+        "KB-405"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-404",
+        "KB-402",
+        "KB-405",
+        "KB-403"
+      ],
+      "reranked": [
+        "KB-402",
+        "KB-401",
+        "KB-404",
+        "KB-405",
+        "KB-403"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-4731-0",
+      "query": "想问一下昨天有提交两单换开发票的申请需要多久的审核时间?；我看下面的发票追踪栏位显示需要先进行系统审核然后回寄发票再行开具?；当中是没有系统审核这一步的嘛?我现在就可以回寄了吗?",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-402",
+        "KB-403",
+        "KB-404",
+        "KB-405"
+      ],
+      "bm25": [
+        "KB-401",
+        "KB-404",
+        "KB-403",
+        "KB-402",
+        "KB-405"
+      ],
+      "dense": [
+        "KB-401",
+        "KB-402",
+        "KB-403",
+        "KB-404",
+        "KB-405"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-404",
+        "KB-402",
+        "KB-403",
+        "KB-405"
+      ],
+      "reranked": [
+        "KB-401",
+        "KB-405",
+        "KB-402",
+        "KB-403",
+        "KB-404"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-4466-0",
+      "query": "你好，请问，能补发一下这个订单的发票吗?或者提供扫描件",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-405",
+        "KB-402",
+        "KB-403",
+        "KB-404"
+      ],
+      "bm25": [
+        "KB-401",
+        "KB-404",
+        "KB-405",
+        "KB-402",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-401",
+        "KB-405",
+        "KB-402",
+        "KB-404",
+        "KB-403"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-405",
+        "KB-404",
+        "KB-402",
+        "KB-403"
+      ],
+      "reranked": [
+        "KB-401",
+        "KB-402",
+        "KB-405",
+        "KB-404",
+        "KB-403"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-1964-1",
+      "query": "我怎么提供给你开票信息",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-401",
+        "KB-402",
+        "KB-403",
+        "KB-405",
+        "KB-404"
+      ],
+      "bm25": [
+        "KB-402",
+        "KB-401",
+        "KB-404",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-402",
+        "KB-401",
+        "KB-404",
+        "KB-405",
+        "KB-403"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-402",
+        "KB-404",
+        "KB-403",
+        "KB-405"
+      ],
+      "reranked": [
+        "KB-401",
+        "KB-402",
+        "KB-405",
+        "KB-404",
+        "KB-403"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-invoice-2624-0",
+      "query": "我想请平台这边帮我重开一下这个订单的发票，因为之前的发票没有纳税人识别码",
+      "intent": "invoice",
+      "expected": "KB-401",
+      "v1": [
+        "KB-402",
+        "KB-401",
+        "KB-403",
+        "KB-405",
+        "KB-404"
+      ],
+      "bm25": [
+        "KB-401",
+        "KB-404",
+        "KB-402",
+        "KB-405",
+        "KB-403"
+      ],
+      "dense": [
+        "KB-402",
+        "KB-401",
+        "KB-403",
+        "KB-405",
+        "KB-404"
+      ],
+      "hybrid": [
+        "KB-401",
+        "KB-402",
+        "KB-404",
+        "KB-403",
+        "KB-405"
+      ],
+      "reranked": [
+        "KB-401",
+        "KB-402",
+        "KB-405",
+        "KB-404",
+        "KB-403"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-969-1",
+      "query": "帮帮忙修改一下送货地址吧；反正还没有发货，你帮忙修改一下吧",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301",
+        "KB-302"
+      ],
+      "dense": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-304",
+        "KB-303"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-10406-1",
+      "query": "那咋办；你们是怎样的流程，像我这种情况",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [],
+      "dense": [
+        "KB-303",
+        "KB-301",
+        "KB-302",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-303",
+        "KB-302",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-302",
+        "KB-304",
+        "KB-301",
+        "KB-303"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-6762-2",
+      "query": "那我改地址可以吧",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301"
+      ],
+      "dense": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-3703-0",
+      "query": "可以修改收货地址吗；收货人电话不变，；还有[订单编号]；刚一起提交付款的",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301",
+        "KB-302"
+      ],
+      "dense": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-304",
+        "KB-303"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-9790-0",
+      "query": "不在一个区啊；他们给更换吗；收货地址现在没有住人",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301"
+      ],
+      "dense": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-304",
+        "KB-303"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-2772-0",
+      "query": "有个售后快递；能帮我改个收货地址",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301",
+        "KB-304",
+        "KB-303"
+      ],
+      "dense": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-304",
+        "KB-303",
+        "KB-302"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-633-1",
+      "query": "那可以改收货地址嘛?",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301",
+        "KB-302"
+      ],
+      "dense": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-7078-1",
+      "query": "帮我更改吧；帮我看看手机号码是什么；好像不对",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-302",
+        "KB-301"
+      ],
+      "dense": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-4831-0",
+      "query": "收货地址写错了，还能改吗?",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301"
+      ],
+      "dense": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-304",
+        "KB-303"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-2481-3",
+      "query": "我刚刚更改了送货地址，；你帮我看一下送货过地址现在是长红西路吗?",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301"
+      ],
+      "dense": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-304",
+        "KB-303"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-4460-1",
+      "query": "搬家了；能改吧?",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [],
+      "dense": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-7513-0",
+      "query": "可以更改收货地址吗",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301",
+        "KB-302"
+      ],
+      "dense": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-3999-0",
+      "query": "我这边地址写错了；需要修改一下",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301",
+        "KB-302"
+      ],
+      "dense": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-304",
+        "KB-303"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-6245-0",
+      "query": "你好，为什么地址你帮我改了，订单上还显示之前的地址?",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301",
+        "KB-303",
+        "KB-302"
+      ],
+      "dense": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-303",
+        "KB-302",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-3937-0",
+      "query": "就是能修改手机号吗",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-302",
+        "KB-301"
+      ],
+      "dense": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-8079-0",
+      "query": "买饮料没注意地址，能改地址了，现在在配送中",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301"
+      ],
+      "dense": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-304",
+        "KB-303"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-7686-2",
+      "query": "晚上[数字]-[数字]点，你们下班了吗?；位置要改，电话也要改",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-302",
+        "KB-301",
+        "KB-304",
+        "KB-303"
+      ],
+      "bm25": [
+        "KB-302",
+        "KB-301"
+      ],
+      "dense": [
+        "KB-302",
+        "KB-301",
+        "KB-304",
+        "KB-303"
+      ],
+      "hybrid": [
+        "KB-302",
+        "KB-301",
+        "KB-304",
+        "KB-303"
+      ],
+      "reranked": [
+        "KB-302",
+        "KB-301",
+        "KB-304",
+        "KB-303"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-481-0",
+      "query": "绑定的手机号更改了怎么办",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-302",
+        "KB-301"
+      ],
+      "dense": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-302",
+        "KB-301",
+        "KB-304",
+        "KB-303"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-8048-2",
+      "query": "噢，我忘记修改地址了；能不能改一下地址",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301",
+        "KB-302"
+      ],
+      "dense": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-304",
+        "KB-303"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-3796-0",
+      "query": "订单地址忘记改了",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301",
+        "KB-303",
+        "KB-302"
+      ],
+      "dense": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-303",
+        "KB-302",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-1511-0",
+      "query": "那两个胶。；我想改下收货地址；我看刚到临沂[地址]。你看能帮拦截一下么；当时下单忘了改地址。",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-303",
+        "KB-302",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301",
+        "KB-303"
+      ],
+      "dense": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-303",
+        "KB-302",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-7174-0",
+      "query": "真是不好意思，我是刚学会在网上买东西还不怎么会玩，弄不来",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [],
+      "dense": [
+        "KB-303",
+        "KB-301",
+        "KB-302",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-303",
+        "KB-302",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-4253-0",
+      "query": "你好，我昨天下的订单，但是手机号换了忘记更改现在收不到短信；这个应该怎么处理",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "dense": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-302",
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-address-7426-0",
+      "query": "需要改一下取货地址。",
+      "intent": "address",
+      "expected": "KB-301",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301"
+      ],
+      "dense": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "reranked": [
+        "KB-301",
+        "KB-302",
+        "KB-304",
+        "KB-303"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-8350-1",
+      "query": "我这边拆开包装看过货没问题吗",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-208",
+        "KB-209",
+        "KB-212",
+        "KB-213",
+        "KB-216"
+      ],
+      "bm25": [
+        "KB-208",
+        "KB-209",
+        "KB-211",
+        "KB-212",
+        "KB-210"
+      ],
+      "dense": [
+        "KB-211",
+        "KB-212",
+        "KB-208",
+        "KB-215",
+        "KB-209",
+        "KB-216",
+        "KB-213",
+        "KB-214",
+        "KB-210"
+      ],
+      "hybrid": [
+        "KB-208",
+        "KB-211",
+        "KB-212",
+        "KB-209",
+        "KB-210",
+        "KB-215",
+        "KB-216",
+        "KB-213",
+        "KB-214"
+      ],
+      "reranked": [
+        "KB-211",
+        "KB-208",
+        "KB-212",
+        "KB-209",
+        "KB-210",
+        "KB-215",
+        "KB-216",
+        "KB-214"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-2866-0",
+      "query": "他收到打开的时候说杯子碎了好几个；我寄的快递损坏了；寄的时候是完好无损的",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-208",
+        "KB-210",
+        "KB-213",
+        "KB-211",
+        "KB-209"
+      ],
+      "bm25": [
+        "KB-208",
+        "KB-213",
+        "KB-212",
+        "KB-211",
+        "KB-210"
+      ],
+      "dense": [
+        "KB-210",
+        "KB-211",
+        "KB-213",
+        "KB-208",
+        "KB-212",
+        "KB-209",
+        "KB-214",
+        "KB-216",
+        "KB-215"
+      ],
+      "hybrid": [
+        "KB-208",
+        "KB-213",
+        "KB-210",
+        "KB-211",
+        "KB-212",
+        "KB-209",
+        "KB-214",
+        "KB-216",
+        "KB-215"
+      ],
+      "reranked": [
+        "KB-211",
+        "KB-210",
+        "KB-212",
+        "KB-209",
+        "KB-213",
+        "KB-208",
+        "KB-216",
+        "KB-215"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-9185-2",
+      "query": "质量没问题就行",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-209",
+        "KB-208",
+        "KB-215",
+        "KB-216",
+        "KB-212"
+      ],
+      "bm25": [
+        "KB-209",
+        "KB-208"
+      ],
+      "dense": [
+        "KB-209",
+        "KB-208",
+        "KB-215",
+        "KB-216",
+        "KB-212",
+        "KB-211",
+        "KB-214",
+        "KB-210",
+        "KB-213"
+      ],
+      "hybrid": [
+        "KB-209",
+        "KB-208",
+        "KB-215",
+        "KB-216",
+        "KB-212",
+        "KB-211",
+        "KB-214",
+        "KB-210",
+        "KB-213"
+      ],
+      "reranked": [
+        "KB-209",
+        "KB-215",
+        "KB-216",
+        "KB-208",
+        "KB-211",
+        "KB-210",
+        "KB-212",
+        "KB-214"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-10300-0",
+      "query": "快递不会压烂吧；我不削皮能吃吗；梨子大不大",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-208",
+        "KB-213",
+        "KB-209",
+        "KB-211",
+        "KB-210"
+      ],
+      "bm25": [
+        "KB-211",
+        "KB-210",
+        "KB-208"
+      ],
+      "dense": [
+        "KB-208",
+        "KB-211",
+        "KB-213",
+        "KB-210",
+        "KB-214",
+        "KB-212",
+        "KB-209",
+        "KB-216",
+        "KB-215"
+      ],
+      "hybrid": [
+        "KB-208",
+        "KB-211",
+        "KB-210",
+        "KB-213",
+        "KB-214",
+        "KB-212",
+        "KB-209",
+        "KB-216",
+        "KB-215"
+      ],
+      "reranked": [
+        "KB-210",
+        "KB-211",
+        "KB-208",
+        "KB-216",
+        "KB-209",
+        "KB-212",
+        "KB-213",
+        "KB-215"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-9210-0",
+      "query": "你好，我有一个订购买妈咪宝贝的订单不小心删了，我用了一个星期红屁股，现在能退吗?",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-208",
+        "KB-209",
+        "KB-216",
+        "KB-214",
+        "KB-212"
+      ],
+      "bm25": [
+        "KB-215",
+        "KB-214",
+        "KB-216",
+        "KB-209",
+        "KB-212",
+        "KB-208"
+      ],
+      "dense": [
+        "KB-208",
+        "KB-209",
+        "KB-216",
+        "KB-214",
+        "KB-215",
+        "KB-212",
+        "KB-210",
+        "KB-211",
+        "KB-213"
+      ],
+      "hybrid": [
+        "KB-208",
+        "KB-215",
+        "KB-214",
+        "KB-209",
+        "KB-216",
+        "KB-212",
+        "KB-210",
+        "KB-211",
+        "KB-213"
+      ],
+      "reranked": [
+        "KB-209",
+        "KB-216",
+        "KB-208",
+        "KB-212",
+        "KB-210",
+        "KB-215",
+        "KB-211",
+        "KB-214"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-10646-0",
+      "query": "关键我这个手环里面绑定了公交卡；我的手环昨天晚上突然没有显示了；蓝牙也连接不上；里面还有[数字]多块钱",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-208",
+        "KB-213",
+        "KB-209",
+        "KB-212",
+        "KB-214"
+      ],
+      "bm25": [
+        "KB-213",
+        "KB-208"
+      ],
+      "dense": [
+        "KB-214",
+        "KB-213",
+        "KB-212",
+        "KB-210",
+        "KB-215",
+        "KB-208",
+        "KB-209",
+        "KB-216",
+        "KB-211"
+      ],
+      "hybrid": [
+        "KB-213",
+        "KB-208",
+        "KB-214",
+        "KB-212",
+        "KB-210",
+        "KB-215",
+        "KB-209",
+        "KB-216",
+        "KB-211"
+      ],
+      "reranked": [
+        "KB-212",
+        "KB-209",
+        "KB-214",
+        "KB-210",
+        "KB-211",
+        "KB-213",
+        "KB-215",
+        "KB-216"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-9004-0",
+      "query": "一共[数字]个坏了[数字]个",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-208",
+        "KB-209",
+        "KB-212",
+        "KB-216",
+        "KB-210"
+      ],
+      "bm25": [
+        "KB-208"
+      ],
+      "dense": [
+        "KB-212",
+        "KB-208",
+        "KB-209",
+        "KB-210",
+        "KB-216",
+        "KB-211",
+        "KB-214",
+        "KB-215",
+        "KB-213"
+      ],
+      "hybrid": [
+        "KB-208",
+        "KB-212",
+        "KB-209",
+        "KB-210",
+        "KB-216",
+        "KB-211",
+        "KB-214",
+        "KB-215",
+        "KB-213"
+      ],
+      "reranked": [
+        "KB-210",
+        "KB-216",
+        "KB-212",
+        "KB-208",
+        "KB-209",
+        "KB-211",
+        "KB-214",
+        "KB-215"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-9901-0",
+      "query": "如果碰到收到个打开看是坏的，咋处理?",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-208",
+        "KB-209",
+        "KB-216",
+        "KB-213",
+        "KB-211"
+      ],
+      "bm25": [
+        "KB-212",
+        "KB-213",
+        "KB-208",
+        "KB-210"
+      ],
+      "dense": [
+        "KB-208",
+        "KB-209",
+        "KB-211",
+        "KB-214",
+        "KB-210",
+        "KB-216",
+        "KB-213",
+        "KB-212",
+        "KB-215"
+      ],
+      "hybrid": [
+        "KB-208",
+        "KB-212",
+        "KB-213",
+        "KB-210",
+        "KB-209",
+        "KB-211",
+        "KB-214",
+        "KB-216",
+        "KB-215"
+      ],
+      "reranked": [
+        "KB-211",
+        "KB-209",
+        "KB-210",
+        "KB-208",
+        "KB-212",
+        "KB-216",
+        "KB-214",
+        "KB-213"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-3365-0",
+      "query": "坏果包赔不；这个果新鲜吗；没打蜡吧；现在拍什么时候送达",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-208",
+        "KB-209",
+        "KB-213",
+        "KB-216",
+        "KB-215"
+      ],
+      "bm25": [],
+      "dense": [
+        "KB-208",
+        "KB-211",
+        "KB-215",
+        "KB-210",
+        "KB-209",
+        "KB-213",
+        "KB-216",
+        "KB-212",
+        "KB-214"
+      ],
+      "hybrid": [
+        "KB-208",
+        "KB-211",
+        "KB-215",
+        "KB-210",
+        "KB-209",
+        "KB-213",
+        "KB-216",
+        "KB-212",
+        "KB-214"
+      ],
+      "reranked": [
+        "KB-208",
+        "KB-209",
+        "KB-210",
+        "KB-216",
+        "KB-211",
+        "KB-215",
+        "KB-212",
+        "KB-213"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-2208-1",
+      "query": "如果换的话，走什么程序呢；刚刚和另一个客服沟通了，我买的硬盘识别不了了，里面存了很多重要资料，看来只能换了",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-208",
+        "KB-215",
+        "KB-209",
+        "KB-214",
+        "KB-216"
+      ],
+      "bm25": [
+        "KB-209",
+        "KB-215",
+        "KB-212",
+        "KB-216",
+        "KB-210"
+      ],
+      "dense": [
+        "KB-214",
+        "KB-209",
+        "KB-208",
+        "KB-215",
+        "KB-211",
+        "KB-216",
+        "KB-212",
+        "KB-210",
+        "KB-213"
+      ],
+      "hybrid": [
+        "KB-209",
+        "KB-215",
+        "KB-212",
+        "KB-216",
+        "KB-210",
+        "KB-208",
+        "KB-214",
+        "KB-211",
+        "KB-213"
+      ],
+      "reranked": [
+        "KB-209",
+        "KB-216",
+        "KB-214",
+        "KB-215",
+        "KB-212",
+        "KB-211",
+        "KB-210",
+        "KB-208"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-8418-2",
+      "query": "我的空调遥控器放电池的地方鼓包了怎么整",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-208",
+        "KB-209",
+        "KB-216",
+        "KB-214",
+        "KB-213"
+      ],
+      "bm25": [],
+      "dense": [
+        "KB-216",
+        "KB-209",
+        "KB-214",
+        "KB-208",
+        "KB-211",
+        "KB-215",
+        "KB-212",
+        "KB-213",
+        "KB-210"
+      ],
+      "hybrid": [
+        "KB-208",
+        "KB-216",
+        "KB-209",
+        "KB-214",
+        "KB-211",
+        "KB-215",
+        "KB-212",
+        "KB-213",
+        "KB-210"
+      ],
+      "reranked": [
+        "KB-209",
+        "KB-216",
+        "KB-215",
+        "KB-211",
+        "KB-214",
+        "KB-210",
+        "KB-212",
+        "KB-213"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-427-0",
+      "query": "订单号:[订单编号]；冰箱；有噪音还有水煮的声音",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-208",
+        "KB-209",
+        "KB-216",
+        "KB-215",
+        "KB-214"
+      ],
+      "bm25": [
+        "KB-209",
+        "KB-215",
+        "KB-212",
+        "KB-214",
+        "KB-208"
+      ],
+      "dense": [
+        "KB-208",
+        "KB-214",
+        "KB-215",
+        "KB-209",
+        "KB-216",
+        "KB-212",
+        "KB-210",
+        "KB-211",
+        "KB-213"
+      ],
+      "hybrid": [
+        "KB-208",
+        "KB-209",
+        "KB-215",
+        "KB-214",
+        "KB-212",
+        "KB-216",
+        "KB-210",
+        "KB-211",
+        "KB-213"
+      ],
+      "reranked": [
+        "KB-209",
+        "KB-214",
+        "KB-215",
+        "KB-208",
+        "KB-212",
+        "KB-216",
+        "KB-210",
+        "KB-211"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-9180-0",
+      "query": "确认一下；会有平台来收我的行旅箱吧?",
+      "intent": "address",
+      "expected": "KB-208",
+      "v1": [
+        "KB-301",
+        "KB-302",
+        "KB-303",
+        "KB-304"
+      ],
+      "bm25": [
+        "KB-301",
+        "KB-303",
+        "KB-304"
+      ],
+      "dense": [
+        "KB-302",
+        "KB-303",
+        "KB-301",
+        "KB-304"
+      ],
+      "hybrid": [
+        "KB-301",
+        "KB-303",
+        "KB-304",
+        "KB-302"
+      ],
+      "reranked": [
+        "KB-303",
+        "KB-301",
+        "KB-302",
+        "KB-304"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-4371-1",
+      "query": "真丢了怎么办?",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-208",
+        "KB-213",
+        "KB-210",
+        "KB-212",
+        "KB-209"
+      ],
+      "bm25": [],
+      "dense": [
+        "KB-213",
+        "KB-210",
+        "KB-212",
+        "KB-211",
+        "KB-208",
+        "KB-214",
+        "KB-209",
+        "KB-215",
+        "KB-216"
+      ],
+      "hybrid": [
+        "KB-213",
+        "KB-208",
+        "KB-210",
+        "KB-212",
+        "KB-211",
+        "KB-214",
+        "KB-209",
+        "KB-215",
+        "KB-216"
+      ],
+      "reranked": [
+        "KB-213",
+        "KB-210",
+        "KB-212",
+        "KB-211",
+        "KB-209",
+        "KB-208",
+        "KB-215",
+        "KB-216"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-2421-1",
+      "query": "我现在已经拿到了，麻烦你了",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-208",
+        "KB-212",
+        "KB-213",
+        "KB-209",
+        "KB-211"
+      ],
+      "bm25": [],
+      "dense": [
+        "KB-212",
+        "KB-211",
+        "KB-213",
+        "KB-210",
+        "KB-215",
+        "KB-208",
+        "KB-214",
+        "KB-209",
+        "KB-216"
+      ],
+      "hybrid": [
+        "KB-212",
+        "KB-211",
+        "KB-213",
+        "KB-208",
+        "KB-210",
+        "KB-215",
+        "KB-214",
+        "KB-209",
+        "KB-216"
+      ],
+      "reranked": [
+        "KB-211",
+        "KB-209",
+        "KB-210",
+        "KB-212",
+        "KB-215",
+        "KB-214",
+        "KB-216",
+        "KB-208"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-1661-0",
+      "query": "刚刚收到这个消毒柜；放不平",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-208",
+        "KB-209",
+        "KB-213",
+        "KB-212",
+        "KB-211"
+      ],
+      "bm25": [
+        "KB-213",
+        "KB-212",
+        "KB-208"
+      ],
+      "dense": [
+        "KB-211",
+        "KB-208",
+        "KB-214",
+        "KB-212",
+        "KB-209",
+        "KB-213",
+        "KB-210",
+        "KB-215",
+        "KB-216"
+      ],
+      "hybrid": [
+        "KB-208",
+        "KB-212",
+        "KB-213",
+        "KB-211",
+        "KB-214",
+        "KB-209",
+        "KB-210",
+        "KB-215",
+        "KB-216"
+      ],
+      "reranked": [
+        "KB-211",
+        "KB-212",
+        "KB-209",
+        "KB-210",
+        "KB-215",
+        "KB-208",
+        "KB-216",
+        "KB-213"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-1993-2",
+      "query": "不是质量问题；要多少钱?",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-209",
+        "KB-208",
+        "KB-216",
+        "KB-215",
+        "KB-210"
+      ],
+      "bm25": [
+        "KB-209",
+        "KB-208"
+      ],
+      "dense": [
+        "KB-209",
+        "KB-208",
+        "KB-215",
+        "KB-214",
+        "KB-210",
+        "KB-216",
+        "KB-212",
+        "KB-213",
+        "KB-211"
+      ],
+      "hybrid": [
+        "KB-209",
+        "KB-208",
+        "KB-215",
+        "KB-214",
+        "KB-210",
+        "KB-216",
+        "KB-212",
+        "KB-213",
+        "KB-211"
+      ],
+      "reranked": [
+        "KB-209",
+        "KB-208",
+        "KB-215",
+        "KB-216",
+        "KB-210",
+        "KB-214",
+        "KB-211",
+        "KB-212"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-4404-0",
+      "query": "我买的充电宝充不进电；现在要退货但包装已经丢掉了",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-209",
+        "KB-208",
+        "KB-216",
+        "KB-213",
+        "KB-212"
+      ],
+      "bm25": [
+        "KB-209",
+        "KB-208",
+        "KB-211",
+        "KB-216",
+        "KB-212",
+        "KB-210"
+      ],
+      "dense": [
+        "KB-209",
+        "KB-216",
+        "KB-208",
+        "KB-213",
+        "KB-214",
+        "KB-212",
+        "KB-211",
+        "KB-210",
+        "KB-215"
+      ],
+      "hybrid": [
+        "KB-209",
+        "KB-208",
+        "KB-216",
+        "KB-211",
+        "KB-212",
+        "KB-210",
+        "KB-213",
+        "KB-214",
+        "KB-215"
+      ],
+      "reranked": [
+        "KB-211",
+        "KB-209",
+        "KB-212",
+        "KB-216",
+        "KB-210",
+        "KB-208",
+        "KB-215",
+        "KB-214"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-1907-0",
+      "query": "我的勺子拆开啦；不要紧吗?；里边有块不平整",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-208",
+        "KB-209",
+        "KB-213",
+        "KB-210",
+        "KB-212"
+      ],
+      "bm25": [],
+      "dense": [
+        "KB-208",
+        "KB-209",
+        "KB-211",
+        "KB-210",
+        "KB-212",
+        "KB-214",
+        "KB-213",
+        "KB-216",
+        "KB-215"
+      ],
+      "hybrid": [
+        "KB-208",
+        "KB-209",
+        "KB-211",
+        "KB-210",
+        "KB-212",
+        "KB-214",
+        "KB-213",
+        "KB-216",
+        "KB-215"
+      ],
+      "reranked": [
+        "KB-211",
+        "KB-209",
+        "KB-208",
+        "KB-216",
+        "KB-210",
+        "KB-212",
+        "KB-215",
+        "KB-214"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-858-0",
+      "query": "我的极米cc坏了；一直显示极米桌面停止运行；什么原因",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-208",
+        "KB-209",
+        "KB-214",
+        "KB-213",
+        "KB-210"
+      ],
+      "bm25": [
+        "KB-208",
+        "KB-213"
+      ],
+      "dense": [
+        "KB-214",
+        "KB-209",
+        "KB-211",
+        "KB-208",
+        "KB-210",
+        "KB-213",
+        "KB-216",
+        "KB-215",
+        "KB-212"
+      ],
+      "hybrid": [
+        "KB-208",
+        "KB-213",
+        "KB-214",
+        "KB-209",
+        "KB-211",
+        "KB-210",
+        "KB-216",
+        "KB-215",
+        "KB-212"
+      ],
+      "reranked": [
+        "KB-216",
+        "KB-215",
+        "KB-209",
+        "KB-212",
+        "KB-214",
+        "KB-213",
+        "KB-208",
+        "KB-210"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-10402-1",
+      "query": "是不是[数字]天内要是有质量问题，你们可以退货或者换货?",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-209",
+        "KB-208",
+        "KB-216",
+        "KB-215",
+        "KB-214"
+      ],
+      "bm25": [
+        "KB-209",
+        "KB-208",
+        "KB-215",
+        "KB-216"
+      ],
+      "dense": [
+        "KB-216",
+        "KB-209",
+        "KB-208",
+        "KB-215",
+        "KB-214",
+        "KB-211",
+        "KB-212",
+        "KB-210",
+        "KB-213"
+      ],
+      "hybrid": [
+        "KB-209",
+        "KB-208",
+        "KB-216",
+        "KB-215",
+        "KB-214",
+        "KB-211",
+        "KB-212",
+        "KB-210",
+        "KB-213"
+      ],
+      "reranked": [
+        "KB-216",
+        "KB-209",
+        "KB-208",
+        "KB-215",
+        "KB-211",
+        "KB-210",
+        "KB-214",
+        "KB-212"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-164-0",
+      "query": "嗯，帮我备注一下就说:请客户随便试，随便打开看；平台物流说不让打开；这让客户不好看产品",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-208",
+        "KB-209",
+        "KB-211",
+        "KB-213",
+        "KB-212"
+      ],
+      "bm25": [
+        "KB-216",
+        "KB-213",
+        "KB-210",
+        "KB-208"
+      ],
+      "dense": [
+        "KB-211",
+        "KB-209",
+        "KB-208",
+        "KB-215",
+        "KB-212",
+        "KB-214",
+        "KB-213",
+        "KB-210",
+        "KB-216"
+      ],
+      "hybrid": [
+        "KB-208",
+        "KB-213",
+        "KB-216",
+        "KB-210",
+        "KB-211",
+        "KB-209",
+        "KB-215",
+        "KB-212",
+        "KB-214"
+      ],
+      "reranked": [
+        "KB-209",
+        "KB-211",
+        "KB-210",
+        "KB-216",
+        "KB-208",
+        "KB-212",
+        "KB-213",
+        "KB-214"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    },
+    {
+      "id": "csds-train-damage-2126-1",
+      "query": "已年过古稀，照顾一下，早点发货；要等，但愿不会有质量问题",
+      "intent": "damage",
+      "expected": "KB-208",
+      "v1": [
+        "KB-209",
+        "KB-208",
+        "KB-215",
+        "KB-212",
+        "KB-216"
+      ],
+      "bm25": [
+        "KB-209",
+        "KB-208"
+      ],
+      "dense": [
+        "KB-209",
+        "KB-215",
+        "KB-214",
+        "KB-208",
+        "KB-212",
+        "KB-216",
+        "KB-211",
+        "KB-210",
+        "KB-213"
+      ],
+      "hybrid": [
+        "KB-209",
+        "KB-208",
+        "KB-215",
+        "KB-214",
+        "KB-212",
+        "KB-216",
+        "KB-211",
+        "KB-210",
+        "KB-213"
+      ],
+      "reranked": [
+        "KB-209",
+        "KB-208",
+        "KB-210",
+        "KB-215",
+        "KB-211",
+        "KB-216",
+        "KB-212",
+        "KB-214"
+      ],
+      "rerankFallback": false,
+      "rerankProvider": "qwen3-rerank"
+    }
+  ]
+}
